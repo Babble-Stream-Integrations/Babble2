@@ -1,5 +1,31 @@
 .appbar {
   display: flex;
   justify-content: space-between;
-  background-color: #0e0e10;
+  background-color: var(--blackberry);
+}
+
+img {
+  width: 15%;
+  height: 15%;
+}
+
+Button.btn {
+  font-family: "MontserratBold";
+  background-color: var(--orange);
+  margin-right: 30px;
+  border-radius: 50px;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: var(--blackberry);
+}
+
+Button.btn:hover {
+  font-family: "MontserratBold";
+  background-color: var(--orange);
+  opacity: 0.9;
+  margin-right: 30px;
+  border-radius: 50px;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: var(--blackberry);
 }
