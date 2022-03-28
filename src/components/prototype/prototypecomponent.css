@@ -35,4 +35,16 @@ body {
 
   display: grid;
   grid-template-columns: repeat(2, 50%);
+
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.PC-button {
+  background-color: #ff8400;
+  border: none;
+  border-radius: 15px;
+  width: auto;
+  height: 30px;
+  margin: 5px;
 }
