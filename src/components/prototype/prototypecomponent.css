@@ -38,13 +38,27 @@ body {
 
   padding-top: 30px;
   padding-bottom: 30px;
+
+  column-gap: 5px;
+  row-gap: 5px;
+}
+
+.PC-button-container {
+  box-sizing: content-box;
 }
 
 .PC-button {
   background-color: #ff8400;
   border: none;
   border-radius: 15px;
-  width: auto;
+  width: 100%;
   height: 30px;
-  margin: 5px;
+}
+
+.PC-input {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+
+  color: white;
 }
