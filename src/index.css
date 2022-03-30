@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--blackberry);
+  background-color: var(--darkGrey);
 }
 
 code {
@@ -14,17 +14,10 @@ code {
 }
 
 :root {
-  --orange: #ff8400;
-  --blackberry: #0e0e10;
-  --raisin: #1a1a1d;
-  --purplePotato: #252529;
-  --pineberry: #d0d0d2;
-  --sandPear: #f2f2f4;
-}
-
-@font-face {
-  font-family: "MontserratBold";
-  src: local("MontserratBold"),
-    url(./fonts/Monserrat/Montserrat-Bold.ttf) format("truetype");
-  font-weight: bold;
+  --mainOrange: #ff8400;
+  --darkGrey: #0e0e10;
+  --midGrey: #1a1a1d;
+  --lightGrey: #252529;
+  --offWhiteOne: #d0d0d2;
+  --offWhiteTwo: #f2f2f4;
 }

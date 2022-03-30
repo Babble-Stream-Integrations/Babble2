@@ -11,7 +11,7 @@
 }
 
 .menu {
-  color: white;
+  color: var(--offWhiteOne);
   padding: 19px;
   height: 32px;
   width: 32px;
@@ -26,13 +26,14 @@ svg {
 }
 
 button {
-  font-family: "MontserratBold";
-  background-color: var(--orange);
+  font-family: "Montserrat";
+  font-weight: bold;
+  background-color: var(--mainOrange);
   margin: 10px;
   border-radius: 50px;
   padding-left: 20px;
   padding-right: 20px;
-  color: var(--blackberry);
+  color: var(--darkGrey);
   height: 30px;
   font-size: large;
   border: none;
