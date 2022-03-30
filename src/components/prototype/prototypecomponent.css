@@ -18,7 +18,7 @@ body {
 
 .PC-settings-container {
   background-color: #252529;
-  width: 50%;
+  width: 60%;
   height: auto;
   min-height: 100px;
   border-radius: 25px;
@@ -26,6 +26,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: content-box;
 }
 
 .PC-grid {
@@ -33,7 +34,7 @@ body {
   height: 90%;
 
   display: grid;
-  grid-template-columns: repeat(2, 50%);
+  grid-template-columns: repeat(2, calc(50% - 7.5px));
 
   padding-top: 30px;
   padding-bottom: 30px;
@@ -44,6 +45,12 @@ body {
 
 .PC-button-container {
   box-sizing: content-box;
+}
+
+.PC-uppercase {
+  text-transform: uppercase;
+  color: white;
+  margin-left: 5px;
 }
 
 .PC-button {

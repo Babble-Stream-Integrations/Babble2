@@ -15,7 +15,11 @@ function PrototypeComponent() {
   const [raffleWinnerAmount, setRaffleWinnerAmount] = useState(1);
   const [raffleDuplicateWinners, setRaffleDuplicateWinners] = useState(false);
   const [raffleAnnounceWinners, setRaffleAnnounceWinners] = useState(false);
-  // const [raffleMyAccount, setRAffleMyAccount] = useState(false);
+  const [raffleMyAccount, setRaffleMyAccount] = useState(false);
+  // Initial fetch request
+  useEffect(() => {
+    console.log("hi");
+  }, []);
   useEffect(() => {
     console.log(raffleDuration);
   }, [raffleDuration]);
@@ -103,16 +107,31 @@ function PrototypeComponent() {
             />
             <b>{String(raffleDuplicateWinners)}</b>
           </div>
-          <div className="PC-switch">
-            <BABswitch
-              isOn={raffleAnnounceWinners}
-              handleToggle={() =>
-                setRaffleAnnounceWinners(!raffleAnnounceWinners)
-              }
-              onColor={"#ff8400"}
-              id={"4"}
-            />
-            <b>{String(raffleAnnounceWinners)}</b>
+          <div className="PC-setting">
+            <b className="PC-uppercase">hi</b>
+            <div className="PC-switch">
+              <BABswitch
+                isOn={raffleAnnounceWinners}
+                handleToggle={() =>
+                  setRaffleAnnounceWinners(!raffleAnnounceWinners)
+                }
+                onColor={"#ff8400"}
+                id={"4"}
+              />
+              <b>{String(raffleAnnounceWinners)}</b>
+            </div>
+          </div>
+          <div className="PC-setting">
+            <b className="PC-uppercase">hi</b>
+            <div className="PC-switch">
+              <BABswitch
+                isOn={raffleMyAccount}
+                handleToggle={() => setRaffleMyAccount(!raffleMyAccount)}
+                onColor={"#ff8400"}
+                id={"4"}
+              />
+              <b>{String(raffleAnnounceWinners)}</b>
+            </div>
           </div>
           <div>
             <button className="PC-button">Start Raffle</button>
