@@ -16,6 +16,8 @@ function PrototypeComponent() {
   const [raffleDuplicateWinners, setRaffleDuplicateWinners] = useState(false);
   const [raffleAnnounceWinners, setRaffleAnnounceWinners] = useState(false);
   const [raffleMyAccount, setRaffleMyAccount] = useState(false);
+  // State for start raffle data
+  const [raffleStartData, setRaffleStartData] = useState([]);
   // Initial fetch request
   useEffect(() => {
     console.log("hi");
@@ -28,10 +30,30 @@ function PrototypeComponent() {
       <div className="PC-settings-container">
         <div className="PC-grid">
           <div className="PC-button-container">
-            <button className="PC-button">Authorize Youtube</button>
+            <button
+              className="PC-button"
+              onClick={() => {
+                fetch("babble-d6ef3/europe-west1/app/api/v1/auth/youtube").then(
+                  (response) =>
+                    response.json().then((data) => console.log(data))
+                );
+              }}
+            >
+              Authorize Youtube
+            </button>
           </div>
           <div className="PC-button-container">
-            <button className="PC-button">Authorize Twitch</button>
+            <button
+              className="PC-button"
+              onClick={() => {
+                fetch("babble-d6ef3/europe-west1/app/api/v1/auth/twitch").then(
+                  (response) =>
+                    response.json().then((data) => console.log(data))
+                );
+              }}
+            >
+              Authorize Twitch
+            </button>
           </div>
           <div>
             <input
@@ -134,7 +156,20 @@ function PrototypeComponent() {
             </div>
           </div>
           <div>
-            <button className="PC-button">Start Raffle</button>
+            <button
+              className="PC-button"
+              onClick={() => {
+                fetch("babble-d6ef3/europe-west1/app/api/v1/raffle/start", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(raffleStartData),
+                });
+              }}
+            >
+              Start Raffle
+            </button>
           </div>
         </div>
       </div>
