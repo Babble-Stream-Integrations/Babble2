@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, useEffect } from "react";
+import React, { ChangeEventHandler } from "react";
 import "./BABswitch.css";
 
 type BABswitchProps = {
@@ -9,11 +9,6 @@ type BABswitchProps = {
 };
 // changeventhandler<htmlinputelement>
 function BABswitch({ isOn, handleToggle, onColor, id }: BABswitchProps) {
-  useEffect(() => {
-    console.log(isOn);
-    console.log(onColor);
-    console.log(document.querySelector("label"));
-  });
   return (
     <>
       <input

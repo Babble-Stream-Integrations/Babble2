@@ -14,7 +14,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
 }
 
 .PC-settings-container {
@@ -39,8 +38,8 @@ body {
   padding-top: 30px;
   padding-bottom: 30px;
 
-  column-gap: 5px;
-  row-gap: 5px;
+  column-gap: 15px;
+  row-gap: 15px;
 }
 
 .PC-button-container {
@@ -50,9 +49,12 @@ body {
 .PC-button {
   background-color: #ff8400;
   border: none;
-  border-radius: 15px;
+  border-radius: 10px;
   width: 100%;
-  height: 30px;
+  height: 50px;
+
+  font-size: x-large;
+  font-weight: 600;
 }
 
 .PC-input {
@@ -61,4 +63,27 @@ body {
   text-align: left;
 
   color: white;
+}
+
+.PC-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-weight: 600;
+  font-size: larger;
+}
+
+.PC-input {
+  width: 100%;
+  height: 40px;
+
+  box-sizing: border-box;
+
+  background-color: #252529;
+  border: 2px solid white;
+  border-radius: 10px;
+
+  margin: 1px;
+  padding-left: 15px;
 }
