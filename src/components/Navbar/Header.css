@@ -9,12 +9,12 @@
   align-items: center;
 }
 
-.logo {
+.babble-logo {
   margin: 10px;
   height: 25px;
 }
 
-.menu {
+.nav-menu {
   color: var(--offWhiteOne);
   height: 32px;
   width: 32px;
@@ -24,12 +24,7 @@
   margin-left: 25px;
 }
 
-svg {
-  height: 2em;
-  width: 2em;
-}
-
-button {
+.log-button {
   font-family: "Montserrat";
   font-weight: bold;
   font-size: 0.85em;
@@ -50,19 +45,19 @@ button {
   justify-content: center;
 }
 
-.profile {
+.nav-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-avatar-profile {
   border-radius: 50%;
   margin-right: 15px;
   height: 30px;
   width: 30px;
 }
 
-.avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hamburger {
+.hamburger-menu {
   height: 25px;
 }
