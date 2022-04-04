@@ -46,9 +46,7 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch(
-                  "https://steamspy.com/api.php?request=top100in2weeks"
-                ).then((response) =>
+                fetch("").then((response) =>
                   response.json().then((data) => console.log(data))
                 );
               }}
@@ -92,43 +90,55 @@ function PrototypeComponent() {
             />
             <b>{String(rafflePaidOnly)}</b>
           </div>
-          <div>
-            <input
-              className="PC-input"
-              type="text"
-              onChange={(e) => {
-                setRaffleFreePrivilage(Number(e.target.value));
-              }}
-            />
+          <div className="PC-setting">
+            <b className="PC-uppercase">hi</b>
+            <div>
+              <input
+                className="PC-input"
+                type="text"
+                onChange={(e) => {
+                  setRaffleFreePrivilage(Number(e.target.value));
+                }}
+              />
+            </div>
           </div>
-          <div>
-            <input
-              className="PC-input"
-              type="text"
-              onChange={(e) => {
-                setRafflePaidPrivilage(Number(e.target.value));
-              }}
-            />
+          <div className="PC-setting">
+            <b className="PC-uppercase">hi</b>
+            <div>
+              <input
+                className="PC-input"
+                type="text"
+                onChange={(e) => {
+                  setRafflePaidPrivilage(Number(e.target.value));
+                }}
+              />
+            </div>
           </div>
-          <div>
-            <input
-              className="PC-input"
-              type="text"
-              onChange={(e) => {
-                setRaffleWinnerAmount(Number(e.target.value));
-              }}
-            />
+          <div className="PC-setting">
+            <b className="PC-uppercase">hi</b>
+            <div>
+              <input
+                className="PC-input"
+                type="text"
+                onChange={(e) => {
+                  setRaffleWinnerAmount(Number(e.target.value));
+                }}
+              />
+            </div>
           </div>
-          <div className="PC-switch">
-            <BABswitch
-              isOn={raffleDuplicateWinners}
-              handleToggle={() =>
-                setRaffleDuplicateWinners(!raffleDuplicateWinners)
-              }
-              onColor={"#ff8400"}
-              id={"3"}
-            />
-            <b>{String(raffleDuplicateWinners)}</b>
+          <div className="PC-setting">
+            <b className="PC-uppercase">hi</b>
+            <div className="PC-switch">
+              <BABswitch
+                isOn={raffleDuplicateWinners}
+                handleToggle={() =>
+                  setRaffleDuplicateWinners(!raffleDuplicateWinners)
+                }
+                onColor={"#ff8400"}
+                id={"3"}
+              />
+              <b>{String(raffleDuplicateWinners)}</b>
+            </div>
           </div>
           <div className="PC-setting">
             <b className="PC-uppercase">hi</b>
