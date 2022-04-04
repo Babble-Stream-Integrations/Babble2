@@ -20,7 +20,7 @@ app.use(
 // app.use('/api/v1', authRoutes);
 
 app.get("/", (_req: Request, res: Response) =>
-  res.send("hi there handsome ;)")
+  res.send({ result: "hi there handsome ;)" })
 );
 
 export default functions.region("europe-west1").https.onRequest(app);
