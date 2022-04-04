@@ -37,6 +37,6 @@ app.use(express_1.default.urlencoded({
 // app.use('/api/v1', addonRoutes);
 // app.use('/api/v1', authRoutes);
 app.get("/", function (_req, res) {
-    return res.send("hi there handsome ;)");
+    return res.send({ result: "hi there handsome ;)" });
 });
 exports.default = functions.region("europe-west1").https.onRequest(app);

@@ -33,10 +33,13 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch("babble-d6ef3/europe-west1/app/api/v1/auth/youtube").then(
-                  (response) =>
+                fetch("babble-d6ef3/europe-west1/default")
+                  .then((response) =>
                     response.json().then((data) => console.log(data))
-                );
+                  )
+                  .catch((err) => {
+                    console.log("Error Reading data " + err);
+                  });
               }}
             >
               Authorize Youtube
