@@ -1,13 +1,26 @@
 import express, { Request, Response } from "express";
+import * as functions from "firebase-functions";
+
+// const userRoutes = require('./routes/users');
+// const addonRoutes = require('./routes/addons');
+// const authRoutes = require('./routes/auth');
+// const layoutRoutes = require('./routes/layout');
 
 const app = express();
-const port = 3000;
-const str = "string";
 
-app.get("/", (_req: Request, res: Response) => {
-  res.send("Hello World!");
-});
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
-});
+// twitchService.checkChat();
+// app.use('/api/v1', userRoutes);
+// app.use('/api/v1', addonRoutes);
+// app.use('/api/v1', authRoutes);
+
+app.get("/", (_req: Request, res: Response) =>
+  res.send("hi there handsome ;)")
+);
+
+export default functions.region("europe-west1").https.onRequest(app);
