@@ -46,9 +46,10 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch("babble-d6ef3/europe-west1/app/api/v1/auth/twitch").then(
-                  (response) =>
-                    response.json().then((data) => console.log(data))
+                fetch(
+                  "https://steamspy.com/api.php?request=top100in2weeks"
+                ).then((response) =>
+                  response.json().then((data) => console.log(data))
                 );
               }}
             >
@@ -154,6 +155,9 @@ function PrototypeComponent() {
               />
               <b>{String(raffleAnnounceWinners)}</b>
             </div>
+          </div>
+          <div>
+            <button className="PC-button">Save Settings</button>
           </div>
           <div>
             <button
