@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "babble-d6ef3"
+  },
+  "targets": {
+    "babble-d6ef3": {
+      "hosting": {
+        "dev": [
+          "dev-babble"
+        ],
+        "main": [
+          "babble-d6ef3"
+        ]
+      }
+    }
   }
 }
