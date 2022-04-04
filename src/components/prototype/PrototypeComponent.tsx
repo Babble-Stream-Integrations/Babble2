@@ -33,7 +33,9 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch("babble-d6ef3/europe-west1/default")
+                fetch(
+                  "babble-d6ef3/europe-west1/default/api/v1/user?=EBSnlWXow3YeFaWxokmnXIijgkv3"
+                )
                   .then((response) =>
                     response.json().then((data) => console.log(data))
                   )

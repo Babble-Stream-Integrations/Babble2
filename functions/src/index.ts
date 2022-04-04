@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 import * as functions from "firebase-functions";
+import admin from "firebase-admin";
 
-// const userRoutes = require('./routes/users');
+import userRoutes from "./routes/users";
 // const addonRoutes = require('./routes/addons');
 // const authRoutes = require('./routes/auth');
 // const layoutRoutes = require('./routes/layout');
@@ -15,7 +16,7 @@ app.use(
 );
 
 // twitchService.checkChat();
-// app.use('/api/v1', userRoutes);
+app.use("/api/v1", userRoutes);
 // app.use('/api/v1', addonRoutes);
 // app.use('/api/v1', authRoutes);
 
