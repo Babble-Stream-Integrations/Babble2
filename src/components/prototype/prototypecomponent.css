@@ -64,6 +64,11 @@ body {
   font-weight: 600;
 }
 
+.PC-button:hover {
+  cursor: pointer;
+  background-color: #e77700;
+}
+
 .PC-input {
   display: flex;
   flex-direction: column;
@@ -75,7 +80,6 @@ body {
 .PC-switch {
   display: flex;
   align-items: center;
-  gap: 10px;
   color: white;
   font-weight: 600;
   font-size: larger;
@@ -93,4 +97,8 @@ body {
 
   margin: 1px;
   padding-left: 15px;
+}
+
+.PC-switch-status {
+  margin-left: 10px;
 }

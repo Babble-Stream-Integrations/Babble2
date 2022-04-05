@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import BABswitch from "../library/switch/BABswitch";
 
 import "./prototypecomponent.css";
@@ -16,15 +16,13 @@ function PrototypeComponent() {
   const [raffleDuplicateWinners, setRaffleDuplicateWinners] = useState(false);
   const [raffleAnnounceWinners, setRaffleAnnounceWinners] = useState(false);
   const [raffleMyAccount, setRaffleMyAccount] = useState(false);
+
   // State for start raffle data
   const [raffleStartData, setRaffleStartData] = useState([]);
+  const [isYoutube, setIsYoutube] = useState(true);
+
   // Initial fetch request
-  useEffect(() => {
-    console.log("hi");
-  }, []);
-  useEffect(() => {
-    console.log(raffleDuration);
-  }, [raffleDuration]);
+
   return (
     <div className="PC-container">
       <div className="PC-settings-container">
@@ -35,10 +33,14 @@ function PrototypeComponent() {
               onClick={() => {
                 fetch("babble-d6ef3/europe-west1/default")
                   .then((response) =>
-                    response.json().then((data) => console.log(data))
+                    response.json().then((data) => {
+                      console.log(data);
+                      alert("login succesfull");
+                    })
                   )
                   .catch((err) => {
                     console.log("Error Reading data " + err);
+                    alert("error during login try again");
                   });
               }}
             >
@@ -57,44 +59,64 @@ function PrototypeComponent() {
               Authorize Twitch
             </button>
           </div>
-          <div>
-            <input
-              className="PC-input"
-              type="text"
-              onChange={(e) => {
-                setRaffleDuration(Number(e.target.value));
-              }}
-            />
-          </div>
-          <div>
-            <input
-              className="PC-input"
-              type="text"
-              onChange={(e) => {
-                setRaffleEnterMessage(e.target.value);
-              }}
-            />
-          </div>
-          <div className="PC-switch">
-            <BABswitch
-              isOn={raffleFreeOnly}
-              handleToggle={() => setRaffleFreeOnly(!raffleFreeOnly)}
-              onColor={"#ff8400"}
-              id={"1"}
-            />
-            <b>{String(raffleFreeOnly)}</b>
-          </div>
-          <div className="PC-switch">
-            <BABswitch
-              isOn={rafflePaidOnly}
-              handleToggle={() => setRafflePaidOnly(!rafflePaidOnly)}
-              onColor={"#ff8400"}
-              id={"2"}
-            />
-            <b>{String(rafflePaidOnly)}</b>
+          <div className="PC-setting">
+            <b className="PC-uppercase">Duration</b>
+            <div>
+              <input
+                className="PC-input"
+                type="text"
+                onChange={(e) => {
+                  setRaffleDuration(Number(e.target.value));
+                }}
+              />
+            </div>
           </div>
           <div className="PC-setting">
-            <b className="PC-uppercase">hi</b>
+            <b className="PC-uppercase">Enter Message</b>
+            <div>
+              <input
+                className="PC-input"
+                type="text"
+                onChange={(e) => {
+                  setRaffleEnterMessage(e.target.value);
+                }}
+              />
+            </div>
+          </div>
+          <div className="PC-setting">
+            <b className="PC-uppercase">
+              {isYoutube ? "Subscriber only" : "Follower only"}
+            </b>
+            <div className="PC-switch">
+              <BABswitch
+                isOn={raffleFreeOnly}
+                handleToggle={() => setRaffleFreeOnly(!raffleFreeOnly)}
+                onColor={"#ff8400"}
+                id={"1"}
+              />
+              <b className="PC-switch-status">{String(raffleFreeOnly)}</b>
+            </div>
+          </div>
+          <div className="PC-setting">
+            <b className="PC-uppercase">
+              {isYoutube ? "Member Only" : "Subscriber Only"}
+            </b>
+            <div className="PC-switch">
+              <BABswitch
+                isOn={rafflePaidOnly}
+                handleToggle={() => setRafflePaidOnly(!rafflePaidOnly)}
+                onColor={"#ff8400"}
+                id={"2"}
+              />
+              <b className="PC-switch-status">{String(rafflePaidOnly)}</b>
+            </div>
+          </div>
+          <div className="PC-setting">
+            <b className="PC-uppercase">
+              {isYoutube
+                ? "Increased Chance Subscriber"
+                : "Increased Chance Follower"}
+            </b>
             <div>
               <input
                 className="PC-input"
@@ -106,7 +128,11 @@ function PrototypeComponent() {
             </div>
           </div>
           <div className="PC-setting">
-            <b className="PC-uppercase">hi</b>
+            <b className="PC-uppercase">
+              {isYoutube
+                ? "Increased Chance Members"
+                : "Increased Chance Subscribers"}
+            </b>
             <div>
               <input
                 className="PC-input"
@@ -118,7 +144,7 @@ function PrototypeComponent() {
             </div>
           </div>
           <div className="PC-setting">
-            <b className="PC-uppercase">hi</b>
+            <b className="PC-uppercase">Amount of Winners</b>
             <div>
               <input
                 className="PC-input"
@@ -130,7 +156,7 @@ function PrototypeComponent() {
             </div>
           </div>
           <div className="PC-setting">
-            <b className="PC-uppercase">hi</b>
+            <b className="PC-uppercase">Duplicate Winner(s)</b>
             <div className="PC-switch">
               <BABswitch
                 isOn={raffleDuplicateWinners}
@@ -140,11 +166,13 @@ function PrototypeComponent() {
                 onColor={"#ff8400"}
                 id={"3"}
               />
-              <b>{String(raffleDuplicateWinners)}</b>
+              <b className="PC-switch-status">
+                {String(raffleDuplicateWinners)}
+              </b>
             </div>
           </div>
           <div className="PC-setting">
-            <b className="PC-uppercase">hi</b>
+            <b className="PC-uppercase">Announce Winner(s)</b>
             <div className="PC-switch">
               <BABswitch
                 isOn={raffleAnnounceWinners}
@@ -154,19 +182,21 @@ function PrototypeComponent() {
                 onColor={"#ff8400"}
                 id={"4"}
               />
-              <b>{String(raffleAnnounceWinners)}</b>
+              <b className="PC-switch-status">
+                {String(raffleAnnounceWinners)}
+              </b>
             </div>
           </div>
           <div className="PC-setting">
-            <b className="PC-uppercase">hi</b>
+            <b className="PC-uppercase">My Account</b>
             <div className="PC-switch">
               <BABswitch
                 isOn={raffleMyAccount}
                 handleToggle={() => setRaffleMyAccount(!raffleMyAccount)}
                 onColor={"#ff8400"}
-                id={"4"}
+                id={"5"}
               />
-              <b>{String(raffleAnnounceWinners)}</b>
+              <b className="PC-switch-status">{String(raffleMyAccount)}</b>
             </div>
           </div>
           <div>
