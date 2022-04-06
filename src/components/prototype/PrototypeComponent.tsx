@@ -22,17 +22,6 @@ function PrototypeComponent() {
   const [isYoutube, setIsYoutube] = useState(false);
   const [isTwitch, setIsTwitch] = useState(true);
 
-  // UserUUID
-  useEffect(() => {
-    if ((isYoutube, isTwitch)) {
-      if (isYoutube === true) {
-        console.log("s");
-      } else if (isTwitch === true) {
-        console.log("sa");
-      }
-    }
-  }, [isYoutube, isTwitch]);
-
   return (
     <div className="PC-container">
       <div className="PC-settings-container">
