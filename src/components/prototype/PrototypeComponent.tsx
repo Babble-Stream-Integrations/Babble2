@@ -264,7 +264,7 @@ function PrototypeComponent() {
                   },
                   body: JSON.stringify({
                     user: localStorage.getItem("UUID"),
-                    addon: "MyRaffleName1",
+                    addon: "MyRaffleAddon2",
                   }),
                 })
                   .then((response) =>
