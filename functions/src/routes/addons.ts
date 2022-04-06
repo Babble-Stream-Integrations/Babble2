@@ -33,7 +33,7 @@ router.post("/raffle/start", async (req, res) => {
     //   youtubeRaffle.startRaffle(doc.data().settings, tokens.data());
     //   res.redirect("http://localhost:3000/rafflesettings");
     // }
-    res.redirect("http://localhost:3000/rafflesettings");
+    res.send({ result: "Youtube raffle has been started!" });
   } else if (settingsDoc.data()!.platform === "twitch") {
     const tokensDoc = await db
       .collection("users")
@@ -50,7 +50,7 @@ router.post("/raffle/start", async (req, res) => {
         scope: tokensDoc.data()!.scope,
       };
       twitchRaffle.startRaffle(settingsDoc.data()!.settings, tokens);
-      res.redirect("http://localhost:3000/rafflesettings");
+      res.send({ result: "Twitch raffle has been started!" });
     }
   } else {
     throw new Error("no platform detected");
