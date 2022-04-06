@@ -19,9 +19,9 @@ function PrototypeComponent() {
 
   // State for start raffle data
   const [raffleStartData, setRaffleStartData] = useState([]);
-  const [isYoutube, setIsYoutube] = useState(true);
+  const [isYoutube, setIsYoutube] = useState(false);
 
-  // Initial fetch request
+  // UserUUID
 
   return (
     <div className="PC-container">
@@ -31,13 +31,12 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch(
-                  "babble-d6ef3/europe-west1/default/api/v1/users/EBSnlWXow3YeFaWxokmnXIijgkv3"
-                )
+                fetch("babble-d6ef3/europe-west1/default/api/v1/auth/youtube")
                   .then((response) =>
                     response.json().then((data) => {
                       console.log(data);
                       alert("login succesfull");
+                      setIsYoutube(true);
                     })
                   )
                   .catch((err) => {

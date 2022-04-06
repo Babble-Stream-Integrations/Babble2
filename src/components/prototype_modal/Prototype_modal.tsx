@@ -1,13 +1,15 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import "./Prototype_modal.css";
 
 type Prototype_modal = {
   Pmodalshow: boolean;
+  SetPmodalShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function Prototype_modal({ Pmodalshow }: Prototype_modal) {
+function Prototype_modal({ Pmodalshow, SetPmodalShow }: Prototype_modal) {
+  const [inputUUID, setInputUUID] = useState("");
   return (
     <>
       <div
@@ -21,10 +23,52 @@ function Prototype_modal({ Pmodalshow }: Prototype_modal) {
             <h2>Fill in your UUID</h2>
           </div>
           <div className="P-modal-content">
-            <input type="text" className="P-modal-input" />
+            <input
+              type="text"
+              className="P-modal-input"
+              onChange={(e) => {
+                setInputUUID(e.target.value);
+              }}
+            />
           </div>
           <div className="P-modal-submit">
-            <button className="P-modal-button">Submit</button>
+            <button
+              className="P-modal-button"
+              onClick={() => {
+                if (inputUUID.trim().length !== 0) {
+                  fetch(
+                    "babble-d6ef3/europe-west1/default/api/v1/users/" +
+                      inputUUID
+                  )
+                    .then((response) => {
+                      if (response.ok) {
+                        console.log(response);
+                        SetPmodalShow(false);
+                        // Test id EBSnlWXow3YeFaWxokmnXIijgkv3
+                        localStorage.setItem("UUID", inputUUID);
+                      } else {
+                        alert(
+                          "UUID is incorrect \nPlease try again or use a different UUID"
+                        );
+                      }
+                      // response.json().then((data) => {
+                      //   console.log(data);
+                      //   console.log(response);
+                      // })
+                    })
+                    .catch((err) => {
+                      console.log("Error Reading data " + err);
+                      alert(
+                        "There has been an error regarding the server \nPlease contact us"
+                      );
+                    });
+                } else {
+                  alert("Fill in a UUID");
+                }
+              }}
+            >
+              Submit
+            </button>
           </div>
         </div>
       </div>
