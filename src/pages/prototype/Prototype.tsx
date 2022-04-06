@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import PrototypeComponent from "../components/prototype/PrototypeComponent";
-import Prototype_modal from "../components/prototype_modal/Prototype_modal";
+import PrototypeComponent from "../../components/prototype/PrototypeComponent";
+import Prototype_modal from "../../components/prototype_modal/Prototype_modal";
 
 function Prototype() {
   const [Pmodalshow, setPmodalshow] = useState(true);
@@ -17,7 +17,7 @@ function Prototype() {
   return (
     <div className="prototype-container">
       <Prototype_modal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
-      <PrototypeComponent />
+      <PrototypeComponent Pmodalshow={Pmodalshow} />
     </div>
   );
 }

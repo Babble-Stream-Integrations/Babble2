@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Prototype from "./pages/Prototype";
+import Prototype from "./pages/prototype/Prototype";
 import "./App.css";
 
 function App() {
