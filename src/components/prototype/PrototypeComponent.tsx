@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import BABswitch from "../library/switch/BABswitch";
 
-import "./prototypecomponent.css";
+import "./PrototypeComponent.css";
 
 function PrototypeComponent() {
   // input values saved in states
@@ -10,8 +10,8 @@ function PrototypeComponent() {
   const [raffleEnterMessage, setRaffleEnterMessage] = useState("");
   const [raffleFreeOnly, setRaffleFreeOnly] = useState(false);
   const [rafflePaidOnly, setRafflePaidOnly] = useState(false);
-  const [raffleFreePrivilage, setRaffleFreePrivilage] = useState(1);
-  const [rafflePaidPrivilage, setRafflePaidPrivilage] = useState(1);
+  const [raffleFreePrivilege, setRaffleFreePrivilege] = useState(1);
+  const [rafflePaidPrivilege, setRafflePaidPrivilege] = useState(1);
   const [raffleWinnerAmount, setRaffleWinnerAmount] = useState(1);
   const [raffleDuplicateWinners, setRaffleDuplicateWinners] = useState(false);
   const [raffleAnnounceWinners, setRaffleAnnounceWinners] = useState(false);
@@ -136,7 +136,7 @@ function PrototypeComponent() {
                 className="PC-input"
                 type="text"
                 onChange={(e) => {
-                  setRaffleFreePrivilage(Number(e.target.value));
+                  setRaffleFreePrivilege(Number(e.target.value));
                 }}
               />
             </div>
@@ -152,7 +152,7 @@ function PrototypeComponent() {
                 className="PC-input"
                 type="text"
                 onChange={(e) => {
-                  setRafflePaidPrivilage(Number(e.target.value));
+                  setRafflePaidPrivilege(Number(e.target.value));
                 }}
               />
             </div>
@@ -234,8 +234,8 @@ function PrototypeComponent() {
                       memberOnly: rafflePaidOnly,
                       duplicateWinners: raffleDuplicateWinners,
                       duration: raffleDuration,
-                      subPrivilege: rafflePaidPrivilage,
-                      memberPrilivege: raffleFreePrivilage,
+                      subPrivilege: rafflePaidPrivilege,
+                      memberPrivilege: raffleFreePrivilege,
                       enterMessage: raffleEnterMessage,
                     }),
                   }
@@ -257,11 +257,16 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch(
-                  "babble-d6ef3/europe-west1/default/api/v1/users/" +
-                    localStorage.getItem("UUID") +
-                    "/addons/MyRaffleAddon1/settings"
-                )
+                fetch("babble-d6ef3/europe-west1/default/api/v1/raffle/start", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    user: localStorage.getItem("UUID"),
+                    addon: "MyRaffleName1",
+                  }),
+                })
                   .then((response) =>
                     response.json().then((data) => {
                       console.log(data);
