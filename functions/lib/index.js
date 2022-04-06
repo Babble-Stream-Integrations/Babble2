@@ -30,7 +30,7 @@ var express_1 = __importDefault(require("express"));
 var functions = __importStar(require("firebase-functions"));
 var users_1 = __importDefault(require("./routes/users"));
 // const addonRoutes = require('./routes/addons');
-// const authRoutes = require('./routes/auth');
+var auth_1 = __importDefault(require("./routes/auth"));
 // const layoutRoutes = require('./routes/layout');
 var app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({
@@ -39,7 +39,7 @@ app.use(express_1.default.urlencoded({
 // twitchService.checkChat();
 app.use("/api/v1", users_1.default);
 // app.use('/api/v1', addonRoutes);
-// app.use('/api/v1', authRoutes);
+app.use("/api/v1", auth_1.default);
 app.get("/", function (_req, res) {
     return res.send({ result: "hi there handsome ;)" });
 });

@@ -51,9 +51,18 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch("").then((response) =>
-                  response.json().then((data) => console.log(data))
-                );
+                fetch(
+                  "babble-d6ef3/europe-west1/default/api/v1/twitch/auth?user=EBSnlWXow3YeFaWxokmnXIijgkv3&addon=raffle"
+                )
+                  .then((response) =>
+                    response.json().then((data) => {
+                      console.log(data);
+                      window.location.href = data.url;
+                    })
+                  )
+                  .catch((err) => {
+                    console.log("Error Reading data " + err);
+                  });
               }}
             >
               Authorize Twitch
