@@ -50,7 +50,7 @@ router.post("/raffle/start", async (req, res) => {
         scope: tokensDoc.data()!.scope,
       };
       twitchRaffle.startRaffle(settingsDoc.data()!.settings, tokens);
-      res.redirect("http://localhost:3000/rafflesettings");
+      res.redirect("http://localhost:3000/prototype");
     }
   } else {
     throw new Error("no platform detected");
