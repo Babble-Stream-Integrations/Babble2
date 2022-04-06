@@ -19,8 +19,8 @@ function PrototypeComponent() {
 
   // State for start raffle data
   const [raffleStartData, setRaffleStartData] = useState([]);
-  const [isYoutube, setIsYoutube] = useState(true);
-  const [isTwitch, setIsTwitch] = useState(false);
+  const [isYoutube, setIsYoutube] = useState(false);
+  const [isTwitch, setIsTwitch] = useState(true);
 
   // UserUUID
   useEffect(() => {
@@ -56,7 +56,7 @@ function PrototypeComponent() {
                 setIsYoutube(true);
                 setIsTwitch(false);
               }}
-              disabled={false}
+              disabled={true}
             >
               Authorize Youtube
             </button>
@@ -65,7 +65,11 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch("babble-d6ef3/europe-west1/default/api/v1/auth/twitch")
+                fetch(
+                  "babble-d6ef3/europe-west1/default/api/v1/twitch/auth?user=" +
+                    localStorage.getItem("UUID") +
+                    "&addon=raffle"
+                )
                   .then((response) =>
                     response.json().then((data) => {
                       console.log(data);
@@ -247,7 +251,11 @@ function PrototypeComponent() {
                     }),
                   }
                 )
-                  .then((response) => response.json())
+                  .then((response) =>
+                    response.json().then((data) => {
+                      console.log(data);
+                    })
+                  )
                   .catch((err) => {
                     console.log("Error Reading data " + err);
                   });
@@ -260,13 +268,19 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch("babble-d6ef3/europe-west1/app/api/v1/raffle/start", {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(raffleStartData),
-                });
+                fetch(
+                  "babble-d6ef3/europe-west1/default/api/v1/users/" +
+                    localStorage.getItem("UUID") +
+                    "/addons/MyRaffleAddon1/settings"
+                )
+                  .then((response) =>
+                    response.json().then((data) => {
+                      console.log(data);
+                    })
+                  )
+                  .catch((err) => {
+                    console.log("Error Reading data " + err);
+                  });
               }}
             >
               Start Raffle
