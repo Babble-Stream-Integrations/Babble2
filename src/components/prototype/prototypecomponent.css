@@ -69,9 +69,10 @@ body {
   background-color: #e77700;
 }
 
+.PC-button:disabled,
 .PC-button:disabled:hover {
   cursor: auto;
-  background-color: #ff8400;
+  background-color: grey;
 }
 
 .PC-input {
