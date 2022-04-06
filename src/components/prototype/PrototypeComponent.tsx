@@ -228,14 +228,14 @@ function PrototypeComponent() {
                     },
                     body: JSON.stringify({
                       announceWinners: raffleAnnounceWinners,
-                      subOnly: rafflePaidOnly,
+                      followOnly: raffleFreeOnly,
                       winnerAmount: raffleWinnerAmount,
                       useMyAccount: raffleMyAccount,
-                      memberOnly: rafflePaidOnly,
+                      subOnly: rafflePaidOnly,
                       duplicateWinners: raffleDuplicateWinners,
                       duration: raffleDuration,
+                      followPrivilege: raffleFreePrivilege,
                       subPrivilege: rafflePaidPrivilege,
-                      memberPrivilege: raffleFreePrivilege,
                       enterMessage: raffleEnterMessage,
                     }),
                   }
