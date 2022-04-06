@@ -10,7 +10,6 @@ async function getUsers() {
 }
 
 async function addUser(user: string, data: any) {
-  console.log({ user: user, data: data });
   const doc = await db.collection("users").doc(user).set(data, { merge: true });
   return { result: `user ${user} added to database!` };
 }
@@ -38,6 +37,7 @@ async function addAddon(user: string, addon: string, data: any) {
     .collection("addons")
     .doc(addon)
     .set(data, { merge: true });
+
   return { result: `addon ${addon} added to ${user}` };
 }
 

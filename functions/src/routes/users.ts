@@ -11,6 +11,7 @@ const router = express.Router();
 router.param("user", async function (req, res, next) {
   if (req.method === "PUT") {
     next();
+    return;
   }
 
   const doc = await db.collection("users").doc(req.params.user).get();
@@ -24,6 +25,7 @@ router.param("user", async function (req, res, next) {
 router.param("addon", async function (req, res, next) {
   if (req.method === "PUT") {
     next();
+    return;
   }
 
   const doc = await db
@@ -42,6 +44,7 @@ router.param("addon", async function (req, res, next) {
 router.param("platform", async function (req, res, next) {
   if (req.method === "PUT") {
     next();
+    return;
   }
 
   const doc = await db
