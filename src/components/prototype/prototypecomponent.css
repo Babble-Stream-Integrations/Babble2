@@ -69,6 +69,11 @@ body {
   background-color: #e77700;
 }
 
+.PC-button:disabled:hover {
+  cursor: auto;
+  background-color: #ff8400;
+}
+
 .PC-input {
   display: flex;
   flex-direction: column;

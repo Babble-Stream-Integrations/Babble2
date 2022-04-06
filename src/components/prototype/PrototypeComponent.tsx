@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BABswitch from "../library/switch/BABswitch";
 
 import "./prototypecomponent.css";
@@ -19,9 +19,19 @@ function PrototypeComponent() {
 
   // State for start raffle data
   const [raffleStartData, setRaffleStartData] = useState([]);
-  const [isYoutube, setIsYoutube] = useState(false);
+  const [isYoutube, setIsYoutube] = useState(true);
+  const [isTwitch, setIsTwitch] = useState(false);
 
   // UserUUID
+  useEffect(() => {
+    if ((isYoutube, isTwitch)) {
+      if (isYoutube === true) {
+        console.log("s");
+      } else if (isTwitch === true) {
+        console.log("sa");
+      }
+    }
+  }, [isYoutube, isTwitch]);
 
   return (
     <div className="PC-container">
@@ -31,19 +41,22 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch("babble-d6ef3/europe-west1/default/api/v1/auth/youtube")
-                  .then((response) =>
-                    response.json().then((data) => {
-                      console.log(data);
-                      alert("login succesfull");
-                      setIsYoutube(true);
-                    })
-                  )
-                  .catch((err) => {
-                    console.log("Error Reading data " + err);
-                    alert("error during login try again");
-                  });
+                // fetch("babble-d6ef3/europe-west1/default/api/v1/auth/youtube")
+                //   .then((response) =>
+                //     response.json().then((data) => {
+                //       console.log(data);
+                //       alert("login succesfull");
+                //       setIsYoutube(true);
+                //     })
+                //   )
+                //   .catch((err) => {
+                //     console.log("Error Reading data " + err);
+                //     alert("error during login try again");
+                //   });
+                setIsYoutube(true);
+                setIsTwitch(false);
               }}
+              disabled={false}
             >
               Authorize Youtube
             </button>
@@ -52,9 +65,7 @@ function PrototypeComponent() {
             <button
               className="PC-button"
               onClick={() => {
-                fetch(
-                  "babble-d6ef3/europe-west1/default/api/v1/twitch/auth?user=EBSnlWXow3YeFaWxokmnXIijgkv3&addon=raffle"
-                )
+                fetch("babble-d6ef3/europe-west1/default/api/v1/auth/twitch")
                   .then((response) =>
                     response.json().then((data) => {
                       console.log(data);
@@ -210,7 +221,40 @@ function PrototypeComponent() {
             </div>
           </div>
           <div>
-            <button className="PC-button">Save Settings</button>
+            <button
+              className="PC-button"
+              onClick={() => {
+                fetch(
+                  "babble-d6ef3/europe-west1/default/api/v1/users/" +
+                    localStorage.getItem("UUID") +
+                    "/addons/MyRaffleAddon1/settings",
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      announceWinners: raffleAnnounceWinners,
+                      subOnly: rafflePaidOnly,
+                      winnerAmount: raffleWinnerAmount,
+                      useMyAccount: raffleMyAccount,
+                      memberOnly: rafflePaidOnly,
+                      duplicateWinners: raffleDuplicateWinners,
+                      duration: raffleDuration,
+                      subPrivilege: rafflePaidPrivilage,
+                      memberPrilivege: raffleFreePrivilage,
+                      enterMessage: raffleEnterMessage,
+                    }),
+                  }
+                )
+                  .then((response) => response.json())
+                  .catch((err) => {
+                    console.log("Error Reading data " + err);
+                  });
+              }}
+            >
+              Save Settings
+            </button>
           </div>
           <div>
             <button
