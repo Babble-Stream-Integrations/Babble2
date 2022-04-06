@@ -1,12 +1,15 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import BABswitch from "../library/switch/BABswitch";
-
 import "./PrototypeComponent.css";
 
-function PrototypeComponent() {
+type PrototypeTypes = {
+  Pmodalshow: boolean;
+};
+
+function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
   // input values saved in states
-  const [raffleDuration, setRaffleDuration] = useState(60);
+  const [raffleDuration, setRaffleDuration] = useState(0);
   const [raffleEnterMessage, setRaffleEnterMessage] = useState("");
   const [raffleFreeOnly, setRaffleFreeOnly] = useState(false);
   const [rafflePaidOnly, setRafflePaidOnly] = useState(false);
@@ -21,6 +24,33 @@ function PrototypeComponent() {
   const [raffleStartData, setRaffleStartData] = useState([]);
   const [isYoutube, setIsYoutube] = useState(false);
   const [isTwitch, setIsTwitch] = useState(true);
+
+  useEffect(() => {
+    if (Pmodalshow === false) {
+      fetch(
+        "babble-d6ef3/europe-west1/default/api/v1/users/" +
+          localStorage.getItem("UUID") +
+          "/addons/MyRaffleAddon2/settings"
+      )
+        .then((response) => {
+          response.json().then((data) => {
+            setRaffleDuration(data["duration"]);
+            setRaffleEnterMessage(data["enterMessage"]);
+            setRaffleFreeOnly(data["followOnly"]);
+            setRafflePaidOnly(data["subOnly"]);
+            setRaffleFreePrivilege(data["followPrivilege"]);
+            setRafflePaidPrivilege(data["subPrivilege"]);
+            setRaffleWinnerAmount(data["winnerAmount"]);
+            setRaffleDuplicateWinners(data["duplicateWinners"]);
+            setRaffleAnnounceWinners(data["announceWinners"]);
+            setRaffleMyAccount(data["useMyAccount"]);
+          });
+        })
+        .catch((err) => {
+          console.log("Error reading datat " + err);
+        });
+    }
+  }, [Pmodalshow]);
 
   return (
     <div className="PC-container">
@@ -82,6 +112,7 @@ function PrototypeComponent() {
                 onChange={(e) => {
                   setRaffleDuration(Number(e.target.value));
                 }}
+                value={raffleDuration}
               />
             </div>
           </div>
@@ -94,6 +125,7 @@ function PrototypeComponent() {
                 onChange={(e) => {
                   setRaffleEnterMessage(e.target.value);
                 }}
+                value={raffleEnterMessage}
               />
             </div>
           </div>
@@ -138,6 +170,7 @@ function PrototypeComponent() {
                 onChange={(e) => {
                   setRaffleFreePrivilege(Number(e.target.value));
                 }}
+                value={raffleFreePrivilege}
               />
             </div>
           </div>
@@ -154,6 +187,7 @@ function PrototypeComponent() {
                 onChange={(e) => {
                   setRafflePaidPrivilege(Number(e.target.value));
                 }}
+                value={rafflePaidPrivilege}
               />
             </div>
           </div>
@@ -166,6 +200,7 @@ function PrototypeComponent() {
                 onChange={(e) => {
                   setRaffleWinnerAmount(Number(e.target.value));
                 }}
+                value={raffleWinnerAmount}
               />
             </div>
           </div>
@@ -220,7 +255,7 @@ function PrototypeComponent() {
                 fetch(
                   "babble-d6ef3/europe-west1/default/api/v1/users/" +
                     localStorage.getItem("UUID") +
-                    "/addons/MyRaffleAddon1/settings",
+                    "/addons/MyRaffleAddon2/settings",
                   {
                     method: "PUT",
                     headers: {
@@ -241,12 +276,15 @@ function PrototypeComponent() {
                   }
                 )
                   .then((response) =>
-                    response.json().then((data) => {
-                      console.log(data);
+                    response.json().then(() => {
+                      alert("Your settings have been saved!");
                     })
                   )
                   .catch((err) => {
                     console.log("Error Reading data " + err);
+                    alert(
+                      "An error has occured. No panic /nPlease contact the person you got your UUID from!"
+                    );
                   });
               }}
             >
