@@ -4,7 +4,7 @@ import PrototypeComponent from "../components/prototype/PrototypeComponent";
 import Prototype_modal from "../components/prototype_modal/Prototype_modal";
 
 function Prototype() {
-  const [Pmodalshow, setPmodalshow] = useState(false);
+  const [Pmodalshow, setPmodalshow] = useState(true);
   return (
     <div className="prototype-container">
       <Prototype_modal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
