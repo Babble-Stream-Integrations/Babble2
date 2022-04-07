@@ -42,7 +42,6 @@ function Prototype_modal({ Pmodalshow, SetPmodalShow }: Prototype_modal) {
                   )
                     .then((response) => {
                       if (response.ok) {
-                        console.log(response);
                         SetPmodalShow(false);
                         // Test id EBSnlWXow3YeFaWxokmnXIijgkv3
                         localStorage.setItem("UUID", inputUUID);

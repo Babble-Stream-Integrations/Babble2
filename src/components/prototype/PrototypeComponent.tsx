@@ -91,7 +91,6 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                 )
                   .then((response) =>
                     response.json().then((data) => {
-                      console.log(data);
                       window.location.href = data.url;
                     })
                   )
@@ -283,7 +282,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                   .catch((err) => {
                     console.log("Error Reading data " + err);
                     alert(
-                      "An error has occured. No panic /nPlease contact the person you got your UUID from!"
+                      "An error has occured. No panic \nPlease contact the person you got your UUID from!"
                     );
                   });
               }}
@@ -306,8 +305,9 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                   }),
                 })
                   .then((response) =>
-                    response.json().then((data) => {
-                      console.log(data);
+                    response.json().then(() => {
+                      console.log(response.ok);
+                      alert("Raffle has been started!");
                     })
                   )
                   .catch((err) => {
