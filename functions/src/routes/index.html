@@ -121,13 +121,14 @@
 		const RaffleResults = (winnaars) => {
 			let x = document.querySelector('#raffle-winners');
 			let winnerstr = "";
-			if (winnaars.length > 8) {
+			let winnaarsarray = winnaars.split("&&");
+			if (winnaarsarray.length > 8) {
 				document.querySelector('h2').style.fontSize = '2em';
 			} else {
 				document.querySelector('h2').style.fontSize = '3em';
 			}
-			for (let i = 0; i < winnaars.length; i++) {
-				winnerstr = winnerstr + winnaars[i] + "<br>"
+			for (let i = 0; i < winnaarsarray.length; i++) {
+				winnerstr = winnerstr + winnaarsarray[i] + "<br>"
 				// console.log(winnerstr);
 			};
 			x.innerHTML = winnerstr;
