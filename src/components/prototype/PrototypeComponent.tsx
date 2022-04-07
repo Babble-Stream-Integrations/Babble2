@@ -9,7 +9,7 @@ type PrototypeTypes = {
 
 function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
   // input values saved in states
-  const [raffleDuration, setRaffleDuration] = useState(0);
+  const [raffleDuration, setRaffleDuration] = useState(1);
   const [raffleEnterMessage, setRaffleEnterMessage] = useState("");
   const [raffleFreeOnly, setRaffleFreeOnly] = useState(false);
   const [rafflePaidOnly, setRafflePaidOnly] = useState(false);
@@ -20,8 +20,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
   const [raffleAnnounceWinners, setRaffleAnnounceWinners] = useState(false);
   const [raffleMyAccount, setRaffleMyAccount] = useState(false);
 
-  // State for start raffle data
-  const [raffleStartData, setRaffleStartData] = useState([]);
+  // Is the page youtube or not?
   const [isYoutube, setIsYoutube] = useState(false);
   const [isTwitch, setIsTwitch] = useState(true);
 
@@ -107,9 +106,16 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
             <div>
               <input
                 className="PC-input"
-                type="text"
+                type="number"
+                min={60}
                 onChange={(e) => {
                   setRaffleDuration(Number(e.target.value));
+                }}
+                onBlur={(e) => {
+                  if (Number(e.target.value) < 60) {
+                    console.log("error");
+                    setRaffleDuration(60);
+                  }
                 }}
                 value={raffleDuration}
               />
@@ -165,9 +171,15 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
             <div>
               <input
                 className="PC-input"
-                type="text"
+                type="number"
+                min={1}
                 onChange={(e) => {
                   setRaffleFreePrivilege(Number(e.target.value));
+                }}
+                onBlur={(e) => {
+                  if (Number(e.target.value) < 1) {
+                    setRaffleFreePrivilege(1);
+                  }
                 }}
                 value={raffleFreePrivilege}
               />
@@ -182,9 +194,15 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
             <div>
               <input
                 className="PC-input"
-                type="text"
+                type="number"
+                min={1}
                 onChange={(e) => {
                   setRafflePaidPrivilege(Number(e.target.value));
+                }}
+                onBlur={(e) => {
+                  if (Number(e.target.value) < 1) {
+                    setRafflePaidPrivilege(1);
+                  }
                 }}
                 value={rafflePaidPrivilege}
               />
@@ -195,9 +213,15 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
             <div>
               <input
                 className="PC-input"
-                type="text"
+                type="number"
+                min={1}
                 onChange={(e) => {
                   setRaffleWinnerAmount(Number(e.target.value));
+                }}
+                onBlur={(e) => {
+                  if (Number(e.target.value) < 1) {
+                    setRaffleWinnerAmount(1);
+                  }
                 }}
                 value={raffleWinnerAmount}
               />
@@ -251,40 +275,46 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
             <button
               className="PC-button"
               onClick={() => {
-                fetch(
-                  "babble-d6ef3/europe-west1/default/api/v1/users/" +
-                    localStorage.getItem("UUID") +
-                    "/addons/MyRaffleAddon2/settings",
-                  {
-                    method: "PUT",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      announceWinners: raffleAnnounceWinners,
-                      followOnly: raffleFreeOnly,
-                      winnerAmount: raffleWinnerAmount,
-                      useMyAccount: raffleMyAccount,
-                      subOnly: rafflePaidOnly,
-                      duplicateWinners: raffleDuplicateWinners,
-                      duration: raffleDuration,
-                      followPrivilege: raffleFreePrivilege,
-                      subPrivilege: rafflePaidPrivilege,
-                      enterMessage: raffleEnterMessage,
-                    }),
-                  }
-                )
-                  .then((response) =>
-                    response.json().then(() => {
-                      alert("Your settings have been saved!");
-                    })
+                if (raffleEnterMessage.trim().length !== 0) {
+                  fetch(
+                    "babble-d6ef3/europe-west1/default/api/v1/users/" +
+                      localStorage.getItem("UUID") +
+                      "/addons/MyRaffleAddon2/settings",
+                    {
+                      method: "PUT",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        announceWinners: raffleAnnounceWinners,
+                        followOnly: raffleFreeOnly,
+                        winnerAmount: raffleWinnerAmount,
+                        useMyAccount: raffleMyAccount,
+                        subOnly: rafflePaidOnly,
+                        duplicateWinners: raffleDuplicateWinners,
+                        duration: raffleDuration,
+                        followPrivilege: raffleFreePrivilege,
+                        subPrivilege: rafflePaidPrivilege,
+                        enterMessage: raffleEnterMessage,
+                      }),
+                    }
                   )
-                  .catch((err) => {
-                    console.log("Error Reading data " + err);
-                    alert(
-                      "An error has occured. No panic \nPlease contact the person you got your UUID from!"
-                    );
-                  });
+                    .then((response) =>
+                      response.json().then(() => {
+                        alert("Your settings have been saved!");
+                      })
+                    )
+                    .catch((err) => {
+                      console.log("Error Reading data " + err);
+                      alert(
+                        "An error has occured. No panic \nPlease contact the person you got your UUID from!"
+                      );
+                    });
+                } else {
+                  alert(
+                    "Enter message is empty \nPlease fill in an enter message"
+                  );
+                }
               }}
             >
               Save Settings
