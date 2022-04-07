@@ -9,8 +9,8 @@ type PrototypeTypes = {
 
 function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
   // input values saved in states
-  const [raffleDuration, setRaffleDuration] = useState(1);
-  const [raffleEnterMessage, setRaffleEnterMessage] = useState("");
+  const [raffleDuration, setRaffleDuration] = useState(60);
+  const [raffleEnterMessage, setRaffleEnterMessage] = useState("!join");
   const [raffleFreeOnly, setRaffleFreeOnly] = useState(false);
   const [rafflePaidOnly, setRafflePaidOnly] = useState(false);
   const [raffleFreePrivilege, setRaffleFreePrivilege] = useState(1);
