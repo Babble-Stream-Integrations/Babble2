@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="title" content="Babble Streamintegrations Raffle Overlay" />
+		<meta name="robots" content="index/noindex" />
+		<meta name="robots" content="index/nofollow" />
+		<meta name="description" content="This is the babble streamintegrations raffle overlay">
+	</head>
+	<body>
+		<style>
+			body {
+				margin: 0;
+				/* background-color: rgb(105, 105, 105); */
+			}
+
+			html {
+				overflow: hidden;
+			}
+
+			/* Container */
+			.general-container {
+				position: absolute;
+
+				height: 100%;
+				width: 100%;
+
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			/* Dynamic CSS variables */
+			:root {
+				--FontSizeTitle: 1em;
+				--FontColorTitle: black;
+
+				--FontSizeWinner: 1em;
+				--FontColorWinner: black;
+
+				--bgOpacity: 1;
+				--bgColor: 255, 255, 255;
+
+				--BorderOpacity: 2;
+				--BorderThickness: 10px;
+				--BorderStyle: solid;
+				--BorderColor: black;
+				--BorderRadius: 50px;
+				--BorderShadow: 0px;
+			}
+
+			.raffle-title {
+				font-size: 4em;
+				margin-bottom: 0;
+			}
+
+			.raffle-winners {
+				font-size: 3em;
+			}
+
+			/* Raffle */
+			.raffle {
+				display: flex;
+				justify-content: center;
+				text-align: center;
+				flex-direction: column;
+
+				margin-right: 3000px;
+
+				padding: 5px;
+
+				width: auto;
+				height: auto;
+				min-width: 580px;
+
+				background-color: rgba(var(--bgColor), var(--bgOpacity));
+				border: var(--BorderThickness) var(--BorderStyle) var(--BorderColor);
+				border-radius: var(--BorderRadius);
+
+			}
+		</style>
+		<div class="general-container">
+			<div class="raffle transition-in">
+				<h1 class="raffle-title">Congratulations</h1>
+				<h2 id="raffle-winners" class="raffle-winners"></h2>
+			</div>
+		</div>
+	</body>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+	<script>
+		let fullAnimation = anime.timeline({
+			easing: 'cubicBezier(.62,.01,.7,.72)',
+			duration: 16000,
+			autoplay: false
+		});
+
+		fullAnimation.add({
+			targets: '.raffle',
+			translateX: 1500,
+			rotate: 360,
+			duration: 3000
+		})
+		.add({
+			targets: '.raffle',
+			translateX: -1500,
+			rotate: -360,
+			duration: 3000
+		}, 13000)
+
+		const startRaffle = () => {
+			fullAnimation.play();
+			return 'Done';
+		};
+
+		//Leg connectie Back-end
+		const params = new URLSearchParams(window.location.search)
+		const id = params.get('id');
+		const evtSource = new EventSource(`http://localhost:5001/babble-d6ef3/europe-west1/default/api/v1/raffle/listen?id=${id}`, { withCredentials: true } );
+
+		const dummyarray = ['Osjesleben', 'Blamant'];
+
+		const RaffleResults = (winnaars) => {
+			let x = document.querySelector('#raffle-winners');
+			let winnerstr = "";
+			if (winnaars.length > 8) {
+				document.querySelector('h2').style.fontSize = '2em';
+			} else {
+				document.querySelector('h2').style.fontSize = '3em';
+			}
+			for (let i = 0; i < winnaars.length; i++) {
+				winnerstr = winnerstr + winnaars[i] + "<br>"
+				// console.log(winnerstr);
+			};
+			x.innerHTML = winnerstr;
+			// startRaffle();
+			return startRaffle()
+		}
+
+		// RaffleResults(dummyarray);
+
+		evtSource.addEventListener("end", (event) => {
+			const data = (event.data);
+			console.log(data);
+			// console.log("test");
+			RaffleResults(data);
+		});
+
+		// evtSource.onmessage = function(event) {
+		// 	let data = event.data;
+		// 	console.log(data);
+		// }
+
+	</script>
+</html>
