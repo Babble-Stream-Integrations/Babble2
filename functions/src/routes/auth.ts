@@ -33,7 +33,7 @@ router.get(
   (req: RequestQuery<{ code: string; scope: string; state: string }>, res) => {
     const code = req.query.code;
     twitchAuth.getTokensWithCode(code);
-    res.redirect("http://localhost:3000/prototype");
+    res.redirect("http://localhost:3000/prototype?token=received");
   }
 );
 
