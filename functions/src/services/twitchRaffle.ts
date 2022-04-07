@@ -86,7 +86,7 @@ async function startRaffle(
 
     if (
       message.toLowerCase() === settings.enterMessage &&
-      !usersEntered.includes(tags.username!)
+      !usersEntered.includes(tags["display-name"]!)
     ) {
       const status = await getStatus(
         tags.subscriber!,
@@ -99,24 +99,29 @@ async function startRaffle(
         status,
         tags["display-name"]!
       );
+
       usersEntered.push(...newUsersEntered);
+
+      console.log(status, usersEntered);
     }
   });
 
   setTimeout(function () {
-    // const winners = pickWinner(
-    //   raffleUsersEntered,
-    //   parseInt(data.winnerAmount),
-    //   data.duplicateWinners
-    // );
-    // if (data.announceWinners) {
-    //   client.say(
-    //     userChannel,
-    //     "The winners of the raffle are: " + winners.join(", ")
-    //   );
-    // }
+    console.log("Users:", usersEntered);
+    const winners = pickWinner(
+      usersEntered,
+      settings.winnerAmount,
+      settings.duplicateWinners
+    );
+    console.log("Winners:", winners);
+
+    if (settings.announceWinners) {
+      client.say(
+        streamerChannel,
+        "The winners of the raffle are: " + winners.join(", ")
+      );
+    }
     client.disconnect();
-    console.log(usersEntered);
   }, ((settings.duration * 60) / 4) * 1000);
 }
 
@@ -169,6 +174,34 @@ function calculateNewUsers(
     return [displayName];
   }
   return [];
+}
+
+function pickWinner(
+  usersEntered: string[],
+  winnerAmount: number,
+  duplicateWinners: boolean
+) {
+  let winnerArray = [];
+  for (let i = 0; i < winnerAmount; i++) {
+    if (usersEntered.length !== 0) {
+      const random = Math.floor(Math.random() * usersEntered.length);
+      winnerArray.push(usersEntered[random]);
+      if (!duplicateWinners) {
+        let i = 0;
+        const arrayItem = usersEntered[random];
+        while (i < usersEntered.length) {
+          if (usersEntered[i] === arrayItem) {
+            usersEntered.splice(i, 1);
+          } else {
+            ++i;
+          }
+        }
+      } else {
+        usersEntered.splice(random, 1);
+      }
+    }
+  }
+  return winnerArray;
 }
 
 export default { startRaffle };
