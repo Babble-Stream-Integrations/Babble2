@@ -324,6 +324,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
             <button
               className="PC-button"
               onClick={() => {
+                alert("Starting Raffle!");
                 fetch("default/api/v1/raffle/start", {
                   method: "POST",
                   headers: {
@@ -335,11 +336,8 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                   }),
                 })
                   .then((response) =>
-                    response.json().then((data) => {
-                      console.log(data);
-
-                      console.log(response.ok);
-                      alert("Raffle is finished!");
+                    response.json().then(() => {
+                      console.log(response);
                     })
                   )
                   .catch((err) => {
