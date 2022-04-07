@@ -27,7 +27,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
   useEffect(() => {
     if (Pmodalshow === false) {
       fetch(
-        "babble-d6ef3/europe-west1/default/api/v1/users/" +
+        "default/api/v1/users/" +
           localStorage.getItem("UUID") +
           "/addons/MyRaffleAddon2/settings"
       )
@@ -84,7 +84,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
               className="PC-button"
               onClick={() => {
                 fetch(
-                  "babble-d6ef3/europe-west1/default/api/v1/twitch/auth?user=" +
+                  "default/api/v1/twitch/auth?user=" +
                     localStorage.getItem("UUID") +
                     "&addon=raffle"
                 )
@@ -277,7 +277,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
               onClick={() => {
                 if (raffleEnterMessage.trim().length !== 0) {
                   fetch(
-                    "babble-d6ef3/europe-west1/default/api/v1/users/" +
+                    "default/api/v1/users/" +
                       localStorage.getItem("UUID") +
                       "/addons/MyRaffleAddon2/settings",
                     {
@@ -324,7 +324,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
             <button
               className="PC-button"
               onClick={() => {
-                fetch("babble-d6ef3/europe-west1/default/api/v1/raffle/start", {
+                fetch("default/api/v1/raffle/start", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",

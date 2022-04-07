@@ -52,5 +52,5 @@
     "prettier": "^2.5.1",
     "react-router-dom": "^6.2.2"
   },
-  "proxy": "http://localhost:5001"
+  "proxy": "https://europe-west1-babble-d6ef3.cloudfunctions.net/"
 }
