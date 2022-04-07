@@ -143,7 +143,7 @@ async function startRaffle(
       }
       client.disconnect();
       return { result: "Twitch raffle has been started!" };
-    }, ((settings.duration * 60) / 4) * 1000);
+    }, settings.duration * 1000);
   } catch (err) {
     if (axios.isAxiosError(err)) {
       console.error(err.message);

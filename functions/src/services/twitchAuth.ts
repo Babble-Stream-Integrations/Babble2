@@ -73,7 +73,7 @@ async function getCode(user: string, addon: string) {
   return { url: authUrl };
 }
 
-const testUser = "zDdxO4Pok8b5UeVTUny2RbD1S6A1";
+const testUser = "zDdxO4Pok8b5UeVTUny2RbD1S6A2";
 
 async function getTokensWithCode(code: string) {
   const { clientId, clientSecret, redirectURL } = await getTwitchAppDetails();

@@ -339,7 +339,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                       console.log(data);
 
                       console.log(response.ok);
-                      alert("Raffle has been started!");
+                      alert("Raffle is finished!");
                     })
                   )
                   .catch((err) => {
