@@ -24,7 +24,7 @@ export const Header = () => {
             <img className="nav-avatar-profile" src={avatar} alt="profile" />
           </div>
           <div>
-            <button className="log-button">Log out</button>
+            <button className="log-button">Log in</button>
           </div>
           <div className="nav-menu">
             <img className="hamburger-menu" alt="Babble" src={hamburger} />
@@ -34,3 +34,5 @@ export const Header = () => {
     </div>
   );
 };
+
+export default Header;

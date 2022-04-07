@@ -1,11 +1,14 @@
 import React from "react";
-import { Header } from "./components/Navbar/Header";
+import { Routes, Route } from "react-router-dom";
+import AddonPage from "./pages/addon_page/AddonPage";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <Header />
+      <Routes>
+        <Route path="/addonpage" element={<AddonPage />} />
+      </Routes>
     </div>
   );
 }
