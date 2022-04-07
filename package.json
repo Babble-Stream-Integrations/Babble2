@@ -21,7 +21,8 @@
     "build": "npm run lint && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .ts --cache"
+    "lint": "eslint . --ext .ts --cache",
+    "deploy": "firebase deploy --only hosting"
   },
   "eslintConfig": {
     "extends": [

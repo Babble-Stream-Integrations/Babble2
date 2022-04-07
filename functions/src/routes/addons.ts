@@ -49,8 +49,10 @@ router.post("/raffle/start", async (req, res) => {
         refreshToken: tokensDoc.data()!.refresh_token,
         scope: tokensDoc.data()!.scope,
       };
-      twitchRaffle.startRaffle(settingsDoc.data()!.settings, tokens);
-      res.send({ result: "Twitch raffle has been started!" });
+
+      res.send(
+        await twitchRaffle.startRaffle(settingsDoc.data()!.settings, tokens)
+      );
     }
   } else {
     throw new Error("no platform detected");

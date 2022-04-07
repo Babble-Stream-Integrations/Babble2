@@ -305,7 +305,9 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                   }),
                 })
                   .then((response) =>
-                    response.json().then(() => {
+                    response.json().then((data) => {
+                      console.log(data);
+
                       console.log(response.ok);
                       alert("Raffle has been started!");
                     })

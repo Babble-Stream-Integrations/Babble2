@@ -31,14 +31,10 @@ async function getPrevScope(user: string) {
     .doc("twitch")
     .get();
 
-  if (!doc.exists) {
-    return "";
+  if (doc.exists && doc.data()!.scope) {
+    return doc.data()!.scope;
   }
-  if (!("scope" in doc.data()!)) {
-    return "";
-  }
-
-  return doc.data()!.scope;
+  return [];
 }
 
 async function getNextScope(addon: string) {
@@ -50,6 +46,8 @@ async function getNextScope(addon: string) {
 }
 
 async function calculateScope(user: string, addon: string) {
+  console.log(await getPrevScope(user), await getNextScope(addon));
+
   // Merge prev&next scopes
   const scopes = (await getPrevScope(user)).concat(await getNextScope(addon));
 
@@ -75,7 +73,7 @@ async function getCode(user: string, addon: string) {
   return { url: authUrl };
 }
 
-const testUser = "EBSnlWXow3YeFaWxokmnXIijgkv3";
+const testUser = "zDdxO4Pok8b5UeVTUny2RbD1S6A1";
 
 async function getTokensWithCode(code: string) {
   const { clientId, clientSecret, redirectURL } = await getTwitchAppDetails();
@@ -101,4 +99,30 @@ async function getTokensWithCode(code: string) {
   }
 }
 
+async function refreshAccessToken(refreshToken: string): Promise<string[]> {
+  const { clientId, clientSecret } = await getTwitchAppDetails();
+
+  try {
+    const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
+      params: {
+        refresh_token: refreshToken,
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: "refresh_token",
+      },
+    });
+    const tokenRes = db
+      .collection("users")
+      .doc(testUser)
+      .collection("tokens")
+      .doc("twitch")
+      .set(res.data);
+
+    return [res.data.access_token, res.data.refresh_token];
+  } catch (err) {
+    throw new Error("Couldn't refresh accessToken");
+  }
+}
+
 export default { getCode, getTokensWithCode };
+export { refreshAccessToken };

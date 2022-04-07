@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios, { Axios, AxiosResponse } from "axios";
 import tmi from "tmi.js";
+import { refreshAccessToken } from "./twitchAuth";
 import admin from "firebase-admin";
 
 !admin.apps.length ? admin.initializeApp() : admin.app();
@@ -29,19 +30,37 @@ async function getClientId(): Promise<string> {
   return doc.data()!.clientId;
 }
 
-async function getStreamerChannel(accessToken: string): Promise<string[]> {
-  const res = await axios.get("https://api.twitch.tv/helix/users", {
-    headers: {
-      Authorization: "Bearer " + accessToken,
-      "Client-Id": await getClientId(),
-    },
-  });
+async function getStreamerChannel(
+  accessToken: string,
+  refreshToken: string
+): Promise<string[]> {
+  try {
+    const res = await axios.get("https://api.twitch.tv/helix/users", {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+        "Client-Id": await getClientId(),
+      },
+    });
 
-  const streamerChannel: string = "#" + res.data.data[0].login;
-  const streamerID: string = res.data.data[0].id;
-  const streamerName: string = res.data.data[0].login;
-  const streamerPassword: string = "oauth:" + accessToken;
-  return [streamerChannel, streamerID, streamerName, streamerPassword];
+    const streamerChannel: string = "#" + res.data.data[0].login;
+    const streamerID: string = res.data.data[0].id;
+    const streamerName: string = res.data.data[0].login;
+    const streamerPassword: string = "oauth:" + accessToken;
+    return [streamerChannel, streamerID, streamerName, streamerPassword];
+  } catch (err) {
+    try {
+      const [newAccessToken, newrefreshToken] = await refreshAccessToken(
+        refreshToken
+      );
+      return await getStreamerChannel(newAccessToken, newrefreshToken);
+    } catch (err) {
+      console.error(err);
+    }
+    if (axios.isAxiosError(err)) {
+      throw err;
+    }
+    throw new Error("Couldn't get Twitch user");
+  }
 }
 
 async function getBotDetails() {
@@ -56,73 +75,81 @@ async function startRaffle(
   console.log(settings, tokens);
   console.log("Start Twitch Raffle");
 
-  const [streamerChannel, streamerID, streamerName, streamerPassword] =
-    await getStreamerChannel(tokens.accessToken);
-  const [botName, botPassword] = await getBotDetails();
+  try {
+    const [streamerChannel, streamerID, streamerName, streamerPassword] =
+      await getStreamerChannel(tokens.accessToken, tokens.refreshToken);
+    const [botName, botPassword] = await getBotDetails();
 
-  const client = new tmi.Client({
-    options: {
-      debug: true,
-    },
-    identity: {
-      username: settings.useMyAccount ? streamerName : botName,
-      password: settings.useMyAccount ? streamerPassword : botPassword,
-    },
-    channels: [streamerName],
-  });
+    const client = new tmi.Client({
+      options: {
+        debug: true,
+      },
+      identity: {
+        username: settings.useMyAccount ? streamerName : botName,
+        password: settings.useMyAccount ? streamerPassword : botPassword,
+      },
+      channels: [streamerName],
+    });
 
-  client.connect().then(() => {
-    client.say(
-      streamerChannel,
-      "Raffle started! Type " + settings.enterMessage + " to enter"
-    );
-  });
-
-  let usersEntered: string[] = [];
-
-  client.on("message", async (channel, tags, message, self) => {
-    // Ignore echoed messages.
-    if (self) return;
-
-    if (
-      message.toLowerCase() === settings.enterMessage &&
-      !usersEntered.includes(tags["display-name"]!)
-    ) {
-      const status = await getStatus(
-        tags.subscriber!,
-        tags["user-id"]!,
-        streamerID,
-        tokens.accessToken
-      );
-      const newUsersEntered = calculateNewUsers(
-        settings,
-        status,
-        tags["display-name"]!
-      );
-
-      usersEntered.push(...newUsersEntered);
-
-      console.log(status, usersEntered);
-    }
-  });
-
-  setTimeout(function () {
-    console.log("Users:", usersEntered);
-    const winners = pickWinner(
-      usersEntered,
-      settings.winnerAmount,
-      settings.duplicateWinners
-    );
-    console.log("Winners:", winners);
-
-    if (settings.announceWinners) {
+    client.connect().then(() => {
       client.say(
         streamerChannel,
-        "The winners of the raffle are: " + winners.join(", ")
+        "Raffle started! Type " + settings.enterMessage + " to enter"
       );
+    });
+
+    let usersEntered: string[] = [];
+
+    client.on("message", async (channel, tags, message, self) => {
+      // Ignore echoed messages.
+      if (self) return;
+
+      if (
+        message.toLowerCase() === settings.enterMessage &&
+        !usersEntered.includes(tags["display-name"]!)
+      ) {
+        const status = await getStatus(
+          tags.subscriber!,
+          tags["user-id"]!,
+          streamerID,
+          tokens.accessToken
+        );
+        const newUsersEntered = calculateNewUsers(
+          settings,
+          status,
+          tags["display-name"]!
+        );
+
+        usersEntered.push(...newUsersEntered);
+
+        console.log(status, usersEntered);
+      }
+    });
+
+    setTimeout(function () {
+      console.log("Users:", usersEntered);
+      const winners = pickWinner(
+        usersEntered,
+        settings.winnerAmount,
+        settings.duplicateWinners
+      );
+      console.log("Winners:", winners);
+
+      if (settings.announceWinners) {
+        client.say(
+          streamerChannel,
+          "The winners of the raffle are: " + winners.join(", ")
+        );
+      }
+      client.disconnect();
+      return { result: "Twitch raffle has been started!" };
+    }, ((settings.duration * 60) / 4) * 1000);
+  } catch (err) {
+    if (axios.isAxiosError(err)) {
+      console.error(err.message);
+      return { error: err.response?.status };
     }
-    client.disconnect();
-  }, ((settings.duration * 60) / 4) * 1000);
+  }
 }
 
 async function getStatus(
