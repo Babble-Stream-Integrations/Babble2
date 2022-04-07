@@ -4,7 +4,7 @@ lib
 # React build output
 build
 
-# Firebase
+# Firebase output
 .firebase
 
 # Logs

@@ -79,8 +79,9 @@ const testUser = "EBSnlWXow3YeFaWxokmnXIijgkv3";
 
 async function getTokensWithCode(code: string) {
   const { clientId, clientSecret, redirectURL } = await getTwitchAppDetails();
-  await axios
-    .post("https://id.twitch.tv/oauth2/token", null, {
+
+  try {
+    const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
       params: {
         client_id: clientId,
         client_secret: clientSecret,
@@ -88,19 +89,16 @@ async function getTokensWithCode(code: string) {
         grant_type: "authorization_code",
         redirect_uri: redirectURL,
       },
-    })
-    .then((response) => {
-      console.log(response.data);
-      const res = db
-        .collection("users")
-        .doc(testUser)
-        .collection("tokens")
-        .doc("twitch")
-        .set(response.data);
-    })
-    .catch((error) => {
-      console.log(error.response);
     });
+    const tokenRes = db
+      .collection("users")
+      .doc(testUser)
+      .collection("tokens")
+      .doc("twitch")
+      .set(res.data);
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 export default { getCode, getTokensWithCode };

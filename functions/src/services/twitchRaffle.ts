@@ -10,8 +10,8 @@ interface TwitchRaffleSettings {
   duplicateWinners: boolean;
   duration: number;
   enterMessage: string;
-  memberOnly: boolean;
-  memberPrivilege: number;
+  followOnly: boolean;
+  followPrivilege: number;
   subOnly: boolean;
   subPrivilege: number;
   useMyAccount: boolean;
@@ -29,7 +29,7 @@ async function getClientId(): Promise<string> {
   return doc.data()!.clientId;
 }
 
-async function getUserChannel(accessToken: string): Promise<string[]> {
+async function getStreamerChannel(accessToken: string): Promise<string[]> {
   const res = await axios.get("https://api.twitch.tv/helix/users", {
     headers: {
       Authorization: "Bearer " + accessToken,
@@ -37,11 +37,11 @@ async function getUserChannel(accessToken: string): Promise<string[]> {
     },
   });
 
-  const userChannel: string = "#" + res.data.data[0].login;
-  const userID: string = res.data.data[0].id;
-  const userName: string = res.data.data[0].login;
-  const userPassword: string = "oauth:" + accessToken;
-  return [userChannel, userID, userName, userPassword];
+  const streamerChannel: string = "#" + res.data.data[0].login;
+  const streamerID: string = res.data.data[0].id;
+  const streamerName: string = res.data.data[0].login;
+  const streamerPassword: string = "oauth:" + accessToken;
+  return [streamerChannel, streamerID, streamerName, streamerPassword];
 }
 
 async function getBotDetails() {
@@ -56,9 +56,8 @@ async function startRaffle(
   console.log(settings, tokens);
   console.log("Start Twitch Raffle");
 
-  const [userChannel, userID, userName, userPassword] = await getUserChannel(
-    tokens.accessToken
-  );
+  const [streamerChannel, streamerID, streamerName, streamerPassword] =
+    await getStreamerChannel(tokens.accessToken);
   const [botName, botPassword] = await getBotDetails();
 
   const client = new tmi.Client({
@@ -66,39 +65,41 @@ async function startRaffle(
       debug: true,
     },
     identity: {
-      username: settings.useMyAccount ? userName : botName,
-      password: settings.useMyAccount ? userPassword : botPassword,
+      username: settings.useMyAccount ? streamerName : botName,
+      password: settings.useMyAccount ? streamerPassword : botPassword,
     },
-    channels: [userName],
+    channels: [streamerName],
   });
 
   client.connect().then(() => {
     client.say(
-      userChannel,
+      streamerChannel,
       "Raffle started! Type " + settings.enterMessage + " to enter"
     );
   });
 
-  let raffleUsersEntered: string[] = [];
+  let usersEntered: string[] = [];
 
-  client.on("message", (channel, tags, message, self) => {
+  client.on("message", async (channel, tags, message, self) => {
     // Ignore echoed messages.
     if (self) return;
 
     if (
       message.toLowerCase() === settings.enterMessage &&
-      !raffleUsersEntered.includes(tags.username!)
+      !usersEntered.includes(tags.username!)
     ) {
-      console.log(tags["display-name"]);
-
-      // sortUser(
-      //   data,
-      //   raffleUsersEntered,
-      //   tags["display-name"],
-      //   tags["user-id"],
-      //   userID,
-      //   tags.subscriber
-      // );
+      const status = await getStatus(
+        tags.subscriber!,
+        tags["user-id"]!,
+        streamerID,
+        tokens.accessToken
+      );
+      const newUsersEntered = calculateNewUsers(
+        settings,
+        status,
+        tags["display-name"]!
+      );
+      usersEntered.push(...newUsersEntered);
     }
   });
 
@@ -115,8 +116,59 @@ async function startRaffle(
     //   );
     // }
     client.disconnect();
-    console.log("Raffle ended!");
-  }, settings.duration * 60 * 1000);
+    console.log(usersEntered);
+  }, ((settings.duration * 60) / 4) * 1000);
+}
+
+async function getStatus(
+  isSubscribed: boolean,
+  viewerID: string,
+  streamerID: string,
+  accessToken: string
+): Promise<string> {
+  if (isSubscribed === true) {
+    return "Subscriber";
+  }
+
+  try {
+    const res = await axios.get(
+      "https://api.twitch.tv/helix/users/follows?from_id=" +
+        viewerID +
+        "&to_id=" +
+        streamerID +
+        "",
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "Client-Id": await getClientId(),
+        },
+      }
+    );
+    if (res.data.total === 1) {
+      return "Follower";
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  return "Pleb";
+}
+
+function calculateNewUsers(
+  settings: TwitchRaffleSettings,
+  status: string,
+  displayName: string
+): string[] {
+  if (status === "Subscriber") {
+    return Array(settings.subPrivilege).fill(displayName);
+  }
+  if (status === "Follower" && !settings.subOnly) {
+    return Array(settings.followPrivilege).fill(displayName);
+  }
+  if (!settings.subOnly && !settings.followOnly) {
+    return [displayName];
+  }
+  return [];
 }
 
 export default { startRaffle };
