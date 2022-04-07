@@ -13,7 +13,7 @@ async function connect(id:string, res:any) {
 	};
 	res.writeHead(200, headers);
 	// setInterval(function () {res.write(":\n\n");}, 4000);
-    setInterval(function () {res.write("event:end\n"); client.res.write('data: test && werkt && dit}\n\n');}, 4000);
+    setInterval(function () {res.write("event:end\n"); client.res.write('data: test && werkt && dit\n\n');}, 4000);
 
 
 	const client:Client = {
