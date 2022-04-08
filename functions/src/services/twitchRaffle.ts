@@ -1,3 +1,5 @@
+import Sse from "./serverSentEvents";
+
 interface TwitchRaffleSettings {
   announceWinners: boolean;
   duplicateWinners: boolean;
@@ -22,6 +24,7 @@ async function startRaffle(
   tokens: TwitchTokens
 ) {
   console.log(settings, tokens);
+  Sse.end("m3jUxL2oFnmCEnAxsUYfzjcEb05RpGoZ", ["test", "hello"]);
 }
 
 export default { startRaffle };
