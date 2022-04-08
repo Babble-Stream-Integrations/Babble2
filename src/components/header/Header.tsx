@@ -5,7 +5,7 @@ import avatar from "../../assets/avatar.png";
 import hamburger from "../../assets/hamburgericon.png";
 import "./Header.css";
 
-export const Header = () => {
+const Header = () => {
   const isDesktop = useMatchMedia("(min-width: 500px)", true);
   const isPhone = useMatchMedia("(max-width: 499px)", true);
 

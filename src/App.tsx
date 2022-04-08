@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/addonpage" element={<AddonPage />} />
+        <Route path="/" element={<AddonPage />} />
       </Routes>
     </div>
   );
