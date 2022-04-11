@@ -8,7 +8,7 @@
     "source": "functions"
   },
   "hosting": {
-    "target": "dev",
+    "target": "main",
     "public": "build",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [

@@ -24,7 +24,8 @@ const router = express.Router();
 router.get(
   "/twitch/auth",
   async (req: RequestQuery<{ user: string; addon: string }>, res) => {
-    res.send(await twitchAuth.getCode(req.query.user, req.query.addon));
+    const authUrl = await twitchAuth.getCode(req.query.user, req.query.addon);
+    res.send(authUrl);
   }
 );
 

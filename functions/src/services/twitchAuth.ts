@@ -17,7 +17,7 @@ async function getTwitchAppDetails() {
   const results: twitchAppDetails = {
     clientId: doc.data()!.clientId,
     clientSecret: doc.data()!.clientSecret,
-    redirectURL: doc.data()!.redirectURLDev,
+    redirectURL: doc.data()!.redirectURLMain,
     state: doc.data()!.state,
   };
   return results;
@@ -70,7 +70,7 @@ async function getCode(user: string, addon: string) {
     `https://id.twitch.tv/oauth2/authorize` +
     `?response_type=code&force_verify=true&client_id=${clientId}&redirect_uri=${redirectURL}&scope=${scopes}&state=${state}`;
 
-  return { url: authUrl };
+  return authUrl;
 }
 
 const testUser = "zDdxO4Pok8b5UeVTUny2RbD1S6A2";

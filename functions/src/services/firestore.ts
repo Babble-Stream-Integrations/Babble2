@@ -4,6 +4,8 @@ import admin from "firebase-admin";
 const db = admin.firestore();
 
 // User functions
+interface User {}
+
 async function getUsers() {
   const col = await db.collection("users").get();
   return col.docs.map((doc) => doc.id);
@@ -25,12 +27,44 @@ async function deleteUser(user: string) {
 }
 
 // UserAddons functions
+interface addon {
+  platform: string;
+  type: string;
+  uniqueString: string;
+  settings: raffleSettings;
+  looks?: unknown;
+  designSettings?: unknown;
+}
+interface raffleSettings {
+  announceWinners: boolean;
+  duplicateWinners: boolean;
+  duration: number;
+  enterMessage: string;
+  useMyAccount: boolean;
+  winnerAmount: number;
+  platformOptions: twitchOptions | youtubeOptions;
+}
+
+interface twitchOptions {
+  followOnly: boolean;
+  followPrivilege: number;
+  subOnly: boolean;
+  subPrivilege: number;
+}
+
+interface youtubeOptions {
+  subOnly: boolean;
+  subPrivilege: number;
+  memberOnly: boolean;
+  memberPrivilege: number;
+}
+
 async function getAddons(user: string) {
   const col = await db.collection("users").doc(user).collection("addons").get();
   return col.docs.map((doc) => doc.id);
 }
 
-async function addAddon(user: string, addon: string, data: any) {
+async function addAddon(user: string, addon: string, data: addon) {
   const doc = await db
     .collection("users")
     .doc(user)
@@ -61,7 +95,11 @@ async function deleteAddon(user: string, addon: string) {
   return { result: `addon ${addon} deleted from ${user}` };
 }
 
-async function updateSettings(user: string, addon: string, data: any) {
+async function updateSettings(
+  user: string,
+  addon: string,
+  data: raffleSettings
+) {
   const doc = await db
     .collection("users")
     .doc(user)
@@ -87,12 +125,24 @@ async function getSettings(user: string, addon: string) {
 }
 
 // UserToken functions
+interface tokens {
+  access_token: string;
+  refresh_token: string;
+  scope: string[];
+  expires_in?: number;
+  token_type?: string;
+}
+
+interface code {
+  code: string;
+}
+
 async function getTokens(user: string) {
   const col = await db.collection("users").doc(user).collection("tokens").get();
   return col.docs.map((doc) => doc.id);
 }
 
-async function addToken(user: string, platform: string, data: any) {
+async function addToken(user: string, platform: string, data: tokens | code) {
   const doc = await db
     .collection("users")
     .doc(user)

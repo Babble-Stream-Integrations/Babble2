@@ -51,6 +51,5 @@
     "eslint-plugin-react": "^7.28.0",
     "prettier": "^2.5.1",
     "react-router-dom": "^6.3.0"
-  },
-  "proxy": "https://europe-west1-babble-d6ef3.cloudfunctions.net/"
+  }
 }
