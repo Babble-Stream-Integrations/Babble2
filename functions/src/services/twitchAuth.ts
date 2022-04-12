@@ -1,20 +1,29 @@
 import axios from "axios";
 import admin from "firebase-admin";
+import { Token } from "typescript";
 
 !admin.apps.length ? admin.initializeApp() : admin.app();
 const db = admin.firestore();
 
-interface twitchAppDetails {
+interface TwitchAppDetails {
   clientId: string;
   clientSecret: string;
   redirectURL: string;
   state: string;
 }
 
+interface Tokens {
+  access_token: string;
+  refresh_token: string;
+  scope: string[];
+  expires_in?: number;
+  token_type?: string;
+}
+
 async function getTwitchAppDetails() {
   const doc = await db.collection("dev").doc("twitchAppDetails").get();
 
-  const results: twitchAppDetails = {
+  const results: TwitchAppDetails = {
     clientId: doc.data()!.clientId,
     clientSecret: doc.data()!.clientSecret,
     redirectURL: doc.data()!.redirectURLMain,
@@ -26,7 +35,7 @@ async function getTwitchAppDetails() {
 async function getPrevScope(user: string) {
   const doc = await db
     .collection("users")
-    .doc(testUser)
+    .doc(user)
     .collection("tokens")
     .doc("twitch")
     .get();
@@ -73,9 +82,7 @@ async function getCode(user: string, addon: string) {
   return authUrl;
 }
 
-const testUser = "zDdxO4Pok8b5UeVTUny2RbD1S6A2";
-
-async function getTokensWithCode(code: string) {
+async function getTokensWithCode(code: string): Promise<Tokens> {
   const { clientId, clientSecret, redirectURL } = await getTwitchAppDetails();
 
   try {
@@ -88,14 +95,11 @@ async function getTokensWithCode(code: string) {
         redirect_uri: redirectURL,
       },
     });
-    const tokenRes = db
-      .collection("users")
-      .doc(testUser)
-      .collection("tokens")
-      .doc("twitch")
-      .set(res.data);
+    return res.data as Tokens;
   } catch (err) {
-    console.error(err);
+    if (axios.isAxiosError(err)) {
+      throw err.response?.data;
+    }
   }
 }
 
@@ -113,7 +117,7 @@ async function refreshAccessToken(refreshToken: string): Promise<string[]> {
     });
     const tokenRes = db
       .collection("users")
-      .doc(testUser)
+      .doc("sf")
       .collection("tokens")
       .doc("twitch")
       .set(res.data);
@@ -124,5 +128,4 @@ async function refreshAccessToken(refreshToken: string): Promise<string[]> {
   }
 }
 
-export default { getCode, getTokensWithCode };
-export { refreshAccessToken };
+export { getCode, getTokensWithCode, refreshAccessToken };

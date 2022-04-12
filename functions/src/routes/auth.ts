@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 // import youtubeAuth from "../services/youtubeAuth";
-import twitchAuth from "../services/twitchAuth";
+import { getCode } from "../services/twitchAuth";
 import { Query } from "express-serve-static-core";
 
 export interface RequestQuery<T extends Query> extends Express.Request {
@@ -24,17 +24,8 @@ const router = express.Router();
 router.get(
   "/twitch/auth",
   async (req: RequestQuery<{ user: string; addon: string }>, res) => {
-    const authUrl = await twitchAuth.getCode(req.query.user, req.query.addon);
+    const authUrl = await getCode(req.query.user, req.query.addon);
     res.send(authUrl);
-  }
-);
-
-router.get(
-  "/twitch/callback",
-  (req: RequestQuery<{ code: string; scope: string; state: string }>, res) => {
-    const code = req.query.code;
-    twitchAuth.getTokensWithCode(code);
-    res.redirect("https://dev-babble.web.app/prototype");
   }
 );
 

@@ -18,24 +18,24 @@ app.use(
   })
 );
 
-// app.use(function (req, res, next) {
-//   const origin =
-//     req.headers.origin == "http://localhost:3000"
-//       ? "http://localhost:3000"
-//       : "https://dev-babble.web.app";
-//   res.setHeader("Access-Control-Allow-Origin", origin);
-//   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, DELETE");
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "X-Requested-With,content-type"
-//   );
-//   next();
-// });
+app.use(function (req, res, next) {
+  const origin =
+    req.headers.origin == "http://localhost:3000"
+      ? "http://localhost:3000"
+      : "https://dev-babble.web.app";
+  res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  next();
+});
 
 // twitchService.checkChat();
-// app.use("/api/v1", userRoutes);
-// app.use("/api/v1", addonRoutes);
-// app.use("/api/v1", authRoutes);
+app.use("/api/v1", userRoutes);
+app.use("/api/v1", addonRoutes);
+app.use("/api/v1", authRoutes);
 
 app.get("/", (_req: Request, res: Response) => {
   res.send({
@@ -43,7 +43,7 @@ app.get("/", (_req: Request, res: Response) => {
   });
 });
 
-app.get("/:from/:to", async (req: Request, res: Response) => {
+app.get("/copy/:from/:to", async (req: Request, res: Response) => {
   const fromArr = req.params.from.split("-");
   const toArr = req.params.to.split("-");
   let fromPath: FirebaseFirestore.DocumentData = db;
@@ -75,4 +75,4 @@ app.get("/:from/:to", async (req: Request, res: Response) => {
   });
 });
 
-export const copyDoc = functions.region("europe-west1").https.onRequest(app);
+export default functions.region("europe-west1").https.onRequest(app);
