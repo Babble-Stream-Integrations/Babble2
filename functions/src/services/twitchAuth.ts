@@ -1,8 +1,6 @@
 import axios from "axios";
 import admin from "firebase-admin";
-import { Token } from "typescript";
 
-!admin.apps.length ? admin.initializeApp() : admin.app();
 const db = admin.firestore();
 
 interface TwitchAppDetails {
@@ -97,9 +95,7 @@ async function getTokensWithCode(code: string): Promise<Tokens> {
     });
     return res.data as Tokens;
   } catch (err) {
-    if (axios.isAxiosError(err)) {
-      throw err.response?.data;
-    }
+    throw err;
   }
 }
 

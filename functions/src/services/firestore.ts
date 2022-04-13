@@ -1,8 +1,7 @@
 import { getTokensWithCode } from "./twitchAuth";
-import admin from "firebase-admin";
 import axios from "axios";
+import admin from "firebase-admin";
 
-!admin.apps.length ? admin.initializeApp() : admin.app();
 const db = admin.firestore();
 
 // User functions
@@ -153,7 +152,10 @@ async function addToken(user: string, platform: string, data: Tokens | Code) {
     try {
       tokens = await getTokensWithCode((data as Code).code);
     } catch (err) {
-      return { error: err };
+      if (axios.isAxiosError(err)) {
+        return { error: err.response?.data };
+      }
+      return { error: "Couldn't generate token" };
     }
   } else {
     tokens = data as Tokens;

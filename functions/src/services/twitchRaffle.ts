@@ -3,7 +3,6 @@ import tmi from "tmi.js";
 import { refreshAccessToken } from "./twitchAuth";
 import admin from "firebase-admin";
 
-!admin.apps.length ? admin.initializeApp() : admin.app();
 const db = admin.firestore();
 
 interface TwitchRaffleSettings {

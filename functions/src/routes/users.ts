@@ -1,8 +1,7 @@
 import express, { Request, Response } from "express";
-import admin from "firebase-admin";
 import firestore from "../services/firestore";
+import admin from "firebase-admin";
 
-!admin.apps.length ? admin.initializeApp() : admin.app();
 const db = admin.firestore();
 
 const router = express.Router();
