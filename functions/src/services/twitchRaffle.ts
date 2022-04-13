@@ -114,24 +114,19 @@ function pickWinner(
   winnerAmount: number,
   duplicateWinners: boolean
 ) {
+  let usersRemaining = usersEntered;
   const winnerArray = [];
   for (let i = 0; i < winnerAmount; i += 1) {
-    if (usersEntered.length !== 0) {
-      const random = Math.floor(Math.random() * usersEntered.length);
-      winnerArray.push(usersEntered[random]);
-      if (!duplicateWinners) {
-        let x = 0;
-        const arrayItem = usersEntered[random];
-        while (x < usersEntered.length) {
-          if (usersEntered[x] === arrayItem) {
-            usersEntered.splice(x, 1);
-          } else {
-            x += 1;
-          }
-        }
-      } else {
-        usersEntered.splice(random, 1);
-      }
+    if (usersRemaining.length === 0) {
+      return winnerArray;
+    }
+    const randomIndex = Math.floor(Math.random() * usersRemaining.length);
+    const randomUser = usersRemaining[randomIndex];
+    winnerArray.push(randomIndex);
+    if (duplicateWinners) {
+      usersRemaining.splice(randomIndex, 1);
+    } else {
+      usersRemaining = usersRemaining.filter((user) => user !== randomUser);
     }
   }
   return winnerArray;
