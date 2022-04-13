@@ -11,11 +11,11 @@ interface TwitchAppDetails {
 }
 
 interface Tokens {
-  access_token: string;
-  refresh_token: string;
+  accessToken: string;
+  refreshToken: string;
   scope: string[];
-  expires_in?: number;
-  token_type?: string;
+  expiresIn?: number;
+  tokenType?: string;
 }
 
 async function getTwitchAppDetails() {
@@ -47,7 +47,7 @@ async function getPrevScope(user: string) {
 async function getNextScope(addon: string) {
   const doc = await db.collection("dev").doc("twitchAddonScopes").get();
   if (!doc.exists) {
-    new Error("Wrong addon specified!");
+    throw new Error("Wrong addon specified!");
   }
   return doc.data()![addon];
 }
@@ -83,20 +83,16 @@ async function getCode(user: string, addon: string) {
 async function getTokensWithCode(code: string): Promise<Tokens> {
   const { clientId, clientSecret, redirectURL } = await getTwitchAppDetails();
 
-  try {
-    const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
-      params: {
-        client_id: clientId,
-        client_secret: clientSecret,
-        code: code,
-        grant_type: "authorization_code",
-        redirect_uri: redirectURL,
-      },
-    });
-    return res.data as Tokens;
-  } catch (err) {
-    throw err;
-  }
+  const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
+    params: {
+      client_id: clientId,
+      client_secret: clientSecret,
+      code,
+      grant_type: "authorization_code",
+      redirect_uri: redirectURL,
+    },
+  });
+  return res.data as Tokens;
 }
 
 async function refreshAccessToken(refreshToken: string): Promise<string[]> {
@@ -111,8 +107,7 @@ async function refreshAccessToken(refreshToken: string): Promise<string[]> {
         grant_type: "refresh_token",
       },
     });
-    const tokenRes = db
-      .collection("users")
+    db.collection("users")
       .doc("sf")
       .collection("tokens")
       .doc("twitch")

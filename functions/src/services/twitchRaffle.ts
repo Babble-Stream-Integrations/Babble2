@@ -1,7 +1,7 @@
-import axios, { Axios, AxiosResponse } from "axios";
+import axios from "axios";
 import tmi from "tmi.js";
-import { refreshAccessToken } from "./twitchAuth";
 import admin from "firebase-admin";
+import { refreshAccessToken } from "./twitchAuth";
 
 const db = admin.firestore();
 
@@ -36,15 +36,15 @@ async function getStreamerChannel(
   try {
     const res = await axios.get("https://api.twitch.tv/helix/users", {
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: `Bearer ${accessToken}`,
         "Client-Id": await getClientId(),
       },
     });
 
-    const streamerChannel: string = "#" + res.data.data[0].login;
+    const streamerChannel: string = `# ${res.data.data[0].login}`;
     const streamerID: string = res.data.data[0].id;
     const streamerName: string = res.data.data[0].login;
-    const streamerPassword: string = "oauth:" + accessToken;
+    const streamerPassword: string = `oauth: ${accessToken}`;
     return [streamerChannel, streamerID, streamerName, streamerPassword];
   } catch (err) {
     try {
@@ -52,11 +52,10 @@ async function getStreamerChannel(
         refreshToken
       );
       return await getStreamerChannel(newAccessToken, newrefreshToken);
-    } catch (err) {
-      console.error(err);
-    }
-    if (axios.isAxiosError(err)) {
-      throw err;
+    } catch (refreshErr) {
+      if (axios.isAxiosError(err)) {
+        throw err;
+      }
     }
     throw new Error("Couldn't get Twitch user");
   }
@@ -65,6 +64,77 @@ async function getStreamerChannel(
 async function getBotDetails() {
   const doc = await db.collection("dev").doc("twitchBot").get();
   return [doc.data()!.name, doc.data()!.token];
+}
+
+async function getStatus(
+  isSubscribed: boolean,
+  viewerID: string,
+  streamerID: string,
+  accessToken: string
+): Promise<string> {
+  if (isSubscribed === true) {
+    return "Subscriber";
+  }
+
+  const res = await axios.get(
+    `https://api.twitch.tv/helix/users/follows?from_id=${viewerID}&to_id=${streamerID}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-Id": await getClientId(),
+      },
+    }
+  );
+  if (res.data.total === 1) {
+    return "Follower";
+  }
+
+  return "Pleb";
+}
+
+function calculateNewUsers(
+  settings: TwitchRaffleSettings,
+  status: string,
+  displayName: string
+): string[] {
+  if (status === "Subscriber") {
+    return Array(settings.subPrivilege).fill(displayName);
+  }
+  if (status === "Follower" && !settings.subOnly) {
+    return Array(settings.followPrivilege).fill(displayName);
+  }
+  if (!settings.subOnly && !settings.followOnly) {
+    return [displayName];
+  }
+  return [];
+}
+
+function pickWinner(
+  usersEntered: string[],
+  winnerAmount: number,
+  duplicateWinners: boolean
+) {
+  const winnerArray = [];
+  for (let i = 0; i < winnerAmount; i += 1) {
+    if (usersEntered.length !== 0) {
+      const random = Math.floor(Math.random() * usersEntered.length);
+      winnerArray.push(usersEntered[random]);
+      if (!duplicateWinners) {
+        let x = 0;
+        const arrayItem = usersEntered[random];
+        while (x < usersEntered.length) {
+          if (usersEntered[x] === arrayItem) {
+            usersEntered.splice(x, 1);
+          } else {
+            x += 1;
+          }
+        }
+      } else {
+        usersEntered.splice(random, 1);
+      }
+    }
+  }
+  return winnerArray;
 }
 
 async function startRaffle(
@@ -93,11 +163,11 @@ async function startRaffle(
     client.connect().then(() => {
       client.say(
         streamerChannel,
-        "Raffle started! Type " + settings.enterMessage + " to enter"
+        `Raffle started! Type ${settings.enterMessage} to enter`
       );
     });
 
-    let usersEntered: string[] = [];
+    const usersEntered: string[] = [];
 
     client.on("message", async (channel, tags, message, self) => {
       // Ignore echoed messages.
@@ -125,7 +195,7 @@ async function startRaffle(
       }
     });
 
-    setTimeout(function () {
+    setTimeout(() => {
       console.log("Users:", usersEntered);
       const winners = pickWinner(
         usersEntered,
@@ -137,11 +207,10 @@ async function startRaffle(
       if (settings.announceWinners) {
         client.say(
           streamerChannel,
-          "The winners of the raffle are: " + winners.join(", ")
+          `The winners of the raffle are: ${winners.join(", ")}`
         );
       }
       client.disconnect();
-      return { result: "Twitch raffle has been started!" };
     }, settings.duration * 1000);
   } catch (err) {
     if (axios.isAxiosError(err)) {
@@ -149,85 +218,7 @@ async function startRaffle(
       return { error: err.response?.status };
     }
   }
-}
-
-async function getStatus(
-  isSubscribed: boolean,
-  viewerID: string,
-  streamerID: string,
-  accessToken: string
-): Promise<string> {
-  if (isSubscribed === true) {
-    return "Subscriber";
-  }
-
-  try {
-    const res = await axios.get(
-      "https://api.twitch.tv/helix/users/follows?from_id=" +
-        viewerID +
-        "&to_id=" +
-        streamerID +
-        "",
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-          "Client-Id": await getClientId(),
-        },
-      }
-    );
-    if (res.data.total === 1) {
-      return "Follower";
-    }
-  } catch (err) {
-    console.error(err);
-  }
-
-  return "Pleb";
-}
-
-function calculateNewUsers(
-  settings: TwitchRaffleSettings,
-  status: string,
-  displayName: string
-): string[] {
-  if (status === "Subscriber") {
-    return Array(settings.subPrivilege).fill(displayName);
-  }
-  if (status === "Follower" && !settings.subOnly) {
-    return Array(settings.followPrivilege).fill(displayName);
-  }
-  if (!settings.subOnly && !settings.followOnly) {
-    return [displayName];
-  }
-  return [];
-}
-
-function pickWinner(
-  usersEntered: string[],
-  winnerAmount: number,
-  duplicateWinners: boolean
-) {
-  let winnerArray = [];
-  for (let i = 0; i < winnerAmount; i++) {
-    if (usersEntered.length !== 0) {
-      const random = Math.floor(Math.random() * usersEntered.length);
-      winnerArray.push(usersEntered[random]);
-      if (!duplicateWinners) {
-        let i = 0;
-        const arrayItem = usersEntered[random];
-        while (i < usersEntered.length) {
-          if (usersEntered[i] === arrayItem) {
-            usersEntered.splice(i, 1);
-          } else {
-            ++i;
-          }
-        }
-      } else {
-        usersEntered.splice(random, 1);
-      }
-    }
-  }
-  return winnerArray;
+  return { result: "Twitch raffle has been succesfully finished!" };
 }
 
 export default { startRaffle };

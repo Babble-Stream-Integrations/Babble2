@@ -1,6 +1,6 @@
-import { getTokensWithCode } from "./twitchAuth";
 import axios from "axios";
 import admin from "firebase-admin";
+import { getTokensWithCode } from "./twitchAuth";
 
 const db = admin.firestore();
 
@@ -16,7 +16,7 @@ async function getUsers() {
 }
 
 async function addUser(user: string, data: User) {
-  const doc = await db.collection("users").doc(user).set(data, { merge: true });
+  await db.collection("users").doc(user).set(data, { merge: true });
   return { result: `user ${user} added to database!` };
 }
 
@@ -26,18 +26,22 @@ async function getUser(user: string) {
 }
 
 async function deleteUser(user: string) {
-  const doc = await db.collection("users").doc(user).delete();
+  await db.collection("users").doc(user).delete();
   return { results: `user ${user} deleted from database!` };
 }
 
 // UserAddons functions
-interface Addon {
-  platform: string;
-  type: string;
-  uniqueString: string;
-  settings: RaffleSettings;
-  looks?: unknown;
-  designSettings?: unknown;
+interface TwitchOptions {
+  followOnly: boolean;
+  followPrivilege: number;
+  subOnly: boolean;
+  subPrivilege: number;
+}
+interface YoutubeOptions {
+  subOnly: boolean;
+  subPrivilege: number;
+  memberOnly: boolean;
+  memberPrivilege: number;
 }
 interface RaffleSettings {
   announceWinners: boolean;
@@ -48,19 +52,13 @@ interface RaffleSettings {
   winnerAmount: number;
   platformOptions: TwitchOptions | YoutubeOptions;
 }
-
-interface TwitchOptions {
-  followOnly: boolean;
-  followPrivilege: number;
-  subOnly: boolean;
-  subPrivilege: number;
-}
-
-interface YoutubeOptions {
-  subOnly: boolean;
-  subPrivilege: number;
-  memberOnly: boolean;
-  memberPrivilege: number;
+interface Addon {
+  platform: string;
+  type: string;
+  uniqueString: string;
+  settings: RaffleSettings;
+  looks?: unknown;
+  designSettings?: unknown;
 }
 
 async function getAddons(user: string) {
@@ -69,7 +67,7 @@ async function getAddons(user: string) {
 }
 
 async function addAddon(user: string, addon: string, data: Addon) {
-  const doc = await db
+  await db
     .collection("users")
     .doc(user)
     .collection("addons")
@@ -90,7 +88,7 @@ async function getAddon(user: string, addon: string) {
 }
 
 async function deleteAddon(user: string, addon: string) {
-  const doc = await db
+  await db
     .collection("users")
     .doc(user)
     .collection("addons")
@@ -104,17 +102,12 @@ async function updateSettings(
   addon: string,
   data: RaffleSettings
 ) {
-  const doc = await db
-    .collection("users")
-    .doc(user)
-    .collection("addons")
-    .doc(addon)
-    .set(
-      {
-        settings: data,
-      },
-      { merge: true }
-    );
+  await db.collection("users").doc(user).collection("addons").doc(addon).set(
+    {
+      settings: data,
+    },
+    { merge: true }
+  );
   return { result: `addon ${addon} updated in ${user}` };
 }
 
@@ -130,11 +123,11 @@ async function getSettings(user: string, addon: string) {
 
 // UserToken functions
 interface Tokens {
-  access_token: string;
-  refresh_token: string;
+  accessToken: string;
+  refreshToken: string;
   scope: string[];
-  expires_in?: number;
-  token_type?: string;
+  expiresIn?: number;
+  tokenType?: string;
 }
 
 interface Code {
@@ -161,7 +154,7 @@ async function addToken(user: string, platform: string, data: Tokens | Code) {
     tokens = data as Tokens;
   }
 
-  const doc = await db
+  await db
     .collection("users")
     .doc(user)
     .collection("tokens")
@@ -181,7 +174,7 @@ async function getToken(user: string, platform: string) {
 }
 
 async function deleteToken(user: string, platform: string) {
-  const doc = await db
+  await db
     .collection("users")
     .doc(user)
     .collection("tokens")
