@@ -53,8 +53,6 @@ async function getNextScope(addon: string) {
 }
 
 async function calculateScope(user: string, addon: string) {
-  console.log(await getPrevScope(user), await getNextScope(addon));
-
   // Merge prev&next scopes
   const scopes = (await getPrevScope(user)).concat(await getNextScope(addon));
 
@@ -77,7 +75,7 @@ async function getCode(user: string, addon: string) {
     `https://id.twitch.tv/oauth2/authorize` +
     `?response_type=code&force_verify=true&client_id=${clientId}&redirect_uri=${redirectURL}&scope=${scopes}&state=${state}`;
 
-  return authUrl;
+  return { url: authUrl };
 }
 
 async function getTokensWithCode(code: string): Promise<Tokens> {

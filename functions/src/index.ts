@@ -25,6 +25,7 @@ app.use((req, res, next) => {
     req.headers.origin === "http://localhost:3000"
       ? "http://localhost:3000"
       : "https://dev-babble.web.app";
+
   res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, DELETE");
   res.setHeader(

@@ -3,6 +3,16 @@ import { useState, useEffect } from "react";
 import BABswitch from "../library/switch/BABswitch";
 import "./PrototypeComponent.css";
 
+const uuid = localStorage.getItem("UUID");
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? "https://europe-west1-babble-d6ef3.cloudfunctions.net/default"
+    : "http://localhost:5001/babble-d6ef3/europe-west1/default";
+const origin =
+  process.env.NODE_ENV === "production"
+    ? "https://dev-babble.web.app"
+    : "http://localhost:3000";
+
 type PrototypeTypes = {
   Pmodalshow: boolean;
 };
@@ -26,18 +36,11 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
 
   useEffect(() => {
     if (Pmodalshow === false) {
-      console.log(process.env.NODE_ENV);
-
-      fetch(
-        "https://europe-west1-babble-d6ef3.cloudfunctions.net/default/api/v1/users/" +
-          localStorage.getItem("UUID") +
-          "/addons/MyRaffleAddon2/settings",
-        {
-          headers: {
-            Origin: "http://localhost:3000",
-          },
-        }
-      )
+      fetch(`${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2/settings`, {
+        headers: {
+          Origin: origin,
+        },
+      })
         .then((response) => {
           response.json().then((data) => {
             setRaffleDuration(data["duration"]);
@@ -53,7 +56,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
           });
         })
         .catch((err) => {
-          console.log("Error reading datat " + err);
+          console.log("Error reading data " + err);
         });
     }
   }, [Pmodalshow]);
@@ -91,12 +94,10 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
               className="PC-button"
               onClick={() => {
                 fetch(
-                  "https://europe-west1-babble-d6ef3.cloudfunctions.net/default/api/v1/twitch/auth?user=" +
-                    localStorage.getItem("UUID") +
-                    "&addon=raffle",
+                  `${baseURL}/api/v1/twitch/auth?uuid=${uuid}&addonName=raffle`,
                   {
                     headers: {
-                      Origin: "http://localhost:3000",
+                      Origin: origin,
                     },
                   }
                 )
@@ -289,14 +290,12 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
               onClick={() => {
                 if (raffleEnterMessage.trim().length !== 0) {
                   fetch(
-                    "https://europe-west1-babble-d6ef3.cloudfunctions.net/default/api/v1/users/" +
-                      localStorage.getItem("UUID") +
-                      "/addons/MyRaffleAddon2/settings",
+                    `${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2/settings`,
                     {
                       method: "PUT",
                       headers: {
                         "Content-Type": "application/json",
-                        Origin: "http://localhost:3000",
+                        Origin: origin,
                       },
                       body: JSON.stringify({
                         announceWinners: raffleAnnounceWinners,
@@ -338,20 +337,17 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
               className="PC-button"
               onClick={() => {
                 alert("Starting Raffle!");
-                fetch(
-                  "https://europe-west1-babble-d6ef3.cloudfunctions.net/default/api/v1/raffle/start",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                      Origin: "http://localhost:3000",
-                    },
-                    body: JSON.stringify({
-                      user: localStorage.getItem("UUID"),
-                      addon: "MyRaffleAddon2",
-                    }),
-                  }
-                )
+                fetch(`${baseURL}/api/v1/raffle/start`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Origin: origin,
+                  },
+                  body: JSON.stringify({
+                    user: uuid,
+                    addon: "MyRaffleAddon2",
+                  }),
+                })
                   .then((response) =>
                     response.json().then(() => {
                       console.log(response);
