@@ -22,7 +22,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .ts --cache",
-    "deploy": "firebase deploy --only hosting"
+    "deploy:main": "firebase deploy --only hosting:main",
+    "deploy:dev": "firebase deploy --only hosting:dev"
+
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +53,5 @@
     "eslint-plugin-react": "^7.28.0",
     "prettier": "^2.5.1",
     "react-router-dom": "^6.3.0"
-  },
-  "proxy": "http://localhost:5001"
+  }
 }

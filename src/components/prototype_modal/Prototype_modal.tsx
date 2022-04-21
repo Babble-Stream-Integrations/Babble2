@@ -37,8 +37,13 @@ function Prototype_modal({ Pmodalshow, SetPmodalShow }: Prototype_modal) {
               onClick={() => {
                 if (inputUUID.trim().length !== 0) {
                   fetch(
-                    "babble-d6ef3/europe-west1/default/api/v1/users/" +
-                      inputUUID
+                    "https://europe-west1-babble-d6ef3.cloudfunctions.net/default/api/v1/users/" +
+                      inputUUID,
+                    {
+                      headers: {
+                        Origin: "http://localhost:3000",
+                      },
+                    }
                   )
                     .then((response) => {
                       if (response.ok) {

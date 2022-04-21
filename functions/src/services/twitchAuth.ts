@@ -1,23 +1,30 @@
 import axios from "axios";
 import admin from "firebase-admin";
 
-!admin.apps.length ? admin.initializeApp() : admin.app();
 const db = admin.firestore();
 
-interface twitchAppDetails {
+interface TwitchAppDetails {
   clientId: string;
   clientSecret: string;
   redirectURL: string;
   state: string;
 }
 
+interface Tokens {
+  accessToken: string;
+  refreshToken: string;
+  scope: string[];
+  expiresIn?: number;
+  tokenType?: string;
+}
+
 async function getTwitchAppDetails() {
   const doc = await db.collection("dev").doc("twitchAppDetails").get();
 
-  const results: twitchAppDetails = {
+  const results: TwitchAppDetails = {
     clientId: doc.data()!.clientId,
     clientSecret: doc.data()!.clientSecret,
-    redirectURL: doc.data()!.redirectURLDev,
+    redirectURL: doc.data()!.redirectURLMain,
     state: doc.data()!.state,
   };
   return results;
@@ -26,7 +33,7 @@ async function getTwitchAppDetails() {
 async function getPrevScope(user: string) {
   const doc = await db
     .collection("users")
-    .doc(testUser)
+    .doc(user)
     .collection("tokens")
     .doc("twitch")
     .get();
@@ -40,14 +47,12 @@ async function getPrevScope(user: string) {
 async function getNextScope(addon: string) {
   const doc = await db.collection("dev").doc("twitchAddonScopes").get();
   if (!doc.exists) {
-    new Error("Wrong addon specified!");
+    throw new Error("Wrong addon specified!");
   }
   return doc.data()![addon];
 }
 
 async function calculateScope(user: string, addon: string) {
-  console.log(await getPrevScope(user), await getNextScope(addon));
-
   // Merge prev&next scopes
   const scopes = (await getPrevScope(user)).concat(await getNextScope(addon));
 
@@ -73,30 +78,19 @@ async function getCode(user: string, addon: string) {
   return { url: authUrl };
 }
 
-const testUser = "zDdxO4Pok8b5UeVTUny2RbD1S6A2";
-
-async function getTokensWithCode(code: string) {
+async function getTokensWithCode(code: string): Promise<Tokens> {
   const { clientId, clientSecret, redirectURL } = await getTwitchAppDetails();
 
-  try {
-    const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
-      params: {
-        client_id: clientId,
-        client_secret: clientSecret,
-        code: code,
-        grant_type: "authorization_code",
-        redirect_uri: redirectURL,
-      },
-    });
-    const tokenRes = db
-      .collection("users")
-      .doc(testUser)
-      .collection("tokens")
-      .doc("twitch")
-      .set(res.data);
-  } catch (err) {
-    console.error(err);
-  }
+  const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
+    params: {
+      client_id: clientId,
+      client_secret: clientSecret,
+      code,
+      grant_type: "authorization_code",
+      redirect_uri: redirectURL,
+    },
+  });
+  return res.data as Tokens;
 }
 
 async function refreshAccessToken(refreshToken: string): Promise<string[]> {
@@ -111,9 +105,8 @@ async function refreshAccessToken(refreshToken: string): Promise<string[]> {
         grant_type: "refresh_token",
       },
     });
-    const tokenRes = db
-      .collection("users")
-      .doc(testUser)
+    db.collection("users")
+      .doc("sf")
       .collection("tokens")
       .doc("twitch")
       .set(res.data);
@@ -124,5 +117,4 @@ async function refreshAccessToken(refreshToken: string): Promise<string[]> {
   }
 }
 
-export default { getCode, getTokensWithCode };
-export { refreshAccessToken };
+export { getCode, getTokensWithCode, refreshAccessToken };
