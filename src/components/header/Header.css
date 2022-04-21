@@ -1,0 +1,63 @@
+.menubalk {
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  height: 70px;
+  margin-top: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
+  align-items: center;
+}
+
+.babble-logo {
+  margin: 10px;
+  height: 25px;
+}
+
+.nav-menu {
+  color: var(--offWhiteOne);
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 25px;
+}
+
+.log-button {
+  font-family: "Montserrat";
+  font-weight: bold;
+  font-size: 0.85em;
+  background-color: var(--mainOrange);
+  border-radius: 50px;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: var(--darkGrey);
+  height: 30px;
+  border: none;
+  text-transform: uppercase;
+}
+
+.header-flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-avatar {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-avatar-profile {
+  border-radius: 50%;
+  margin-right: 15px;
+  height: 30px;
+  width: 30px;
+}
+
+.hamburger-menu {
+  height: 25px;
+}
