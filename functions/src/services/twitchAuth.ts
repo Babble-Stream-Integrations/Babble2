@@ -38,7 +38,7 @@ async function getPrevScope(user: string) {
     .doc("twitch")
     .get();
 
-  if (doc.exists && "scope" in doc.data()!) {
+  if (doc.exists && doc.data()!.scope) {
     return doc.data()!.scope;
   }
   return [];
