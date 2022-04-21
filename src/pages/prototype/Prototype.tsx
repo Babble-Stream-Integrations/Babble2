@@ -16,7 +16,7 @@ const origin =
 function Prototype() {
   const [Pmodalshow, setPmodalshow] = useState(true);
   useEffect(() => {
-    if (localStorage.getItem("UUID") === null) {
+    if (uuid === null) {
       setPmodalshow(true);
       console.log("F");
     } else {
@@ -39,6 +39,7 @@ function Prototype() {
         .then((response) =>
           response.json().then((data) => {
             console.log(data);
+            window.history.replaceState({}, document.title, "/prototype");
             alert("login succesfull");
           })
         )

@@ -41,10 +41,10 @@ async function getStreamerChannel(
       },
     });
 
-    const streamerChannel: string = `# ${res.data.data[0].login}`;
+    const streamerChannel: string = `#${res.data.data[0].login}`;
     const streamerID: string = res.data.data[0].id;
     const streamerName: string = res.data.data[0].login;
-    const streamerPassword: string = `oauth: ${accessToken}`;
+    const streamerPassword: string = `oauth:${accessToken}`;
     return [streamerChannel, streamerID, streamerName, streamerPassword];
   } catch (err) {
     try {
@@ -122,7 +122,7 @@ function pickWinner(
     }
     const randomIndex = Math.floor(Math.random() * usersRemaining.length);
     const randomUser = usersRemaining[randomIndex];
-    winnerArray.push(randomIndex);
+    winnerArray.push(randomUser);
     if (duplicateWinners) {
       usersRemaining.splice(randomIndex, 1);
     } else {
