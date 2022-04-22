@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import PrototypeComponent from "../../components/prototype/PrototypeComponent";
-import Prototype_modal from "../../components/prototype_modal/Prototype_modal";
+import Prototype_modal from "../../components/prototypeModal/PrototypeModal";
 
 const uuid = localStorage.getItem("UUID");
 const baseURL =
