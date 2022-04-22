@@ -12,6 +12,8 @@
     "@types/react-dom": "^17.0.11",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.0",
     "typescript": "^4.5.5",
     "web-vitals": "^2.1.4"
@@ -21,7 +23,10 @@
     "build": "npm run lint && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .ts --cache"
+    "lint": "eslint . --ext .ts --cache",
+    "deploy:main": "firebase deploy --only hosting:main",
+    "deploy:dev": "firebase deploy --only hosting:dev"
+
   },
   "eslintConfig": {
     "extends": [
@@ -49,7 +54,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "prettier": "^2.5.1",
-    "react-router-dom": "^6.2.2"
-  },
-  "proxy": "http://localhost:5001"
+    "react-router-dom": "^6.3.0"
+  }
 }

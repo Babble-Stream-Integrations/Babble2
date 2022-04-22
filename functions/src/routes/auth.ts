@@ -1,11 +1,6 @@
-import express, { Request, Response } from "express";
+import express, { Request } from "express";
 // import youtubeAuth from "../services/youtubeAuth";
-import twitchAuth from "../services/twitchAuth";
-import { Query } from "express-serve-static-core";
-
-export interface RequestQuery<T extends Query> extends Express.Request {
-  query: T;
-}
+import { getCode } from "../services/twitchAuth";
 
 const router = express.Router();
 
@@ -21,19 +16,16 @@ const router = express.Router();
 // });
 
 // Twitch routes
-router.get(
-  "/twitch/auth",
-  async (req: RequestQuery<{ user: string; addon: string }>, res) => {
-    res.send(await twitchAuth.getCode(req.query.user, req.query.addon));
-  }
-);
+interface userInfo {
+  uuid: string;
+  addonName: string;
+}
 
 router.get(
-  "/twitch/callback",
-  (req: RequestQuery<{ code: string; scope: string; state: string }>, res) => {
-    const code = req.query.code;
-    twitchAuth.getTokensWithCode(code);
-    res.redirect("http://localhost:3000/prototype");
+  "/twitch/auth",
+  async (req: Request<unknown, unknown, unknown, userInfo>, res) => {
+    const authUrl = await getCode(req.query.uuid, req.query.addonName);
+    res.send(authUrl);
   }
 );
 

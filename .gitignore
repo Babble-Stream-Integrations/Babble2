@@ -1,6 +1,12 @@
 # TS compile output
 lib
 
+# React build output
+build
+
+# Firebase output
+.firebase
+
 # Logs
 logs
 *.log

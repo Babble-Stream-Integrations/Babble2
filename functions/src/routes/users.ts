@@ -1,14 +1,13 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import admin from "firebase-admin";
 import firestore from "../services/firestore";
 
-!admin.apps.length ? admin.initializeApp() : admin.app();
 const db = admin.firestore();
 
 const router = express.Router();
 
 // Parameteres
-router.param("user", async function (req, res, next) {
+router.param("user", async (req, res, next) => {
   if (req.method === "PUT") {
     next();
     return;
@@ -22,7 +21,7 @@ router.param("user", async function (req, res, next) {
   }
 });
 
-router.param("addon", async function (req, res, next) {
+router.param("addon", async (req, res, next) => {
   if (req.method === "PUT") {
     next();
     return;
@@ -41,7 +40,7 @@ router.param("addon", async function (req, res, next) {
   }
 });
 
-router.param("platform", async function (req, res, next) {
+router.param("platform", async (req, res, next) => {
   if (req.method === "PUT") {
     next();
     return;

@@ -1,16 +1,22 @@
+import axios from "axios";
 import admin from "firebase-admin";
+import { getTokensWithCode } from "./twitchAuth";
 
-!admin.apps.length ? admin.initializeApp() : admin.app();
 const db = admin.firestore();
 
 // User functions
+interface User {
+  displayName: string;
+  email: string;
+}
+
 async function getUsers() {
   const col = await db.collection("users").get();
   return col.docs.map((doc) => doc.id);
 }
 
-async function addUser(user: string, data: any) {
-  const doc = await db.collection("users").doc(user).set(data, { merge: true });
+async function addUser(user: string, data: User) {
+  await db.collection("users").doc(user).set(data, { merge: true });
   return { result: `user ${user} added to database!` };
 }
 
@@ -20,18 +26,48 @@ async function getUser(user: string) {
 }
 
 async function deleteUser(user: string) {
-  const doc = await db.collection("users").doc(user).delete();
+  await db.collection("users").doc(user).delete();
   return { results: `user ${user} deleted from database!` };
 }
 
 // UserAddons functions
+interface TwitchOptions {
+  followOnly: boolean;
+  followPrivilege: number;
+  subOnly: boolean;
+  subPrivilege: number;
+}
+interface YoutubeOptions {
+  subOnly: boolean;
+  subPrivilege: number;
+  memberOnly: boolean;
+  memberPrivilege: number;
+}
+interface RaffleSettings {
+  announceWinners: boolean;
+  duplicateWinners: boolean;
+  duration: number;
+  enterMessage: string;
+  useMyAccount: boolean;
+  winnerAmount: number;
+  platformOptions: TwitchOptions | YoutubeOptions;
+}
+interface Addon {
+  platform: string;
+  type: string;
+  uniqueString: string;
+  settings: RaffleSettings;
+  looks?: unknown;
+  designSettings?: unknown;
+}
+
 async function getAddons(user: string) {
   const col = await db.collection("users").doc(user).collection("addons").get();
   return col.docs.map((doc) => doc.id);
 }
 
-async function addAddon(user: string, addon: string, data: any) {
-  const doc = await db
+async function addAddon(user: string, addon: string, data: Addon) {
+  await db
     .collection("users")
     .doc(user)
     .collection("addons")
@@ -52,7 +88,7 @@ async function getAddon(user: string, addon: string) {
 }
 
 async function deleteAddon(user: string, addon: string) {
-  const doc = await db
+  await db
     .collection("users")
     .doc(user)
     .collection("addons")
@@ -61,18 +97,17 @@ async function deleteAddon(user: string, addon: string) {
   return { result: `addon ${addon} deleted from ${user}` };
 }
 
-async function updateSettings(user: string, addon: string, data: any) {
-  const doc = await db
-    .collection("users")
-    .doc(user)
-    .collection("addons")
-    .doc(addon)
-    .set(
-      {
-        settings: data,
-      },
-      { merge: true }
-    );
+async function updateSettings(
+  user: string,
+  addon: string,
+  data: RaffleSettings
+) {
+  await db.collection("users").doc(user).collection("addons").doc(addon).set(
+    {
+      settings: data,
+    },
+    { merge: true }
+  );
   return { result: `addon ${addon} updated in ${user}` };
 }
 
@@ -87,18 +122,44 @@ async function getSettings(user: string, addon: string) {
 }
 
 // UserToken functions
+interface Tokens {
+  accessToken: string;
+  refreshToken: string;
+  scope: string[];
+  expiresIn?: number;
+  tokenType?: string;
+}
+
+interface Code {
+  code: string;
+}
+
 async function getTokens(user: string) {
   const col = await db.collection("users").doc(user).collection("tokens").get();
   return col.docs.map((doc) => doc.id);
 }
 
-async function addToken(user: string, platform: string, data: any) {
-  const doc = await db
+async function addToken(user: string, platform: string, data: Tokens | Code) {
+  let tokens: ReturnType<typeof getTokensWithCode> | Tokens;
+  if ((data as Code).code) {
+    try {
+      tokens = await getTokensWithCode((data as Code).code);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        return { error: err.response?.data };
+      }
+      return { error: "Couldn't generate token" };
+    }
+  } else {
+    tokens = data as Tokens;
+  }
+
+  await db
     .collection("users")
     .doc(user)
     .collection("tokens")
     .doc(platform)
-    .set(data, { merge: true });
+    .set(tokens, { merge: true });
   return { result: `${platform} tokens added to ${user}` };
 }
 
@@ -113,7 +174,7 @@ async function getToken(user: string, platform: string) {
 }
 
 async function deleteToken(user: string, platform: string) {
-  const doc = await db
+  await db
     .collection("users")
     .doc(user)
     .collection("tokens")

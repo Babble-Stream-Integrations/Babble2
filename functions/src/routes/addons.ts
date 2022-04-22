@@ -1,10 +1,8 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import admin from "firebase-admin";
 // import youtubeRaffle from "../services/youtubeRaffle";
 import twitchRaffle from "../services/twitchRaffle";
 
-import admin from "firebase-admin";
-
-!admin.apps.length ? admin.initializeApp() : admin.app();
 const db = admin.firestore();
 
 const router = express.Router();
@@ -18,7 +16,7 @@ router.post("/raffle/start", async (req, res) => {
     .get();
   if (!settingsDoc.exists) {
     throw new Error("addon document not found");
-  } else if (settingsDoc.data()!.type != "raffle") {
+  } else if (settingsDoc.data()!.type !== "raffle") {
     throw new Error("Wrong type of addon: expected raffle addon");
   } else if (settingsDoc.data()!.platform === "youtube") {
     // const tokens = await db
@@ -33,7 +31,7 @@ router.post("/raffle/start", async (req, res) => {
     //   youtubeRaffle.startRaffle(doc.data().settings, tokens.data());
     //   res.redirect("http://localhost:3000/rafflesettings");
     // }
-    res.redirect("http://localhost:3000/rafflesettings");
+    res.send({ result: "Youtube raffle has been started!" });
   } else if (settingsDoc.data()!.platform === "twitch") {
     const tokensDoc = await db
       .collection("users")
@@ -49,8 +47,10 @@ router.post("/raffle/start", async (req, res) => {
         refreshToken: tokensDoc.data()!.refresh_token,
         scope: tokensDoc.data()!.scope,
       };
-      twitchRaffle.startRaffle(settingsDoc.data()!.settings, tokens);
-      res.redirect("http://localhost:3000/rafflesettings");
+
+      res.send(
+        await twitchRaffle.startRaffle(settingsDoc.data()!.settings, tokens)
+      );
     }
   } else {
     throw new Error("no platform detected");
