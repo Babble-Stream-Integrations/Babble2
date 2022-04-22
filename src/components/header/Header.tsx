@@ -5,7 +5,7 @@ import avatar from "../../assets/avatar.png";
 import hamburger from "../../assets/hamburgericon.png";
 import "./Header.css";
 
-export const Header = () => {
+const Header = () => {
   const isDesktop = useMatchMedia("(min-width: 500px)", true);
   const isPhone = useMatchMedia("(max-width: 499px)", true);
 
@@ -24,7 +24,7 @@ export const Header = () => {
             <img className="nav-avatar-profile" src={avatar} alt="profile" />
           </div>
           <div>
-            <button className="log-button">Log out</button>
+            <button className="log-button">Log in</button>
           </div>
           <div className="nav-menu">
             <img className="hamburger-menu" alt="Babble" src={hamburger} />
@@ -34,3 +34,5 @@ export const Header = () => {
     </div>
   );
 };
+
+export default Header;
