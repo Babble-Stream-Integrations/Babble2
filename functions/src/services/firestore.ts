@@ -1,8 +1,13 @@
 import axios from "axios";
+// eslint-disable-next-line no-unused-vars
+import cryptoRandomString from "crypto-random-string";
 import admin from "firebase-admin";
 import { getTokensWithCode } from "./twitchAuth";
 
 const db = admin.firestore();
+
+// eslint-disable-next-line no-unused-vars
+const randomString = cryptoRandomString({ length: 32, type: "url-safe" });
 
 // User functions
 interface User {
@@ -75,6 +80,16 @@ async function addAddon(user: string, addon: string, data: Addon) {
     .set(data, { merge: true });
 
   return { result: `addon ${addon} added to ${user}` };
+}
+
+async function setUniqueString(user: string, addon: string) {
+  await db.collection("users").doc(user).collection("addons").doc(addon).set(
+    {
+      uniqueString: "oi",
+    },
+    { merge: true }
+  );
+  return { result: `addon ${addon} updated in ${user}` };
 }
 
 async function getAddon(user: string, addon: string) {
@@ -190,6 +205,7 @@ export default {
   deleteUser,
   getAddons,
   addAddon,
+  setUniqueString,
   getAddon,
   deleteAddon,
   getSettings,
