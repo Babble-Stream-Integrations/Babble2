@@ -17,6 +17,7 @@
     "@types/express-serve-static-core": "^4.17.28",
     "axios": "^0.26.1",
     "cors": "^2.8.5",
+    "crypto-random-string": "^4.0.0",
     "express": "^4.17.3",
     "firebase-admin": "^9.8.0",
     "firebase-functions": "^3.14.1",
