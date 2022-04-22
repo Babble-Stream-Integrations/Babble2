@@ -1,13 +1,9 @@
 import axios from "axios";
-// eslint-disable-next-line no-unused-vars
-import cryptoRandomString from "crypto-random-string";
+import { nanoid } from "nanoid";
 import admin from "firebase-admin";
 import { getTokensWithCode } from "./twitchAuth";
 
 const db = admin.firestore();
-
-// eslint-disable-next-line no-unused-vars
-const randomString = cryptoRandomString({ length: 32, type: "url-safe" });
 
 // User functions
 interface User {
@@ -85,11 +81,11 @@ async function addAddon(user: string, addon: string, data: Addon) {
 async function setUniqueString(user: string, addon: string) {
   await db.collection("users").doc(user).collection("addons").doc(addon).set(
     {
-      uniqueString: "oi",
+      uniqueString: nanoid(),
     },
     { merge: true }
   );
-  return { result: `addon ${addon} updated in ${user}` };
+  return { result: `uniqueString for addon ${addon} updated in ${user}` };
 }
 
 async function getAddon(user: string, addon: string) {
