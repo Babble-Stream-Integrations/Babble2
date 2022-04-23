@@ -1,7 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import PrototypeComponent from "../../components/prototype/PrototypeComponent";
-import Prototype_modal from "../../components/prototypeModal/PrototypeModal";
+import PrototypeModal from "../../components/prototypeModal/PrototypeModal";
+import BABalert from "../../components/library/alert/BABalert";
 
 const uuid = localStorage.getItem("UUID");
 const baseURL =
@@ -51,7 +52,8 @@ function Prototype() {
   }, []);
   return (
     <div className="prototype-container">
-      <Prototype_modal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
+      <BABalert></BABalert>
+      <PrototypeModal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
       <PrototypeComponent Pmodalshow={Pmodalshow} />
     </div>
   );
