@@ -1,0 +1,110 @@
+body {
+  background-color: #0e0e10;
+}
+
+.prototype-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.PC-container {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.PC-settings-container {
+  background-color: #252529;
+  width: 60%;
+  height: auto;
+  min-height: 100px;
+  border-radius: 25px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: content-box;
+}
+
+.PC-grid {
+  width: 90%;
+  height: 90%;
+
+  display: grid;
+  grid-template-columns: repeat(2, calc(50% - 7.5px));
+
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+  column-gap: 15px;
+  row-gap: 15px;
+}
+
+.PC-button-container {
+  box-sizing: content-box;
+}
+
+.PC-uppercase {
+  text-transform: uppercase;
+  color: white;
+  margin-left: 5px;
+}
+
+.PC-button {
+  background-color: #ff8400;
+  border: none;
+  border-radius: 10px;
+  width: 100%;
+  height: 50px;
+
+  font-size: x-large;
+  font-weight: 600;
+}
+
+.PC-button:hover {
+  cursor: pointer;
+  background-color: #e77700;
+}
+
+.PC-button:disabled,
+.PC-button:disabled:hover {
+  cursor: auto;
+  background-color: grey;
+}
+
+.PC-input {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+
+  color: white;
+}
+
+.PC-switch {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-weight: 600;
+  font-size: larger;
+}
+
+.PC-input {
+  width: 100%;
+  height: 40px;
+
+  box-sizing: border-box;
+
+  background-color: #252529;
+  border: 2px solid white;
+  border-radius: 10px;
+
+  margin: 1px;
+  padding-left: 15px;
+}
+
+.PC-switch-status {
+  margin-left: 10px;
+}

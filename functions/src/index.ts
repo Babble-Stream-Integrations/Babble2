@@ -1,13 +1,45 @@
+/* eslint-disable import/first */
 import express, { Request, Response } from "express";
+import * as functions from "firebase-functions";
+import admin from "firebase-admin";
+
+admin.initializeApp();
+import userRoutes from "./routes/users";
+import addonRoutes from "./routes/addons";
+import authRoutes from "./routes/auth";
 
 const app = express();
-const port = 3000;
-const str = "string";
+
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
+app.use((req, res, next) => {
+  const origin =
+    req.headers.origin === "http://localhost:3000"
+      ? "http://localhost:3000"
+      : "https://dev-babble.web.app";
+
+  res.setHeader("Access-Control-Allow-Origin", origin);
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  next();
+});
+
+// twitchService.checkChat();
+app.use("/api/v1", userRoutes);
+app.use("/api/v1", addonRoutes);
+app.use("/api/v1", authRoutes);
 
 app.get("/", (_req: Request, res: Response) => {
-  res.send("Hello World!");
+  res.send({
+    result: "hi there handsome ;)",
+  });
 });
 
-app.listen(port, () => {
-  return console.log(`Express is listening at http://localhost:${port}`);
-});
+export default functions.region("europe-west1").https.onRequest(app);
