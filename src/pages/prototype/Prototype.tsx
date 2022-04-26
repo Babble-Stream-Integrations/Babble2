@@ -52,8 +52,10 @@ function Prototype() {
   }, []);
   return (
     <div className="prototype-container">
-      <BABalert></BABalert>
       <PrototypeModal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
+      <BABalert Position="Center">
+        <h1>hi</h1>
+      </BABalert>
       <PrototypeComponent Pmodalshow={Pmodalshow} />
     </div>
   );
