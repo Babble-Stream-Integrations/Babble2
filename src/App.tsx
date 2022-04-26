@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import AddonPage from "./pages/addon_page/AddonPage";
+import AddonPage from "./pages/addonPage/AddonPage";
 import "./App.css";
 
 function App() {
