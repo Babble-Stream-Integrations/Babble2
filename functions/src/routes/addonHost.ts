@@ -13,10 +13,10 @@ router.get("/raffle", async (req, res) => {
 router.get(
   "/raffle/listen",
   async (req: Request<unknown, unknown, unknown, { id: string }>, res) => {
-    // const { id } = req.query;
+    const { id } = req.query;
     // Sse.connect(id, res);
     // req.on("close", Sse.disconnect.bind(id));
-	RTDB.start();
+	RTDB.start(id);
   }
 );
 

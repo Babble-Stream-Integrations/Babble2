@@ -8,16 +8,21 @@ const realtimeDB = getDatabase(RTDBApp);
 const DBref = firebase.database().ref();
 const test3 = 'testtesttest'
 // input functie id: string, duration: bigint
-async function start() {
-	DBref.child(test3).set({
-			werkend:'true',
-			errors:'hopelijk niet'
+async function start(id: string) {
+	DBref.child(id).set({
+			type:'start',
+			// duration: duration
+	});
+}
+
+async function end(id: string, winners: string[]) {
+	DBref.child(id).set({
+			type:'end',
+			winners: winners
 	});
 }
 
 export default {
-	// connect,
-	// disconnect,
 	start,
-	// end,
+	end,
 };
