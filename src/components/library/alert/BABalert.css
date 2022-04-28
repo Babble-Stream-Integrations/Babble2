@@ -9,11 +9,11 @@
 }
 
 .alert-box {
-  width: 100px;
-  height: 100px;
+  width: auto;
+  height: auto;
 
+  background-color: rgb(253, 176, 176);
   position: fixed;
   z-index: 1000;
-  background-color: rgb(253, 176, 176);
   pointer-events: all;
 }

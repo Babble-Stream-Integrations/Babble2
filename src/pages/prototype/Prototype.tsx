@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import PrototypeComponent from "../../components/prototype/PrototypeComponent";
 import PrototypeModal from "../../components/prototypeModal/PrototypeModal";
 import BABalert from "../../components/library/alert/BABalert";
+import StartRaffleNotification from "../../components/startRaffleNotification/StartRaffleNotification";
 
 const uuid = localStorage.getItem("UUID");
 const baseURL =
@@ -13,6 +14,14 @@ const origin =
   process.env.NODE_ENV === "production"
     ? "https://dev-babble.web.app"
     : "http://localhost:3000";
+
+const RaffleAlertStyle = {
+  display: "flex",
+  borderRadius: "30px",
+  margin: "50px",
+  backgroundColor: "var(--offWhiteTwo)",
+  // transform: "translateX(1000px)",
+};
 
 function Prototype() {
   const [Pmodalshow, setPmodalshow] = useState(true);
@@ -50,11 +59,12 @@ function Prototype() {
         });
     }
   }, []);
+
   return (
     <div className="prototype-container">
       <PrototypeModal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
-      <BABalert Position="Center">
-        <h1>hi</h1>
+      <BABalert Position="TopRight" ContainerStyle={RaffleAlertStyle}>
+        <StartRaffleNotification />
       </BABalert>
       <PrototypeComponent Pmodalshow={Pmodalshow} />
     </div>
