@@ -10,10 +10,10 @@ const RTDBApp = initializeApp(
   "RTDBApp"
 );
 
-const realtimeDB = getDatabase(RTDBApp);
+getDatabase(RTDBApp);
 const DBref = firebase.database().ref();
 // input functie id: string, duration: bigint
-async function RTDBStart(id: string, duration: bigint) {
+async function RTDBStart(id: string, duration: number) {
   DBref.child(id).set({
     type: "start",
     duration,
@@ -33,8 +33,4 @@ async function RTDBIdle(id: string) {
   });
 }
 
-export default {
-  RTDBStart,
-  RTDBEnd,
-  RTDBIdle,
-};
+export { RTDBStart, RTDBEnd, RTDBIdle };

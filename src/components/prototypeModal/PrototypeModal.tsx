@@ -1,14 +1,14 @@
 import React from "react";
 import { useState } from "react";
 
-import "./Prototype_modal.css";
+import "./PrototypeModal.css";
 
-type Prototype_modal = {
+type PrototypeModal = {
   Pmodalshow: boolean;
   SetPmodalShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function Prototype_modal({ Pmodalshow, SetPmodalShow }: Prototype_modal) {
+function Prototype_modal({ Pmodalshow, SetPmodalShow }: PrototypeModal) {
   const [inputUUID, setInputUUID] = useState("");
   return (
     <>

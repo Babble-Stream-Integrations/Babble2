@@ -1,4 +1,4 @@
-//todo: dictionary van maken
+// todo: dictionary van maken
 interface Client {
   id: string;
   res: any;
@@ -12,7 +12,7 @@ async function connect(id: string, res: any) {
     Connection: "keep-alive",
   };
   res.writeHead(200, headers);
-  setInterval(function () {
+  setInterval(() => {
     res.write(":\n\n");
   }, 40000);
   // setInterval(function () {res.write("event:end\n"); client.res.write('data: test && werkt && dit\n\n');}, 4000);
@@ -31,8 +31,8 @@ async function disconnect(id: string) {
 
 async function start(id: string, duration: bigint) {
   clients.forEach((client) => {
-    if (client.id == id) {
-      let time: number = Date.now();
+    if (client.id === id) {
+      const time: number = Date.now();
       client.res.write("event: start\n");
       client.res.write(`data: {"time": ${time}, "duration": ${duration}}\n\n`);
     }
@@ -43,7 +43,7 @@ async function end(id: string, winners: string[]) {
   console.log(clients);
   clients.forEach((client) => {
     console.log("2");
-    if (client.id == id) {
+    if (client.id === id) {
       client.res.write("event: end\n");
       client.res.write(`data: ${winners}\n\n`);
     }
