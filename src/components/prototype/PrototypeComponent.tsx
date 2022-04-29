@@ -15,9 +15,13 @@ const origin =
 
 type PrototypeTypes = {
   Pmodalshow: boolean;
+  setRaffleAlertShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
+function PrototypeComponent({
+  Pmodalshow,
+  setRaffleAlertShow,
+}: PrototypeTypes) {
   // input values saved in states
   const [raffleDuration, setRaffleDuration] = useState(60);
   const [raffleEnterMessage, setRaffleEnterMessage] = useState("!join");
@@ -336,7 +340,8 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
             <button
               className="PC-button"
               onClick={() => {
-                alert("Starting Raffle!");
+                // alert("Starting Raffle!");
+                setRaffleAlertShow(true);
                 fetch(`${baseURL}/api/v1/raffle/start`, {
                   method: "POST",
                   headers: {
