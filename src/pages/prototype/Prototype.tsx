@@ -28,10 +28,8 @@ function Prototype() {
   useEffect(() => {
     if (uuid === null) {
       setPmodalshow(true);
-      console.log("F");
     } else {
       setPmodalshow(false);
-      console.log("testtest");
     }
 
     const params = window.location.search;
@@ -64,7 +62,7 @@ function Prototype() {
     <div className="prototype-container">
       <PrototypeModal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
       <BABalert
-        Position="TopRight"
+        Position="Center"
         ContainerStyle={RaffleAlertStyle}
         raffleAlertShow={raffleAlertShow}
         setRaffleAlertShow={setRaffleAlertShow}

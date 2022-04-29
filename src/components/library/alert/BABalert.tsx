@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import * as location from "./BABalertLocations";
+import { ChooseAlertAnimation } from "./BABalertAnimation";
 
 import "./BABalert.css";
+import { getValue } from "@testing-library/user-event/dist/utils";
 
 interface BABalertTypes {
   Position?: string;
@@ -19,12 +21,15 @@ function BABalert({
   setRaffleAlertShow,
 }: BABalertTypes) {
   const [alertPosition, setAlertPosition] = useState({});
+  const [alertAnimation, setAlertAnimation] = useState("alert-animation-left");
 
   // useEffect om de correcte positie CSS te geven aan de container
+  // Ook om de correcte animate CSS class door te geven aan de alert
   useEffect(() => {
     for (const [x, y] of Object.entries(location)) {
       if (x === Position) {
         setAlertPosition(y);
+        setAlertAnimation(ChooseAlertAnimation(x));
       }
     }
   }, []);
@@ -33,14 +38,14 @@ function BABalert({
     if (raffleAlertShow === true) {
       setTimeout(() => {
         setRaffleAlertShow(false);
-      }, 6000);
+      }, 7000);
     }
   }, [raffleAlertShow]);
 
   return (
     <div className="alert-container" style={alertPosition}>
       <div
-        className={raffleAlertShow ? "alert-animation" : "alert-box"}
+        className={raffleAlertShow ? alertAnimation : "alert-box"}
         style={ContainerStyle}
       >
         {children}

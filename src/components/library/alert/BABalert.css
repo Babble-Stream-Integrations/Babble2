@@ -17,8 +17,9 @@
   pointer-events: all;
 }
 
-.alert-animation {
-  animation-name: alertSlideIn, alertSlideOut;
+/* Animation slide in right */
+.alert-animation-right {
+  animation-name: alertSlideInRight, alertSlideOutRight;
   animation-duration: 2s, 2s;
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
@@ -27,16 +28,16 @@
   display: flex;
 }
 
-@keyframes alertSlideIn {
+@keyframes alertSlideInRight {
   from {
-    transform: translateX(70vw);
+    transform: translateX(100vw);
   }
   to {
     transform: translateX(0vw);
   }
 }
 
-@keyframes alertSlideOut {
+@keyframes alertSlideOutRight {
   from {
     transform: translateX(0vw);
     display: flex;
@@ -44,5 +45,126 @@
   to {
     transform: translateX(100vw);
     display: none;
+  }
+}
+
+/* Animation slide in left */
+.alert-animation-left {
+  animation-name: alertSlideInLeft, alertSlideOutLeft;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: none, forwards;
+
+  display: flex;
+}
+
+@keyframes alertSlideInLeft {
+  from {
+    transform: translateX(-100vw);
+  }
+  to {
+    transform: translateX(0vw);
+  }
+}
+
+@keyframes alertSlideOutLeft {
+  from {
+    transform: translateX(0vw);
+    display: flex;
+  }
+  to {
+    transform: translateX(-100vw);
+    display: none;
+  }
+}
+
+/* Animation slide in top */
+.alert-animation-top {
+  animation-name: alertSlideInTop, alertSlideOutTop;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: none, forwards;
+
+  display: flex;
+}
+
+@keyframes alertSlideInTop {
+  from {
+    transform: translateY(-100vw);
+  }
+  to {
+    transform: translateY(0vw);
+  }
+}
+
+@keyframes alertSlideOutTop {
+  from {
+    transform: translateY(0vw);
+    display: flex;
+  }
+  to {
+    transform: translateY(-100vw);
+    display: none;
+  }
+}
+
+/* Animation slide in bottom */
+.alert-animation-bottom {
+  animation-name: alertSlideInBottom, alertSlideOutBottom;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: none, forwards;
+
+  display: flex;
+}
+
+@keyframes alertSlideInBottom {
+  from {
+    transform: translateY(100vw);
+  }
+  to {
+    transform: translateY(0vw);
+  }
+}
+
+@keyframes alertSlideOutBottom {
+  from {
+    transform: translateY(0vw);
+    display: flex;
+  }
+  to {
+    transform: translateY(100vw);
+    display: none;
+  }
+}
+
+.alert-animation-center {
+  animation-name: alertSlideInCenter, alertSlideOutCenter;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: none, forwards;
+
+  display: flex;
+}
+
+@keyframes alertSlideInCenter {
+  from {
+    transform: scale(0, 0);
+  }
+  to {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes alertSlideOutCenter {
+  from {
+    transform: scale(1, 1);
+  }
+  to {
+    transform: scale(0, 0);
   }
 }
