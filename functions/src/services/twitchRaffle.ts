@@ -172,8 +172,6 @@ async function startRaffle(
         message.toLowerCase() === settings.enterMessage &&
         !usersEntered.includes(tags["display-name"]!)
       ) {
-        console.log(tags.subscriber);
-
         const status = await getStatus(
           tags.subscriber!,
           tags["user-id"]!,

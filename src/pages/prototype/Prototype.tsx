@@ -62,7 +62,7 @@ function Prototype() {
     <div className="prototype-container">
       <PrototypeModal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
       <BABalert
-        Position="Center"
+        Position="TopRight"
         ContainerStyle={RaffleAlertStyle}
         raffleAlertShow={raffleAlertShow}
         setRaffleAlertShow={setRaffleAlertShow}
