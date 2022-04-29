@@ -12,8 +12,38 @@
   width: auto;
   height: auto;
 
-  background-color: rgb(253, 176, 176);
+  display: none;
   position: fixed;
   z-index: 1000;
   pointer-events: all;
+}
+
+.alert-animation {
+  animation-name: alertSlideIn, alertSlideOut;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: none, forwards;
+
+  display: flex;
+}
+
+@keyframes alertSlideIn {
+  from {
+    transform: translateX(70vw);
+  }
+  to {
+    transform: translateX(0vw);
+  }
+}
+
+@keyframes alertSlideOut {
+  from {
+    transform: translateX(0vw);
+    display: flex;
+  }
+  to {
+    transform: translateX(100vw);
+    display: none;
+  }
 }

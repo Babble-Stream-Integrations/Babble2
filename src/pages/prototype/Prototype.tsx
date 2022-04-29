@@ -16,7 +16,6 @@ const origin =
     : "http://localhost:3000";
 
 const RaffleAlertStyle = {
-  display: "flex",
   borderRadius: "30px",
   margin: "50px",
   backgroundColor: "var(--offWhiteTwo)",

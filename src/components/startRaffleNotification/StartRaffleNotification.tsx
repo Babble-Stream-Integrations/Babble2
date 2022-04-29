@@ -1,5 +1,4 @@
 import "./StartRaffleNotification.css";
-import onexone from "../../assets/temporary/onexone.png";
 import ticketlogo from "../../assets/Ticket-icon.png";
 
 const StartRaffleNotification = () => {
