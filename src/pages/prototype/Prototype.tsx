@@ -24,6 +24,7 @@ const RaffleAlertStyle = {
 
 function Prototype() {
   const [Pmodalshow, setPmodalshow] = useState(true);
+  const [raffleAlertShow, setRaffleAlertShow] = useState(false);
   useEffect(() => {
     if (uuid === null) {
       setPmodalshow(true);
@@ -62,10 +63,18 @@ function Prototype() {
   return (
     <div className="prototype-container">
       <PrototypeModal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
-      <BABalert Position="TopRight" ContainerStyle={RaffleAlertStyle}>
+      <BABalert
+        Position="TopRight"
+        ContainerStyle={RaffleAlertStyle}
+        raffleAlertShow={raffleAlertShow}
+        setRaffleAlertShow={setRaffleAlertShow}
+      >
         <StartRaffleNotification />
       </BABalert>
-      <PrototypeComponent Pmodalshow={Pmodalshow} />
+      <PrototypeComponent
+        Pmodalshow={Pmodalshow}
+        setRaffleAlertShow={setRaffleAlertShow}
+      />
     </div>
   );
 }

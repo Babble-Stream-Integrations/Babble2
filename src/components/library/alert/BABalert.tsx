@@ -7,11 +7,18 @@ interface BABalertTypes {
   Position?: string;
   ContainerStyle?: object;
   children?: React.ReactNode;
+  raffleAlertShow: boolean;
+  setRaffleAlertShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function BABalert({ Position, children, ContainerStyle }: BABalertTypes) {
+function BABalert({
+  Position,
+  children,
+  ContainerStyle,
+  raffleAlertShow,
+  setRaffleAlertShow,
+}: BABalertTypes) {
   const [alertPosition, setAlertPosition] = useState({});
-  const [alertVisible, setAlertVisible] = useState(false);
 
   // useEffect om de correcte positie CSS te geven aan de container
   useEffect(() => {
@@ -23,30 +30,30 @@ function BABalert({ Position, children, ContainerStyle }: BABalertTypes) {
   }, []);
 
   useEffect(() => {
-    if (alertVisible === true) {
+    if (raffleAlertShow === true) {
       setTimeout(() => {
-        setAlertVisible(false);
+        setRaffleAlertShow(false);
       }, 6000);
     }
-  }, [alertVisible]);
+  }, [raffleAlertShow]);
 
   return (
     <div className="alert-container" style={alertPosition}>
       <div
-        className={alertVisible ? "alert-animation" : "alert-box"}
+        className={raffleAlertShow ? "alert-animation" : "alert-box"}
         style={ContainerStyle}
       >
         {children}
       </div>
-      <button
+      {/* <button
         onClick={() => {
-          setAlertVisible(!alertVisible);
-          console.log(alertVisible);
+          setRaffleAlertShow(!raffleAlertShow);
+          console.log(raffleAlertShow);
         }}
         style={{ pointerEvents: "all" }}
       >
         TEST
-      </button>
+      </button> */}
     </div>
   );
 }
