@@ -31,6 +31,7 @@ function BABalert({
         setAlertAnimation(ChooseAlertAnimation(x));
       }
     }
+
   }, [Position]);
 
   useEffect(() => {
@@ -40,6 +41,7 @@ function BABalert({
       }, 7000);
     }
   }, [raffleAlertShow, setRaffleAlertShow]);
+
 
   return (
     <div className="alert-container" style={alertPosition}>
