@@ -36,7 +36,6 @@ function PrototypeComponent({
 
   // Is the page youtube or not?
   const [isYoutube, setIsYoutube] = useState(false);
-  const [isTwitch, setIsTwitch] = useState(true);
 
   useEffect(() => {
     if (Pmodalshow === false) {
@@ -86,7 +85,6 @@ function PrototypeComponent({
                 //     alert("error during login try again");
                 //   });
                 setIsYoutube(true);
-                setIsTwitch(false);
               }}
               disabled={true}
             >

@@ -3,7 +3,6 @@ import * as location from "./BABalertLocations";
 import { ChooseAlertAnimation } from "./BABalertAnimation";
 
 import "./BABalert.css";
-import { getValue } from "@testing-library/user-event/dist/utils";
 
 interface BABalertTypes {
   Position?: string;
@@ -32,7 +31,7 @@ function BABalert({
         setAlertAnimation(ChooseAlertAnimation(x));
       }
     }
-  }, []);
+  }, [Position]);
 
   useEffect(() => {
     if (raffleAlertShow === true) {
@@ -40,7 +39,7 @@ function BABalert({
         setRaffleAlertShow(false);
       }, 7000);
     }
-  }, [raffleAlertShow]);
+  }, [raffleAlertShow, setRaffleAlertShow]);
 
   return (
     <div className="alert-container" style={alertPosition}>
