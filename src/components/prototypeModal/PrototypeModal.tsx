@@ -8,7 +8,7 @@ type PrototypeModal = {
   SetPmodalShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function Prototype_modal({ Pmodalshow, SetPmodalShow }: PrototypeModal) {
+function PrototypeModal({ Pmodalshow, SetPmodalShow }: Prototype_modal) {
   const [inputUUID, setInputUUID] = useState("");
   return (
     <>
@@ -80,4 +80,4 @@ function Prototype_modal({ Pmodalshow, SetPmodalShow }: PrototypeModal) {
   );
 }
 
-export default Prototype_modal;
+export default PrototypeModal;

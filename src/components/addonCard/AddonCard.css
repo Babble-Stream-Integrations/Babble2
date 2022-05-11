@@ -1,0 +1,26 @@
+.addonCard {
+  color: var(--offWhiteTwo);
+  width: 254px;
+  height: 143px;
+  border-radius: 8px;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25px 15px;
+}
+
+.titleAddon {
+  position: absolute;
+  bottom: 0px;
+  left: 13px;
+  font-size: small;
+  margin-bottom: 10px;
+}
+
+.placeholder {
+  height: 50px;
+  text-transform: none;
+}
