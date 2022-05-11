@@ -139,9 +139,6 @@ async function startRaffle(
   tokens: TwitchTokens,
   uniqueString: string
 ) {
-  console.log(settings, tokens);
-  console.log("Start Twitch Raffle");
-  console.log(uniqueString);
 
   try {
     const [streamerChannel, streamerID, streamerName, streamerPassword] =
