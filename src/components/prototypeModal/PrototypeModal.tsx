@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import "./PrototypeModal.css";
 
-type Prototype_modal = {
+type PrototypeModal = {
   Pmodalshow: boolean;
   SetPmodalShow: React.Dispatch<React.SetStateAction<boolean>>;
 };

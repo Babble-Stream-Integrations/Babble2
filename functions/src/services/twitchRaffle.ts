@@ -3,6 +3,8 @@ import tmi from "tmi.js";
 import admin from "firebase-admin";
 import { refreshAccessToken } from "./twitchAuth";
 
+import { RTDBIdle, RTDBEnd, RTDBStart } from "./realtimeDB";
+
 const db = admin.firestore();
 
 interface TwitchRaffleSettings {
@@ -134,10 +136,12 @@ function pickWinner(
 
 async function startRaffle(
   settings: TwitchRaffleSettings,
-  tokens: TwitchTokens
+  tokens: TwitchTokens,
+  uniqueString: string
 ) {
   console.log(settings, tokens);
   console.log("Start Twitch Raffle");
+  console.log(uniqueString);
 
   try {
     const [streamerChannel, streamerID, streamerName, streamerPassword] =
@@ -160,6 +164,8 @@ async function startRaffle(
         streamerChannel,
         `Raffle started! Type ${settings.enterMessage} to enter`
       );
+      RTDBStart(uniqueString, settings.duration);
+      RTDBIdle(uniqueString);
     });
 
     const usersEntered: string[] = [];
@@ -197,6 +203,9 @@ async function startRaffle(
         settings.winnerAmount,
         settings.duplicateWinners
       );
+      RTDBEnd(uniqueString, winners);
+      RTDBIdle(uniqueString);
+
       console.log("Winners:", winners);
 
       if (settings.announceWinners) {
