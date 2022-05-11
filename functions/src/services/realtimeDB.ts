@@ -1,8 +1,6 @@
 import firebase from "firebase-admin";
-import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
 
-const RTDBApp = initializeApp(
+const RTDBApp = firebase.initializeApp(
   {
     databaseURL:
       "https://babble-d6ef3-default-rtdb.europe-west1.firebasedatabase.app",
@@ -10,9 +8,8 @@ const RTDBApp = initializeApp(
   "RTDBApp"
 );
 
-getDatabase(RTDBApp);
+firebase.database(RTDBApp);
 const DBref = firebase.database().ref();
-// input functie id: string, duration: bigint
 async function RTDBStart(id: string, duration: number) {
   DBref.child(id).set({
     type: "start",

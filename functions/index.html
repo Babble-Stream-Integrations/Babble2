@@ -160,12 +160,6 @@
           break;
       }
     });
-    // const evtSource = new EventSource(
-    //   `http://localhost:5001/babble-d6ef3/europe-west1/default/api/v1/raffle/listen?id=${id}`,
-    //   { withCredentials: true }
-    // );
-
-    const dummyarray = ["Osjesleben", "Blamant"];
 
     const RaffleResults = (winnaars) => {
       let x = document.querySelector("#raffle-winners");
@@ -177,25 +171,9 @@
       }
       for (let i = 0; i < winnaars.length; i++) {
         winnerstr = winnerstr + winnaars[i] + "<br>";
-        // console.log(winnerstr);
       }
       x.innerHTML = winnerstr;
-      // startRaffle();
       return startRaffle();
     };
-
-    // RaffleResults(dummyarray);
-
-    // evtSource.addEventListener("end", (event) => {
-    //   const data = event.data;
-    //   console.log(data);
-    //   // console.log("test");
-    //   RaffleResults(data);
-    // });
-
-    // evtSource.onmessage = function(event) {
-    // 	let data = event.data;
-    // 	console.log(data);
-    // }
   </script>
 </html>
