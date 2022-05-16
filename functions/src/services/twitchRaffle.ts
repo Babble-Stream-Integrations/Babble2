@@ -4,6 +4,7 @@ import admin from "firebase-admin";
 import { refreshAccessToken } from "./twitchAuth";
 
 const db = admin.firestore();
+let clientId: string;
 
 interface TwitchRaffleSettings {
   announceWinners: boolean;
@@ -37,7 +38,7 @@ async function getStreamerChannel(
     const res = await axios.get("https://api.twitch.tv/helix/users", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Client-Id": await getClientId(),
+        "Client-Id": clientId,
       },
     });
 
@@ -81,7 +82,7 @@ async function getStatus(
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Client-Id": await getClientId(),
+        "Client-Id": clientId,
       },
     }
   );
@@ -138,6 +139,7 @@ async function startRaffle(
 ) {
   console.log(settings, tokens);
   console.log("Start Twitch Raffle");
+  clientId = await getClientId();
 
   try {
     const [streamerChannel, streamerID, streamerName, streamerPassword] =

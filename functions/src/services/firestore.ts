@@ -3,7 +3,6 @@ import admin from "firebase-admin";
 import { getTokensWithCode } from "./twitchAuth";
 
 const db = admin.firestore();
-
 // User functions
 interface User {
   displayName: string;

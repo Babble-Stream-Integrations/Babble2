@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-import "./Prototype_modal.css";
+import "./PrototypeModal.css";
 
 type Prototype_modal = {
   Pmodalshow: boolean;
