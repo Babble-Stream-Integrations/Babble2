@@ -141,7 +141,6 @@
   }
 }
 
-
 /* Animation slide in Center */
 .alert-animation-center {
   animation-name: alertSlideInCenter, alertSlideOutCenter;

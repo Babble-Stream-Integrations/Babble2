@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import PrototypeComponent from "../../components/prototype/PrototypeComponent";
 import PrototypeModal from "../../components/prototypeModal/PrototypeModal";
+import BABalertcontainer from "../../components/library/alert/BABalertcontainer";
 import BABalert from "../../components/library/alert/BABalert";
 import StartRaffleNotification from "../../components/startRaffleNotification/StartRaffleNotification";
 
@@ -61,14 +62,15 @@ function Prototype() {
   return (
     <div className="prototype-container">
       <PrototypeModal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
-      <BABalert
-        Position="TopRight"
-        ContainerStyle={RaffleAlertStyle}
-        raffleAlertShow={raffleAlertShow}
-        setRaffleAlertShow={setRaffleAlertShow}
-      >
-        <StartRaffleNotification />
-      </BABalert>
+      <BABalertcontainer Position="TopRight">
+        <BABalert
+          ContainerStyle={RaffleAlertStyle}
+          raffleAlertShow={raffleAlertShow}
+          setRaffleAlertShow={setRaffleAlertShow}
+        >
+          <StartRaffleNotification />
+        </BABalert>
+      </BABalertcontainer>
       <PrototypeComponent
         Pmodalshow={Pmodalshow}
         setRaffleAlertShow={setRaffleAlertShow}
