@@ -1,6 +1,7 @@
 import "./AddonCard.css";
+import { IAddonData } from "../addonCards/AddonCards";
 
-const addonCard = ({ card }) => {
+const addonCard = ({ card }: { card: IAddonData }) => {
   const titleWords = card.title.split(" ");
   const [hslSplit, ...restsplit] = card.color.split(", ");
   const colorChange = parseInt(restsplit[1]) + 15;
@@ -9,7 +10,7 @@ const addonCard = ({ card }) => {
   return (
     <div
       className="addonCard"
-      key={card.id}
+      key={card.order}
       style={{
         background: `linear-gradient(to right, hsl(${lightColor}), hsl(${card.color})`,
       }}
