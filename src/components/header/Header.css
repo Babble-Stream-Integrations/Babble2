@@ -46,7 +46,7 @@
 }
 
 .nav-avatar {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AddonCard from "../addonCard/AddonCard";
 import db from "../../firebase/Firebase";
-import { collection, onSnapshot, doc } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 
 export interface IAddonData {
   title: string;
