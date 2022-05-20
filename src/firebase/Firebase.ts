@@ -1,6 +1,10 @@
 // import { firebase } from "firebase";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+} from "firebase/app-check";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCzNQ2O8_KEF7rcupBT8gNjB0_BIE7K4ig",
@@ -15,6 +19,12 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaEnterpriseProvider(
+    "6LcE__sfAAAAAKhv-b9yRgWWpRSz3OWsUdnoNfTY"
+  ),
+  isTokenAutoRefreshEnabled: true,
+});
 const db = getFirestore(app);
 export default db;
 
