@@ -10,6 +10,7 @@ const RTDBApp = firebase.initializeApp(
 
 firebase.database(RTDBApp);
 const DBref = firebase.database().ref();
+
 async function RTDBStart(id: string, duration: number) {
   DBref.child(id).set({
     type: "start",
