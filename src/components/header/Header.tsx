@@ -11,16 +11,15 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
-// import { useState } from "react";
+import { useState } from "react";
 
 const Header = () => {
-  // const [buttonText, setButtonText] = useState("Login");
+  const [currentUser, setCurrentUser] = useState();
   const isDesktop = useMatchMedia("(min-width: 569px)", true);
   const isPhone = useMatchMedia("(max-width: 568px)", true);
 
   function test() {
     alert("test");
-    // localStorage.removeItem("profilePic");
   }
   const google_provider = new GoogleAuthProvider();
   const auth = getAuth();

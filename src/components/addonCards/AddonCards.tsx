@@ -16,6 +16,7 @@ export interface AddonData {
 }
 
 const AddonCards = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [addoncards, setAddons] = useState<any[]>([]);
 
   useEffect(() => {
@@ -25,7 +26,6 @@ const AddonCards = () => {
     // });
     onSnapshot(collection(db, "addonTemplates"), (snapshot) => {
       setAddons(snapshot.docs.map((doc) => doc.data()));
-      console.log(Array.isArray(snapshot.docs.map((doc) => doc.data())));
     });
   }, []);
   // console.log(addoncards);
