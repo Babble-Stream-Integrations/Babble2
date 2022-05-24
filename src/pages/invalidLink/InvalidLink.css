@@ -1,0 +1,61 @@
+.IL-container {
+  width: 100vw;
+  height: 100vh;
+
+  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.IL-content {
+  width: 20%;
+  height: 20%;
+  min-width: 350px;
+  min-height: 350px;
+  background-color: var(--lightGrey);
+
+  margin: 50px;
+  border-radius: 25px;
+}
+
+.IL-text-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.IL-text-paragraph {
+  padding: 0 10px 0 10px;
+}
+
+.IL-text-head {
+  font-size: larger;
+  font-weight: 700;
+}
+
+.IL-text-logo {
+  width: 75px;
+}
+
+.IL-text-paragrahp-invalid {
+  color: var(--mainOrange);
+}
+
+.IL-returnBtn {
+  background-color: var(--mainOrange);
+  border: none;
+  border-radius: 25px;
+  padding: 15px;
+  font-size: medium;
+}
+
+.IL-text-returnBtn {
+  margin-bottom: 0;
+}
+
+.IL-returnBtn:hover {
+  cursor: pointer;
+}
