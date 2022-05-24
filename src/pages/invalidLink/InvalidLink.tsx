@@ -15,10 +15,10 @@ const InvalidLink = () => {
           <p className="IL-text-paragraph">
             Please check the URL for mistakes and try again.
           </p>
-          <p>
+          <p className="IL-text-returnBtn">
             <a href="https://babble.streamintegrations.com">
               <button type="button" className="IL-returnBtn">
-                Return to main page
+                <b>Return to main page</b>
               </button>
             </a>
           </p>
