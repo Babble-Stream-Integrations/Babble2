@@ -1,7 +1,7 @@
 // import firebase from "firebase/compat/auth";
 import { useMatchMedia } from "../../helpers/useMatchMedia";
-import logo from "../../assets/logo/Babble-Small-Transparant.png";
-import logo2 from "../../assets/logo/Babble-Big-Transparant.png";
+import logo from "../../assets/logo/Babble-Orange-S.png";
+import logo2 from "../../assets/logo/Babble-Orange-L.png";
 // import avatar from "../../assets/avatar.png";
 import hamburger from "../../assets/hamburgericon.png";
 import "./Header.css";
@@ -13,8 +13,14 @@ import {
 } from "firebase/auth";
 import { useState } from "react";
 
+interface User {
+  displayName: string;
+  email: string;
+  photoURL: string;
+}
+
 const Header = () => {
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState<[]>();
   const isDesktop = useMatchMedia("(min-width: 569px)", true);
   const isPhone = useMatchMedia("(max-width: 568px)", true);
 
@@ -36,6 +42,7 @@ const Header = () => {
         // The signed-in user info.
         const user = result.user;
         console.log(user);
+        // setCurrentUser(user);
         // ...
       })
       .catch((error) => {
