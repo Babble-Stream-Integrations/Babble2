@@ -11,22 +11,51 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
-import { useState } from "react";
+// import { collectionGroup } from "firebase/firestore";
+// import { useState } from "react";
 
-interface User {
-  displayName: string;
-  email: string;
-  photoURL: string;
-}
+// interface User {
+//   displayName: string;
+//   email: string;
+//   photoURL: string;
+// }
 
 const Header = () => {
-  const [currentUser, setCurrentUser] = useState<[]>();
   const isDesktop = useMatchMedia("(min-width: 569px)", true);
   const isPhone = useMatchMedia("(max-width: 568px)", true);
 
   function test() {
-    alert("test");
+    checkCookie();
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function getCookie(dark_mode: any) {
+    const name = dark_mode + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(";");
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == " ") {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  function checkCookie() {
+    const user = getCookie("darkmode");
+    if (user != "") {
+      console.log("succes check");
+      //TODO Pagina moet worden veranderd naar ingelogte addonpagina
+    } else {
+      console.log("fail check");
+      //TODO niet ingelogde addonpagina
+    }
+  }
+
   const google_provider = new GoogleAuthProvider();
   const auth = getAuth();
   const signInWithGoogle = () => {
@@ -36,14 +65,13 @@ const Header = () => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
 
         if (credential !== null) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const token = credential.accessToken;
-          console.log(token);
         }
         // The signed-in user info.
         const user = result.user;
-        console.log(user);
-        // setCurrentUser(user);
-        // ...
+        const cookie = "darkmode =" + JSON.stringify(user) + "; max-age=60;";
+        document.cookie = cookie;
       })
       .catch((error) => {
         // Handle Errors here.
@@ -66,8 +94,6 @@ const Header = () => {
       console.log(error);
       // An error happened.
     });
-
-  // const changeText = (text) => setButtonText(text);
 
   return (
     <div className="menubalk">
@@ -94,9 +120,7 @@ const Header = () => {
             <button className="log-button" onClick={signInWithGoogle}>
               Login
             </button>
-            {/* <span style={{ color: "white" }}>
-              {localStorage.getItem("name")}
-            </span> */}
+            <span id="cookies" style={{ color: "white" }}></span>
           </div>
           <div className="nav-menu">
             <img
@@ -111,5 +135,4 @@ const Header = () => {
     </div>
   );
 };
-
 export default Header;
