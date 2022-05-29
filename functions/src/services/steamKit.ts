@@ -1,16 +1,9 @@
 import axios from "axios";
-import admin from "firebase-admin";
-
-const db = admin.firestore();
-
-async function getDefaultSteamAPIKey(): Promise<string> {
-  const doc = await db.collection("dev").doc("steamDetails").get();
-  return doc.data()!.steamWebAPIKey;
-}
+import { getSteamDetails } from "../db/devDb";
 
 async function getCurrentSteamGame(steamAPIKey: string, steamId: string) {
   const steamApiKey =
-    steamAPIKey !== "" ? steamAPIKey : await getDefaultSteamAPIKey();
+    steamAPIKey !== "" ? steamAPIKey : (await getSteamDetails()).steamWebAPIKey;
   let currentlyPlaying = "";
   let currentlyPlayingId = "";
   try {
@@ -38,7 +31,7 @@ async function getSteamGameAchievementData(
   steamId: string
 ) {
   const steamApiKey =
-    steamAPIKey !== "" ? steamAPIKey : await getDefaultSteamAPIKey();
+    steamAPIKey !== "" ? steamAPIKey : (await getSteamDetails()).steamWebAPIKey;
   try {
     const achievementsRequest = `https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/?appid=${gameId}&key=${steamApiKey}&steamid=${steamId}`;
     const response = await axios.get(achievementsRequest);
