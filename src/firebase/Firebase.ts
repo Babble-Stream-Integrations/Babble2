@@ -4,6 +4,7 @@ import { getFirestore } from "firebase/firestore";
 import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
+  getToken,
 } from "firebase/app-check";
 
 const firebaseConfig = {
@@ -25,8 +26,18 @@ const appCheck = initializeAppCheck(app, {
   ),
   isTokenAutoRefreshEnabled: true,
 });
+let appchecktoken;
+try {
+  appchecktoken = async () => {
+    await getToken(appCheck, /* forceRefresh= */ false);
+  };
+} catch (err) {
+  alert(err);
+}
+
 const db = getFirestore(app);
 export default db;
+export { appchecktoken };
 
 // Initialize Firebase
 // firebase.initializeApp(firebaseConfig);

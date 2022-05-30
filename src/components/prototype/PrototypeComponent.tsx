@@ -1,7 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import appchecktoken from Firebase.ts;
 import BABswitch from "../library/switch/BABswitch";
 import "./PrototypeComponent.css";
+import { FirebaseError } from "firebase/app";
 
 const uuid = localStorage.getItem("UUID");
 const baseURL =
@@ -39,6 +41,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
       fetch(`${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2/settings`, {
         headers: {
           Origin: origin,
+          appchecktoken: appchecktoken,
         },
       })
         .then((response) => {
@@ -98,6 +101,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                   {
                     headers: {
                       Origin: origin,
+                      appchecktoken: appchecktoken,
                     },
                   }
                 )
@@ -296,6 +300,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                       headers: {
                         "Content-Type": "application/json",
                         Origin: origin,
+                        appchecktoken: appchecktoken,
                       },
                       body: JSON.stringify({
                         announceWinners: raffleAnnounceWinners,
@@ -342,6 +347,7 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                   headers: {
                     "Content-Type": "application/json",
                     Origin: origin,
+                    appchecktoken: appchecktoken,
                   },
                   body: JSON.stringify({
                     user: uuid,

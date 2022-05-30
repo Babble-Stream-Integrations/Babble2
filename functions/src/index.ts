@@ -31,6 +31,27 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(async (req, res, next) => {
+  const appCheckToken = req.header("appchecktoken");
+  if (appCheckToken !== undefined) {
+    if (process.env.NODE_ENV === "production") {
+      try {
+        await admin.appCheck().verifyToken(appCheckToken);
+      } catch (err) {
+        res.status(400).send({ error: "Invalid appcheck token" });
+        functions.logger.log("appcheck: invalid");
+        throw new Error("Invalid appcheck token");
+      }
+    } else {
+      next();
+    }
+  } else {
+    functions.logger.log("appcheck: missing");
+    res.status(400).send({ error: "Missing appcheck token" });
+    throw new Error("missing appcheck token");
+  }
+});
+
 // twitchService.checkChat();
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", addonRoutes);
