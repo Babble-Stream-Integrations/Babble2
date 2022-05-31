@@ -17,10 +17,15 @@ function AddonVisual() {
         const params = location.search;
         const searchParams = new URLSearchParams(params);
         getAddonStyling(
-          searchParams.get("user"),
-          searchParams.get("addon"),
+          searchParams.get("user") || "",
+          searchParams.get("addon") || "",
           setAddonStyling
-        ).catch(console.error);
+        ).catch(() => {
+          console.error;
+          alert(
+            "An error while fetching data has occured. Please check if your URL is correct"
+          );
+        });
       } else {
         navigate("../../invalidlink", { replace: true });
       }
