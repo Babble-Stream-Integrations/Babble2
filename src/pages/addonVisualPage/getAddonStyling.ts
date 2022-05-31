@@ -1,7 +1,8 @@
 import db from "../../firebase/Firebase";
 import { doc, getDoc } from "firebase/firestore";
-import React, { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
+// Functie om styling data op te halen uit de firestore en doormiddel van setStylingState op te slaan in state die in AddonVisual staat.
 export async function getAddonStyling(
   user: string,
   addon: string,
@@ -11,10 +12,8 @@ export async function getAddonStyling(
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    // return console.log("Document data:", docSnap.data());
     return setStylingState(docSnap.data()["styling"]);
   } else {
-    // doc.data() will be undefined in this case
-    return console.log("No such document!");
+    return console.log("Error finding data");
   }
 }
