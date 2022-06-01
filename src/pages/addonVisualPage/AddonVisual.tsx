@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { getAddonStyling } from "./getAddonStyling";
 
 function AddonVisual() {
-  const [addonStyling, setAddonStyling] = useState({});
+  const [addonData, setAddonData] = useState({});
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
@@ -19,7 +19,7 @@ function AddonVisual() {
         getAddonStyling(
           searchParams.get("user") || "",
           searchParams.get("addon") || "",
-          setAddonStyling
+          setAddonData
         ).catch(() => {
           console.error;
           alert(

@@ -6,14 +6,19 @@ import { Dispatch, SetStateAction } from "react";
 export async function getAddonStyling(
   user: string,
   addon: string,
-  setStylingState: Dispatch<SetStateAction<object>>
+  setDataState: Dispatch<SetStateAction<object>>
 ) {
   const docRef = doc(db, "users", user, "addons", addon);
   const docSnap = await getDoc(docRef);
-
   if (docSnap.exists()) {
-    return setStylingState(docSnap.data()["styling"]);
+    const stateData = {
+      uniqueString: docSnap.data()["uniqueString"],
+      styling: docSnap.data()["styling"],
+    };
+    return setDataState(stateData);
   } else {
-    return console.log("Error finding data");
+    return alert(
+      "An error while fetching data has occured. Please check if your URL is correct"
+    );
   }
 }
