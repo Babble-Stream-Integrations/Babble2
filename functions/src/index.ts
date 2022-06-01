@@ -37,18 +37,24 @@ app.use(async (req, res, next) => {
     if (process.env.NODE_ENV === "production") {
       try {
         await admin.appCheck().verifyToken(appCheckToken);
+        functions.logger.log("appcheck: valid");
+        next();
       } catch (err) {
-        res.status(400).send({ error: "Invalid appcheck token" });
         functions.logger.log("appcheck: invalid");
-        throw new Error("Invalid appcheck token");
+        //strict mode:
+        // res.status(400).send({ error: "Invalid appcheck token" });
+        // throw new Error("Invalid appcheck token");
+        next();
       }
     } else {
       next();
     }
   } else {
     functions.logger.log("appcheck: missing");
-    res.status(400).send({ error: "Missing appcheck token" });
-    throw new Error("missing appcheck token");
+    //strict mode:
+    // res.status(400).send({ error: "Missing appcheck token" });
+    // throw new Error("missing appcheck token");
+    next();
   }
 });
 
