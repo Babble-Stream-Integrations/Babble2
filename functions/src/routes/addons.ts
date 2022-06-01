@@ -49,7 +49,11 @@ router.post("/raffle/start", async (req, res) => {
       };
 
       res.send(
-        await twitchRaffle.startRaffle(settingsDoc.data()!.settings, tokens)
+        await twitchRaffle.startRaffle(
+          settingsDoc.data()!.settings,
+          tokens,
+          settingsDoc.data()!.uniqueString
+        )
       );
     }
   } else {
