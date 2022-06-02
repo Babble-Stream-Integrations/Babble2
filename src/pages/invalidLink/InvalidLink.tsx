@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../assets/logo/Babble-Small-Transparant.png";
+import logo from "../../assets/logo/Babble-Orange-L.png";
 import "./InvalidLink.css";
 
 const InvalidLink = () => {
