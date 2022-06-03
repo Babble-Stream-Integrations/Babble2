@@ -11,11 +11,9 @@ function Raffle({ dataRecieved, data }: addonTypes) {
   useEffect(() => {
     console.log(data["styling"]);
     if (typeof data === "object") {
-      console.log(
-        Object.keys(data["styling"]).forEach((x) => {
-          console.log(x);
-        })
-      );
+      Object.keys(data["styling"]).forEach((x) => {
+        console.log(x);
+      });
     }
   }, [dataRecieved]);
   return (
