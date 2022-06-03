@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getAddonStyling } from "./getAddonStyling";
+import Raffle from "../../components/addonCollection/raffle/Raffle";
 
 function AddonVisual() {
   const [addonData, setAddonData] = useState({});
+  const [dataRecieved, setDataRecieved] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   useEffect(() => {
@@ -20,12 +22,16 @@ function AddonVisual() {
           searchParams.get("user") || "",
           searchParams.get("addon") || "",
           setAddonData
-        ).catch(() => {
-          console.error;
-          alert(
-            "An error while fetching data has occured. Please check if your URL is correct"
-          );
-        });
+        )
+          .then(() => {
+            if (addonData !== {}) setDataRecieved(true);
+          })
+          .catch(() => {
+            console.error;
+            alert(
+              "An error while fetching data has occured. Please check if your URL is correct"
+            );
+          });
       } else {
         navigate("../../invalidlink", { replace: true });
       }
@@ -36,7 +42,7 @@ function AddonVisual() {
 
   return (
     <>
-      <div></div>
+      {dataRecieved && <Raffle dataRecieved={dataRecieved} data={addonData} />}
     </>
   );
 }
