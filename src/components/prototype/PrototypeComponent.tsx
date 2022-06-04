@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import BABswitch from "../library/switch/BABswitch";
 import "./PrototypeComponent.css";
+import { appchecktoken } from "../../firebase/Firebase";
 
 const uuid = localStorage.getItem("UUID");
 const baseURL =
