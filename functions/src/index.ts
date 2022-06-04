@@ -42,7 +42,7 @@ app.use(async (req, res, next) => {
         next();
       } catch (err) {
         functions.logger.log("appcheck: invalid");
-        //strict mode:
+        // strict mode:
         // res.status(400).send({ error: "Invalid appcheck token" });
         // throw new Error("Invalid appcheck token");
         next();
@@ -52,7 +52,7 @@ app.use(async (req, res, next) => {
     }
   } else {
     functions.logger.log("appcheck: missing");
-    //strict mode:
+    // strict mode:
     // res.status(400).send({ error: "Missing appcheck token" });
     // throw new Error("missing appcheck token");
     next();

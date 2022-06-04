@@ -26,18 +26,18 @@ const appCheck = initializeAppCheck(app, {
   ),
   isTokenAutoRefreshEnabled: true,
 });
-let appchecktoken;
+let appchecktoken: string;
 try {
-  appchecktoken = async () => {
-    await getToken(appCheck, /* forceRefresh= */ false);
+  async () => {
+    appchecktoken = (await getToken(appCheck, /* forceRefresh= */ false)).token;
   };
 } catch (err) {
   alert(err);
 }
 
 const db = getFirestore(app);
-export default db;
 export { appchecktoken };
+export default db;
 
 // Initialize Firebase
 // firebase.initializeApp(firebaseConfig);

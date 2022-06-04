@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import appchecktoken from Firebase.ts;
+import { appchecktoken } from "../../firebase/Firebase";
 import BABswitch from "../library/switch/BABswitch";
 import "./PrototypeComponent.css";
 import { FirebaseError } from "firebase/app";
