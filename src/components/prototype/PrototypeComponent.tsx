@@ -43,6 +43,7 @@ function PrototypeComponent({
       fetch(`${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2/settings`, {
         headers: {
           Origin: origin,
+          appchecktoken: appchecktoken,
         },
       })
         .then((response) => {
@@ -101,6 +102,7 @@ function PrototypeComponent({
                   {
                     headers: {
                       Origin: origin,
+                      appchecktoken: appchecktoken,
                     },
                   }
                 )
@@ -299,6 +301,7 @@ function PrototypeComponent({
                       headers: {
                         "Content-Type": "application/json",
                         Origin: origin,
+                        appchecktoken: appchecktoken,
                       },
                       body: JSON.stringify({
                         announceWinners: raffleAnnounceWinners,
@@ -346,6 +349,7 @@ function PrototypeComponent({
                   headers: {
                     "Content-Type": "application/json",
                     Origin: origin,
+                    appchecktoken: appchecktoken,
                   },
                   body: JSON.stringify({
                     user: uuid,

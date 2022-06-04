@@ -57,7 +57,6 @@ app.use(async (req, res, next) => {
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", addonRoutes);
 app.use("/api/v1", authRoutes);
-
 app.get("/", (_req: Request, res: Response) => {
   res.send({
     result: "hi there handsome ;)",
