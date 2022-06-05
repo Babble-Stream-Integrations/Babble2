@@ -26,5 +26,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    - name: install front-end dependencies
     - run: npm ci
+    - name: install back-end dependencies
+    - run: npm ci
+    - working-directory: ./functions
+    - name: run front-end ESLint
     - run: npm run lint
+    - name: run back-end ESLint
+    - run: npm run lint
+    - working-directory: ./functions
+    
