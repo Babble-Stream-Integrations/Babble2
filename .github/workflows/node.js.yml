@@ -3,37 +3,25 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: [pull_request]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 16.x
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: install front-end dependencies
-      run: npm ci
-    - name: install back-end dependencies
-      run: npm install
+        node-version: '16.x'
+    - run: npm ci
+    - run: npm ci
       working-directory: functions
-    - name: run front-end ESLint
+    - name: Run front-end ESLint
       run: npm run lint
     - name: run back-end ESLint
+      if: always()
       run: npm run lint
       working-directory: functions
     
