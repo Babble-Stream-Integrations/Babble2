@@ -1,14 +1,5 @@
-.midPage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  max-width: 568px;
-  margin: auto;
-}
-
 .titlePage {
-  color: var(--offWhiteTwo);
+  color: var(--offWhiteOne);
   font-weight: normal;
   font-size: 1.6em;
 }
@@ -21,43 +12,9 @@
   border-bottom-style: solid;
   border-bottom-color: var(--lightGrey);
   padding-bottom: 5px;
-  color: var(--offWhiteTwo);
+  color: var(--offWhiteOne);
   font-weight: normal;
   font-size: small;
   text-align: left;
-  margin-top: 25px;
-  width: 538px;
-  margin-bottom: 0px;
-}
-
-.templateCards {
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  flex-wrap: wrap;
-}
-
-@media only screen and (max-width: 568px) {
-  .midPage {
-    justify-content: center;
-  }
-
-  .subTitle {
-    width: 254px;
-  }
-
-  .templateCards {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-}
-
-.page-container {
-  position: relative;
-  min-height: 100vh;
-}
-
-.content-wrap {
-  padding-bottom: 7.5rem;
+  margin: 25px 50px;
 }

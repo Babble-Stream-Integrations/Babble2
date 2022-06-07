@@ -82,9 +82,6 @@ router.put("/users/:user/addons/:addon", async (req, res) => {
     await firestore.addAddon(req.params.user, req.params.addon, req.body)
   );
 });
-router.put("/users/:user/addons/:addon/setUniqueString", async (req, res) => {
-  res.send(await firestore.setUniqueString(req.params.user, req.params.addon));
-});
 router.get("/users/:user/addons/:addon", async (req, res) => {
   res.send(await firestore.getAddon(req.params.user, req.params.addon));
 });

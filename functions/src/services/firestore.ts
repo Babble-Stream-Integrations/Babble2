@@ -1,5 +1,4 @@
 import axios from "axios";
-import { nanoid } from "nanoid";
 import admin from "firebase-admin";
 import { getTokensWithCode } from "./twitchAuth";
 
@@ -75,16 +74,6 @@ async function addAddon(user: string, addon: string, data: Addon) {
     .set(data, { merge: true });
 
   return { result: `addon ${addon} added to ${user}` };
-}
-
-async function setUniqueString(user: string, addon: string) {
-  await db.collection("users").doc(user).collection("addons").doc(addon).set(
-    {
-      uniqueString: nanoid(),
-    },
-    { merge: true }
-  );
-  return { result: `uniqueString for addon ${addon} updated in ${user}` };
 }
 
 async function getAddon(user: string, addon: string) {
@@ -200,7 +189,6 @@ export default {
   deleteUser,
   getAddons,
   addAddon,
-  setUniqueString,
   getAddon,
   deleteAddon,
   getSettings,

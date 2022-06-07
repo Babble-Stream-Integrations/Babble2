@@ -6,21 +6,16 @@ import hamburger from "../../assets/hamburgericon.png";
 import "./Header.css";
 
 const Header = () => {
-  const isDesktop = useMatchMedia("(min-width: 569px)", true);
-  const isPhone = useMatchMedia("(max-width: 568px)", true);
+  const isDesktop = useMatchMedia("(min-width: 500px)", true);
+  const isPhone = useMatchMedia("(max-width: 499px)", true);
 
   return (
     <div className="menubalk">
       {isPhone && <img className="babble-logo" alt="Babble" src={logo} />}
       {isDesktop && <img className="babble-logo" alt="Babble" src={logo2} />}
       {isPhone && (
-        <div className="header-flex">
-          <div>
-            <button className="log-button">Log in</button>
-          </div>
-          <div className="nav-menu">
-            <img className="hamburger-menu" alt="Babble" src={hamburger} />
-          </div>
+        <div className="nav-menu">
+          <img className="hamburger-menu" alt="Babble" src={hamburger} />
         </div>
       )}
       {isDesktop && (

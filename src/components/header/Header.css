@@ -25,7 +25,7 @@
 }
 
 .log-button {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat";
   font-weight: bold;
   font-size: 0.85em;
   background-color: var(--mainOrange);
