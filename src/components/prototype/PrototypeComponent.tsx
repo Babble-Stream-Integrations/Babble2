@@ -15,9 +15,13 @@ const origin =
 
 type PrototypeTypes = {
   Pmodalshow: boolean;
+  setRaffleAlertShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
+function PrototypeComponent({
+  Pmodalshow,
+  setRaffleAlertShow,
+}: PrototypeTypes) {
   // input values saved in states
   const [raffleDuration, setRaffleDuration] = useState(60);
   const [raffleEnterMessage, setRaffleEnterMessage] = useState("!join");
@@ -32,7 +36,6 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
 
   // Is the page youtube or not?
   const [isYoutube, setIsYoutube] = useState(false);
-  const [isTwitch, setIsTwitch] = useState(true);
 
   useEffect(() => {
     if (Pmodalshow === false) {
@@ -82,7 +85,6 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
                 //     alert("error during login try again");
                 //   });
                 setIsYoutube(true);
-                setIsTwitch(false);
               }}
               disabled={true}
             >
@@ -336,7 +338,8 @@ function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
             <button
               className="PC-button"
               onClick={() => {
-                alert("Starting Raffle!");
+                // alert("Starting Raffle!");
+                setRaffleAlertShow(true);
                 fetch(`${baseURL}/api/v1/raffle/start`, {
                   method: "POST",
                   headers: {
