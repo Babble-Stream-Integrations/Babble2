@@ -11,14 +11,14 @@ const router = express.Router();
 
 // eslint-disable-next-line consistent-return
 async function runAddon(user: string, addon: string, addonType: string) {
-  const addonDoc = await db.doc(`users/${user}/addons/${addon}`).get();
-  if (!addonDoc.exists) {
+  const settingsDoc = await db.doc(`users/${user}/addons/${addon}`).get();
+  if (!settingsDoc.exists) {
     throw new Error("addon document not found");
   }
-  if (addonDoc.data()!.type !== addonType) {
+  if (settingsDoc.data()!.type !== addonType) {
     throw new Error(`Wrong type of addon: expected ${addonType} addon`);
   }
-  const { platform } = addonDoc.data()!;
+  const { platform } = settingsDoc.data()!;
   if (platform !== "twitch" && platform !== "youtube") {
     throw new Error("no platform detected");
   }
@@ -28,7 +28,7 @@ async function runAddon(user: string, addon: string, addonType: string) {
     throw new Error("twitch tokens not found");
   }
 
-  const { settings, uniqueString } = addonDoc.data()!;
+  const { settings } = settingsDoc.data()!;
   const tokens = {
     accessToken: tokensDoc.data()!.access_token,
     refreshToken: tokensDoc.data()!.refresh_token,
@@ -39,7 +39,7 @@ async function runAddon(user: string, addon: string, addonType: string) {
   }
   if (platform === "twitch") {
     if (addonType === "raffleSystem") {
-      await twitchRaffle.startRaffle(settings, tokens, uniqueString);
+      await twitchRaffle.startRaffle(settings, tokens);
       return { result: "Twitch raffle has been succesfully finished!" };
     }
     if (addonType === "automaticStreamTitle") {
