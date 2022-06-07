@@ -3,12 +3,12 @@ import { useState } from "react";
 
 import "./PrototypeModal.css";
 
-type Prototype_modal = {
+type PrototypeModal = {
   Pmodalshow: boolean;
   SetPmodalShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function Prototype_modal({ Pmodalshow, SetPmodalShow }: Prototype_modal) {
+function PrototypeModal({ Pmodalshow, SetPmodalShow }: PrototypeModal) {
   const [inputUUID, setInputUUID] = useState("");
   return (
     <>
@@ -80,4 +80,4 @@ function Prototype_modal({ Pmodalshow, SetPmodalShow }: Prototype_modal) {
   );
 }
 
-export default Prototype_modal;
+export default PrototypeModal;
