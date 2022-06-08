@@ -4,6 +4,7 @@ import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
   getToken,
+  AppCheckTokenResult,
 } from "firebase/app-check";
 
 const firebaseConfig = {
@@ -28,14 +29,16 @@ const appCheck = initializeAppCheck(app, {
   isTokenAutoRefreshEnabled: true,
 });
 
-let appchecktoken: string;
-try {
-  async () => {
-    appchecktoken = (await getToken(appCheck, /* forceRefresh= */ false)).token;
-  };
-} catch (err) {
-  alert(err);
+export async function getAppcheck() {
+  let appchecktoken: string;
+  let appchecktokenresult: AppCheckTokenResult;
+  try {
+    appchecktokenresult = await getToken(appCheck, /* forceRefresh= */ false);
+    appchecktoken = appchecktokenresult.token;
+    if (appchecktoken !== "") return appchecktoken;
+  } catch (err) {
+    alert(err);
+  }
 }
 
-export { appchecktoken };
 export default db;
