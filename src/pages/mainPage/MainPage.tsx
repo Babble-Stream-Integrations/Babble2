@@ -1,6 +1,5 @@
 import React from "react";
 import { getAppcheck } from "../../firebase/Firebase";
-// import { appchecktoken, appchecktokenresult } from "../../firebase/Firebase";
 
 function MainPage() {
   return (
