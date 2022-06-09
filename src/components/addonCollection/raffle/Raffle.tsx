@@ -2,8 +2,9 @@ import { onValue, ref } from "firebase/database";
 import { rtdb } from "../../../firebase/RealtimeDatabase";
 import { useEffect, useState } from "react";
 import ticketlogo from "../../../assets/Ticket-icon.png";
-import "./Raffle.css";
+import * as location from "./RaffleLocations";
 import { ChooseRaffleAnimation } from "./RaffleAnimation";
+import "./Raffle.css";
 
 interface addonTypes {
   data: object;
@@ -12,23 +13,22 @@ interface addonTypes {
 
 function Raffle({ dataRecieved, data }: addonTypes) {
   const [render, setRender] = useState(false);
-  const [raffleAnimation, setRaffleAnimation] = useState(
-    "alert-animation-left"
-  );
   useEffect(() => {
     const styling = data["styling"];
+    const raffle = document.getElementById("raffle");
+    const canvas = document.getElementById("canvas");
     if (typeof data === "object") {
       for (const [x, y] of Object.entries(styling)) {
-        document
-          .getElementById("canvas")
-          .style.setProperty("--" + x, y.toString());
-        // if (x === "position") {
-        //   document
-        //     .getElementById("raffle")
-        //     .classList.add(ChooseRaffleAnimation(y.toString()));
-        // }
+        canvas.style.setProperty("--" + x, y.toString());
+        if (x === "position") {
+          for (const [a, b] of Object.entries(location)) {
+            if ("P" + y === a) {
+              for (const i in b) canvas.style[i] = b[i];
+            }
+          }
+          raffle.classList.add(ChooseRaffleAnimation(y.toString()));
+        }
       }
-      console.log(data["uniqueString  "]);
       const eventRef = ref(rtdb, data["uniqueString"]);
       onValue(eventRef, (snapshot) => {
         const data = snapshot.val();
@@ -36,17 +36,15 @@ function Raffle({ dataRecieved, data }: addonTypes) {
         switch (eventType) {
           case "start":
             console.log("startcase");
-            document
-              .getElementById("raffle")
-              .style.setProperty("display", "block");
+            raffle.style.animationPlayState = "running";
+            raffle.style.setProperty("display", "block");
             break;
           case "end":
-            document
-              .getElementById("raffle")
-              .style.setProperty("display", "none");
             console.log("endcase");
             break;
           case "idle":
+            raffle.style.animationPlayState = "paused";
+            raffle.style.setProperty("display", "none");
             console.log("idlecase");
             break;
         }
