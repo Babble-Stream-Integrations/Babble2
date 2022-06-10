@@ -29,12 +29,10 @@ const appCheck = initializeAppCheck(app, {
 });
 
 export async function getAppcheck() {
-  let appchecktoken: string;
-  let appchecktokenresult: AppCheckTokenResult;
   try {
-    appchecktokenresult = await getToken(appCheck, /* forceRefresh= */ false);
-    appchecktoken = appchecktokenresult.token;
-    if (appchecktoken !== "") return appchecktoken;
+    const res = await getToken(appCheck, /* forceRefresh= */ false);
+    const appCheckToken = res.token;
+    if (appCheckToken !== "") return appCheckToken;
   } catch (err) {
     alert(err);
   }
