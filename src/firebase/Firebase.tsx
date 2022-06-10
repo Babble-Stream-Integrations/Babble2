@@ -32,7 +32,7 @@ export async function getAppcheck() {
   try {
     const res = await getToken(appCheck, /* forceRefresh= */ false);
     const appCheckToken = res.token;
-    if (appCheckToken !== "") return appCheckToken;
+    return appCheckToken;
   } catch (err) {
     alert(err);
   }
