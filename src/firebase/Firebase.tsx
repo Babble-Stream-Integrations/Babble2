@@ -4,7 +4,6 @@ import {
   initializeAppCheck,
   ReCaptchaEnterpriseProvider,
   getToken,
-  AppCheckTokenResult,
 } from "firebase/app-check";
 
 const firebaseConfig = {
