@@ -6,6 +6,8 @@ import {
   getToken,
 } from "firebase/app-check";
 
+// de "apikey" hier is geen security risk https://firebase.google.com/docs/projects/api-keys
+// het is verder ook net zo goed mogelijk er bij te komen via inspect element
 const firebaseConfig = {
   apiKey: "AIzaSyCzNQ2O8_KEF7rcupBT8gNjB0_BIE7K4ig",
   authDomain: "babble-d6ef3.firebaseapp.com",
