@@ -1,6 +1,7 @@
 import React from "react";
+import { getAppcheck } from "../../firebase/Firebase";
 
-function main_page() {
+function MainPage() {
   return (
     <div>
       <div>
@@ -12,4 +13,4 @@ function main_page() {
   );
 }
 
-export default main_page;
+export default MainPage;
