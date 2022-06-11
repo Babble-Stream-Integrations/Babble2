@@ -18,6 +18,7 @@
   height: 100vh;
   position: fixed;
   display: flex;
+  overflow: hidden;
 }
 
 .raffle {

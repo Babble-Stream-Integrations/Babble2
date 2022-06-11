@@ -1,9 +1,9 @@
 import { onValue, ref } from "firebase/database";
 import { rtdb } from "../../../firebase/RealtimeDatabase";
-import { useEffect, useState } from "react";
-import ticketlogo from "../../../assets/Ticket-icon.png";
+import { Children, useEffect, useState } from "react";
 import * as location from "./RaffleLocations";
 import { ChooseRaffleAnimation } from "./RaffleAnimation";
+import RaffleVisualStart from "./RaffleVisualStart";
 import "./Raffle.css";
 
 interface addonTypes {
@@ -55,23 +55,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
     <>
       <div id="canvas" className="canvas">
         <div id="raffle" className="raffle">
-          <div className="raffle__container">
-            <div className="raffle__logo">
-              <img
-                src={ticketlogo}
-                alt="Ticket logo Raffle"
-                className="raffle__img"
-              />
-            </div>
-            <div className="raffle__text">
-              <div className="raffle__title">
-                Raffle <b>starting</b>!
-              </div>
-              <div className="raffle__subtitle">
-                Use <b>/join</b> to enter.
-              </div>
-            </div>
-          </div>
+          <RaffleVisualStart />
         </div>
       </div>
     </>
