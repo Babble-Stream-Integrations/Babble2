@@ -35,9 +35,12 @@ const AddonCards = () => {
 
   return (
     <>
-      {addoncards.map((addoncard: IAddonData, index: number) => (
-        <AddonCard key={index} card={addoncard} />
-      ))}
+      {addoncards.length > 0
+        ? addoncards.map((addoncard: IAddonData, index: number) => (
+            <AddonCard key={index} card={addoncard} />
+          ))
+        : "No cards to show"}
+      ;
     </>
   );
 };

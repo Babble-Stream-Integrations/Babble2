@@ -11,21 +11,47 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
-// import { collectionGroup } from "firebase/firestore";
-// import { useState } from "react";
-
-// interface User {
-//   displayName: string;
-//   email: string;
-//   photoURL: string;
-// }
+import { useEffect, useState } from "react";
 
 const Header = () => {
+  const [showLoggedIn, setShowLoggedIn] = useState(false);
+  const [avatar, setAvatar] = useState(logo);
   const isDesktop = useMatchMedia("(min-width: 569px)", true);
   const isPhone = useMatchMedia("(max-width: 568px)", true);
+  const google_provider = new GoogleAuthProvider();
+  const auth = getAuth();
 
-  function test() {
+  useEffect(() => {
     checkCookie();
+    // console.log(showLoggedIn);
+  });
+
+  function checkCookie() {
+    const user = getCookie("darkmode");
+    if (user != "") {
+      setShowLoggedIn(true);
+      if (user.includes("photoURL")) {
+        const avatar = user.split(`","providerData"`);
+        const photourl = avatar[0].split(`"photoURL":"`);
+        setAvatar(photourl[1]);
+      }
+    } else {
+      setShowLoggedIn(false);
+    }
+  }
+
+  function signOutWithGoogle() {
+    signOut(auth)
+      .then(() => {
+        document.cookie = "darkmode=; Max-Age=0; path=/; domain=";
+        setShowLoggedIn(false);
+        // Sign-out successful.
+      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .catch((error: any) => {
+        console.log(error);
+        // An error happened.
+      });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,19 +71,6 @@ const Header = () => {
     return "";
   }
 
-  function checkCookie() {
-    const user = getCookie("darkmode");
-    if (user != "") {
-      console.log("succes check");
-      //TODO Pagina moet worden veranderd naar ingelogte addonpagina
-    } else {
-      console.log("fail check");
-      //TODO niet ingelogde addonpagina
-    }
-  }
-
-  const google_provider = new GoogleAuthProvider();
-  const auth = getAuth();
   const signInWithGoogle = () => {
     signInWithPopup(auth, google_provider)
       .then((result) => {
@@ -70,8 +83,10 @@ const Header = () => {
         }
         // The signed-in user info.
         const user = result.user;
-        const cookie = "darkmode =" + JSON.stringify(user) + "; max-age=60;";
+        // console.log(user);
+        const cookie = "darkmode =" + JSON.stringify(user) + "; max-age=30;";
         document.cookie = cookie;
+        setShowLoggedIn(true);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -82,18 +97,10 @@ const Header = () => {
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log(errorCode, errorMessage, email, credential);
+        setShowLoggedIn(false);
         // ...
       });
   };
-
-  signOut(auth)
-    .then(() => {
-      // Sign-out successful.
-    })
-    .catch((error) => {
-      console.log(error);
-      // An error happened.
-    });
 
   return (
     <div className="menubalk">
@@ -101,11 +108,20 @@ const Header = () => {
       {isDesktop && <img className="babble-logo" alt="Babble" src={logo2} />}
       {isPhone && (
         <div className="header-flex">
-          <div>
-            <button className="log-button" onClick={test}>
-              Log in
-            </button>
-          </div>
+          {showLoggedIn && (
+            <div>
+              <button className="log-button" onClick={signOutWithGoogle}>
+                Logout
+              </button>
+            </div>
+          )}
+          {!showLoggedIn && (
+            <div>
+              <button className="log-button" onClick={signInWithGoogle}>
+                Login
+              </button>
+            </div>
+          )}
           <div className="nav-menu">
             <img className="hamburger-menu" alt="Babble" src={hamburger} />
           </div>
@@ -113,15 +129,29 @@ const Header = () => {
       )}
       {isDesktop && (
         <div className="header-flex">
-          <div className="nav-avatar">
-            <img className="nav-avatar-profile" src={logo} alt="profile" />
-          </div>
-          <div>
-            <button className="log-button" onClick={signInWithGoogle}>
-              Login
-            </button>
-            <span id="cookies" style={{ color: "white" }}></span>
-          </div>
+          {showLoggedIn && (
+            <div className="header-flex">
+              <div className="nav-avatar">
+                <img
+                  className="nav-avatar-profile"
+                  src={avatar}
+                  alt="profile"
+                />
+              </div>
+              <div>
+                <button className="log-button" onClick={signOutWithGoogle}>
+                  Logout
+                </button>
+              </div>
+            </div>
+          )}
+          {!showLoggedIn && (
+            <div>
+              <button className="log-button" onClick={signInWithGoogle}>
+                Login
+              </button>
+            </div>
+          )}
           <div className="nav-menu">
             <img
               className="hamburger-menu"
