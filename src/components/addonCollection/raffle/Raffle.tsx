@@ -1,6 +1,6 @@
 import { onValue, ref } from "firebase/database";
 import { rtdb } from "../../../firebase/RealtimeDatabase";
-import { Children, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import * as location from "./RaffleLocations";
 import { ChooseRaffleAnimation } from "./RaffleAnimation";
 import RaffleVisualStart from "./RaffleVisualStart";
