@@ -20,15 +20,10 @@ const AddonCards = () => {
   const [addoncards, setAddons] = useState<any[]>([]);
 
   useEffect(() => {
-    // onSnapshot(collection(db, "addonTemplates"), (snapshot) => {
-    //   setAddons(snapshot.docs.map((doc) => doc.data()));
-    //   console.log(snapshot.docs);
-    // });
     onSnapshot(collection(db, "addonTemplates"), (snapshot) => {
       setAddons(snapshot.docs.map((doc) => doc.data()));
     });
   }, []);
-  // console.log(addoncards);
   addoncards.sort(function (a, b) {
     return Number(a.order) - Number(b.order);
   });

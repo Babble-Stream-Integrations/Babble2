@@ -23,7 +23,6 @@ const Header = () => {
 
   useEffect(() => {
     checkCookie();
-    // console.log(showLoggedIn);
   });
 
   function checkCookie() {
@@ -45,12 +44,10 @@ const Header = () => {
       .then(() => {
         document.cookie = "darkmode=; Max-Age=0; path=/; domain=";
         setShowLoggedIn(false);
-        // Sign-out successful.
       })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .catch((error: any) => {
         console.log(error);
-        // An error happened.
       });
   }
 
@@ -81,24 +78,18 @@ const Header = () => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const token = credential.accessToken;
         }
-        // The signed-in user info.
         const user = result.user;
-        // console.log(user);
         const cookie = "darkmode =" + JSON.stringify(user) + "; max-age=30;";
         document.cookie = cookie;
         setShowLoggedIn(true);
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
         const email = error.email;
-        // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         console.log(errorCode, errorMessage, email, credential);
         setShowLoggedIn(false);
-        // ...
       });
   };
 

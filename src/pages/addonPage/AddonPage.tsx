@@ -14,13 +14,9 @@ const AddonPage = () => {
   function checkCookie() {
     const user = getCookie("darkmode");
     if (user != "") {
-      // console.log("succes check");
       setShowLoggedIn(true);
-      //TODO Pagina moet worden veranderd naar ingelogte addonpagina
     } else {
-      // console.log("fail check");
       setShowLoggedIn(false);
-      //TODO niet ingelogde addonpagina
     }
   }
 
@@ -40,8 +36,6 @@ const AddonPage = () => {
     }
     return "";
   }
-  // hier get cookie aanroepen
-  //boolean of cookie er is en in if operater (dubbele && gebruiken) 1 of ander renderen
   return (
     <div className="page-container">
       <div className="content-wrap">

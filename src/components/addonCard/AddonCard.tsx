@@ -9,8 +9,8 @@ const addonCard = ({ card }: { card: IAddonData }) => {
 
   return (
     <div
-      className="addonCard"
       key={card.order}
+      className="addonCard"
       style={{
         background: `linear-gradient(to right, hsl(${lightColor}), hsl(${card.color})`,
       }}
