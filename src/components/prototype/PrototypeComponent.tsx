@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { getAppcheck } from "../../firebase/Firebase";
 import BABswitch from "../library/switch/BABswitch";
 import "./PrototypeComponent.css";
 
@@ -36,12 +37,20 @@ function PrototypeComponent({
 
   // Is the page youtube or not?
   const [isYoutube, setIsYoutube] = useState(false);
+  const [appcheck, setAppcheck] = useState("");
+
+  useEffect(() => {
+    getAppcheck().then((result) => {
+      setAppcheck(result);
+    });
+  });
 
   useEffect(() => {
     if (Pmodalshow === false) {
       fetch(`${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2/settings`, {
         headers: {
           Origin: origin,
+          appchecktoken: appcheck,
         },
       })
         .then((response) => {
@@ -100,6 +109,7 @@ function PrototypeComponent({
                   {
                     headers: {
                       Origin: origin,
+                      appchecktoken: appcheck,
                     },
                   }
                 )
@@ -298,6 +308,7 @@ function PrototypeComponent({
                       headers: {
                         "Content-Type": "application/json",
                         Origin: origin,
+                        appchecktoken: appcheck,
                       },
                       body: JSON.stringify({
                         announceWinners: raffleAnnounceWinners,
@@ -345,6 +356,7 @@ function PrototypeComponent({
                   headers: {
                     "Content-Type": "application/json",
                     Origin: origin,
+                    appchecktoken: appcheck,
                   },
                   body: JSON.stringify({
                     user: uuid,
