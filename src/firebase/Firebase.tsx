@@ -1,6 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+  getToken,
+} from "firebase/app-check";
 
+// de "apikey" hier is geen security risk https://firebase.google.com/docs/projects/api-keys
+// environment variables hebben geen zin omdat het ook bij network zichtbaar is bij inspect element
 const firebaseConfig = {
   apiKey: "AIzaSyCzNQ2O8_KEF7rcupBT8gNjB0_BIE7K4ig",
   authDomain: "babble-d6ef3.firebaseapp.com",
@@ -16,4 +23,21 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaEnterpriseProvider(
+    "6LcE__sfAAAAAKhv-b9yRgWWpRSz3OWsUdnoNfTY"
+  ),
+  isTokenAutoRefreshEnabled: true,
+});
+
+export async function getAppcheck() {
+  try {
+    const res = await getToken(appCheck, /* forceRefresh= */ false);
+    const appCheckToken = res.token;
+    return appCheckToken;
+  } catch (err) {
+    alert(err);
+  }
+}
+
 export default db;

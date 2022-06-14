@@ -1,7 +1,6 @@
 .IL-container {
   width: 100vw;
   height: 100vh;
-
   color: white;
   display: flex;
   justify-content: center;
@@ -14,7 +13,6 @@
   min-width: 350px;
   min-height: 350px;
   background-color: var(--lightGrey);
-
   margin: 50px;
   border-radius: 25px;
 }
