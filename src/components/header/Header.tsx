@@ -2,7 +2,6 @@
 import { useMatchMedia } from "../../helpers/useMatchMedia";
 import logo from "../../assets/logo/Babble-Orange-S.png";
 import logo2 from "../../assets/logo/Babble-Orange-L.png";
-// import avatar from "../../assets/avatar.png";
 import hamburger from "../../assets/hamburgericon.png";
 import "./Header.css";
 import {
@@ -71,9 +70,7 @@ const Header = () => {
   const signInWithGoogle = () => {
     signInWithPopup(auth, google_provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
-
         if (credential !== null) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const token = credential.accessToken;
