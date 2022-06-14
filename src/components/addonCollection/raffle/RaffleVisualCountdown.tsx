@@ -2,7 +2,7 @@ import React from "react";
 import ticketlogo from "../../../assets/Ticket-icon.png";
 import "./Raffle.css";
 
-function RaffleVisualStart() {
+function RaffleVisualCountdown() {
   return (
     <>
       <div className="raffle__container">
@@ -15,7 +15,7 @@ function RaffleVisualStart() {
         </div>
         <div className="raffle__text">
           <div className="raffle__title">
-            Raffle <b>starting</b>!
+            Countdown <b>hallo</b>!
           </div>
           <div className="raffle__subtitle">
             Use <b>/join</b> to enter.
@@ -26,4 +26,4 @@ function RaffleVisualStart() {
   );
 }
 
-export default RaffleVisualStart;
+export default RaffleVisualCountdown;

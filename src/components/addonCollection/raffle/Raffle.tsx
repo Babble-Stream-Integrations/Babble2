@@ -5,6 +5,7 @@ import * as location from "./RaffleLocations";
 import { ChooseRaffleAnimation } from "./RaffleAnimation";
 import RaffleVisualStart from "./RaffleVisualStart";
 import "./Raffle.css";
+import RaffleVisualCountdown from "./RaffleVisualCountdown";
 
 interface addonTypes {
   data: object;
@@ -12,7 +13,7 @@ interface addonTypes {
 }
 
 function Raffle({ dataRecieved, data }: addonTypes) {
-  const [render, setRender] = useState(false);
+  const [state, setState] = useState(2);
   useEffect(() => {
     const styling = data["styling"];
     const raffle = document.getElementById("raffle");
@@ -26,7 +27,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
               for (const i in b) canvas.style[i] = b[i];
             }
           }
-          raffle.classList.add(ChooseRaffleAnimation(y.toString()));
+          // raffle.classList.add(ChooseRaffleAnimation(y.toString()));
         }
       }
       const eventRef = ref(rtdb, data["uniqueString"]);
@@ -38,14 +39,17 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             console.log("startcase");
             raffle.style.animationPlayState = "running";
             raffle.style.setProperty("display", "block");
+            setState(1);
             break;
           case "end":
             console.log("endcase");
             break;
           case "idle":
-            raffle.style.animationPlayState = "paused";
-            raffle.style.setProperty("display", "none");
             console.log("idlecase");
+            raffle.style.animationPlayState = "paused";
+            // raffle.style.setProperty("display", "none");
+            raffle.style.setProperty("display", "block");
+            setState(2);
             break;
         }
       });
@@ -55,7 +59,12 @@ function Raffle({ dataRecieved, data }: addonTypes) {
     <>
       <div id="canvas" className="canvas">
         <div id="raffle" className="raffle">
-          <RaffleVisualStart />
+          {
+            {
+              1: <RaffleVisualStart />,
+              2: <RaffleVisualCountdown />,
+            }[state]
+          }
         </div>
       </div>
     </>

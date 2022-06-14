@@ -24,7 +24,7 @@
 .raffle {
   width: auto;
   height: auto;
-  display: none;
+  /* display: none; */
   position: fixed;
   background-color: var(--backgroundColor);
   margin: 50px;
