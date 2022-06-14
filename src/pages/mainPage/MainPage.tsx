@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { getAppcheck } from "../../firebase/Firebase";
+import { useNavigate } from "react-router-dom";
 
 function MainPage() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate("/addons", { replace: true });
+  }, []);
   return (
     <div>
       <div>

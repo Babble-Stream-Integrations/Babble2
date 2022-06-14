@@ -6,5 +6,5 @@ const realtimeFirebaseConfig = {
     "https://babble-d6ef3-default-rtdb.europe-west1.firebasedatabase.app/",
 };
 
-const realtimeApp = initializeApp(realtimeFirebaseConfig);
+const realtimeApp = initializeApp(realtimeFirebaseConfig, "rtdbapp");
 export const rtdb = getDatabase(realtimeApp);
