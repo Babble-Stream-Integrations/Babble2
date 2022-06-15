@@ -4,7 +4,7 @@ import "./Raffle.css";
 
 function RaffleVisualStart() {
   return (
-    <>
+    <div>
       <div className="raffle__container">
         <div className="raffle__logo">
           <img
@@ -22,7 +22,7 @@ function RaffleVisualStart() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
