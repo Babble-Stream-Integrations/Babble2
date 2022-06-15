@@ -9,12 +9,15 @@
 
 .titlePage {
   color: var(--offWhiteTwo);
-  font-weight: normal;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
   font-size: 1.6em;
 }
 
 .myAddon {
-  display: none;
+  display: flex;
+  justify-content: center;
 }
 
 .subTitle {
