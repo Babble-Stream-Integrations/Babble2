@@ -1,21 +1,17 @@
-import PropTypes from "prop-types";
 import "./Button.css";
 
 interface Three {
   text: string;
-  onClick: any;
+  // clickOn: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  clickOn: () => void;
 }
 
-const Button = ({ text, onClick }: Three) => {
+const Button = ({ text, clickOn }: Three) => {
   return (
-    <button onClick={onClick} className="btn">
+    <button onClick={clickOn} className="btn">
       {text}
     </button>
   );
-};
-
-Button.propTypes = {
-  text: PropTypes.string,
 };
 
 export default Button;

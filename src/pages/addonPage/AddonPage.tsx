@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddonCards from "../../components/addonCards/AddonCards";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
-import logo from "../../assets/logo/Babble-Orange-S.png";
+import logoSmall from "../../assets/logo/Babble-Orange-S.png";
 import {
   getAuth,
   signInWithPopup,
@@ -13,7 +13,7 @@ import "./AddonPage.css";
 
 const AddonPage = () => {
   const [showLoggedIn, setShowLoggedIn] = useState(false);
-  const [avatar, setAvatar] = useState(logo);
+  const [avatar, setAvatar] = useState(logoSmall);
   const google_provider = new GoogleAuthProvider();
   const auth = getAuth();
 
@@ -51,7 +51,7 @@ const AddonPage = () => {
         document.cookie = "darkmode=; Max-Age=0; path=/; domain=";
         setShowLoggedIn(false);
       })
-      .catch((error: any) => {
+      .catch((error: string) => {
         console.log(error);
       });
   }
@@ -70,7 +70,7 @@ const AddonPage = () => {
     }
   }
 
-  function getCookie(cookie: any) {
+  function getCookie(cookie: string) {
     const name = cookie + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
     const ca = decodedCookie.split(";");
@@ -91,6 +91,10 @@ const AddonPage = () => {
       <div className="content-wrap">
         <Header
           onSignIn={showLoggedIn ? signOutWithGoogle : signInWithGoogle}
+          // onSignIn={(event: React.MouseEvent<HTMLButtonElement>) => {
+          //   event.preventDefault();
+          //   return showLoggedIn ? signOutWithGoogle : signInWithGoogle;
+          // }}
           showSite={showLoggedIn}
           avatar={avatar}
         />

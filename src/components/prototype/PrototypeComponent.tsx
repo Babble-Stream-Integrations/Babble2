@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { getAppcheck } from "../../firebase/Firebase";
+// import { getAppcheck } from "../../firebase/Firebase";
 import BABswitch from "../library/switch/BABswitch";
 import "./PrototypeComponent.css";
 
@@ -39,11 +39,11 @@ function PrototypeComponent({
   const [isYoutube, setIsYoutube] = useState(false);
   const [appcheck, setAppcheck] = useState("");
 
-  useEffect(() => {
-    getAppcheck().then((result) => {
-      setAppcheck(result);
-    });
-  });
+  // useEffect(() => {
+  //   getAppcheck().then((result) => {
+  //     setAppcheck(result);
+  //   });
+  // });
 
   useEffect(() => {
     if (Pmodalshow === false) {
