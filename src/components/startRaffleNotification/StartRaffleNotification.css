@@ -1,0 +1,35 @@
+.SRN-content {
+  display: flex;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-right: 40px;
+  margin-left: 40px;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.SRN-image {
+  height: 3.7em;
+  width: 3.7em;
+  margin: 0.3em;
+  margin-bottom: 0;
+}
+
+.SRN-icon {
+  display: flex;
+  align-items: center;
+}
+
+.SRN-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding-bottom: 1px;
+}
+
+.SRN-title {
+  text-transform: uppercase;
+  font-size: xx-large;
+  letter-spacing: 0.1rem;
+}
