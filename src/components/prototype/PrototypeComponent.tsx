@@ -1,6 +1,5 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { getAppcheck } from "../../firebase/Firebase";
 import BABswitch from "../library/switch/BABswitch";
 import "./PrototypeComponent.css";
 
@@ -16,13 +15,9 @@ const origin =
 
 type PrototypeTypes = {
   Pmodalshow: boolean;
-  setRaffleAlertShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function PrototypeComponent({
-  Pmodalshow,
-  setRaffleAlertShow,
-}: PrototypeTypes) {
+function PrototypeComponent({ Pmodalshow }: PrototypeTypes) {
   // input values saved in states
   const [raffleDuration, setRaffleDuration] = useState(60);
   const [raffleEnterMessage, setRaffleEnterMessage] = useState("!join");
@@ -37,20 +32,13 @@ function PrototypeComponent({
 
   // Is the page youtube or not?
   const [isYoutube, setIsYoutube] = useState(false);
-  const [appcheck, setAppcheck] = useState("");
-
-  useEffect(() => {
-    getAppcheck().then((result) => {
-      setAppcheck(result);
-    });
-  });
+  const [isTwitch, setIsTwitch] = useState(true);
 
   useEffect(() => {
     if (Pmodalshow === false) {
       fetch(`${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2/settings`, {
         headers: {
           Origin: origin,
-          appchecktoken: appcheck,
         },
       })
         .then((response) => {
@@ -94,6 +82,7 @@ function PrototypeComponent({
                 //     alert("error during login try again");
                 //   });
                 setIsYoutube(true);
+                setIsTwitch(false);
               }}
               disabled={true}
             >
@@ -109,7 +98,6 @@ function PrototypeComponent({
                   {
                     headers: {
                       Origin: origin,
-                      appchecktoken: appcheck,
                     },
                   }
                 )
@@ -308,7 +296,6 @@ function PrototypeComponent({
                       headers: {
                         "Content-Type": "application/json",
                         Origin: origin,
-                        appchecktoken: appcheck,
                       },
                       body: JSON.stringify({
                         announceWinners: raffleAnnounceWinners,
@@ -349,14 +336,12 @@ function PrototypeComponent({
             <button
               className="PC-button"
               onClick={() => {
-                // alert("Starting Raffle!");
-                setRaffleAlertShow(true);
+                alert("Starting Raffle!");
                 fetch(`${baseURL}/api/v1/raffle/start`, {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
                     Origin: origin,
-                    appchecktoken: appcheck,
                   },
                   body: JSON.stringify({
                     user: uuid,

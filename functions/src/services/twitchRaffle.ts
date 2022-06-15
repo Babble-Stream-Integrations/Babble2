@@ -3,10 +3,7 @@ import tmi from "tmi.js";
 import admin from "firebase-admin";
 import { refreshAccessToken } from "./twitchAuth";
 
-import { RTDBIdle, RTDBEnd, RTDBStart } from "./realtimeDB";
-
 const db = admin.firestore();
-let clientId: string;
 
 interface TwitchRaffleSettings {
   announceWinners: boolean;
@@ -40,7 +37,7 @@ async function getStreamerChannel(
     const res = await axios.get("https://api.twitch.tv/helix/users", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Client-Id": clientId,
+        "Client-Id": await getClientId(),
       },
     });
 
@@ -84,7 +81,7 @@ async function getStatus(
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Client-Id": clientId,
+        "Client-Id": await getClientId(),
       },
     }
   );
@@ -137,12 +134,10 @@ function pickWinner(
 
 async function startRaffle(
   settings: TwitchRaffleSettings,
-  tokens: TwitchTokens,
-  uniqueString: string
+  tokens: TwitchTokens
 ) {
   console.log(settings, tokens);
   console.log("Start Twitch Raffle");
-  clientId = await getClientId();
 
   try {
     const [streamerChannel, streamerID, streamerName, streamerPassword] =
@@ -165,8 +160,6 @@ async function startRaffle(
         streamerChannel,
         `Raffle started! Type ${settings.enterMessage} to enter`
       );
-      RTDBStart(uniqueString, settings.duration);
-      RTDBIdle(uniqueString);
     });
 
     const usersEntered: string[] = [];
@@ -204,9 +197,6 @@ async function startRaffle(
         settings.winnerAmount,
         settings.duplicateWinners
       );
-      RTDBEnd(uniqueString, winners);
-      RTDBIdle(uniqueString);
-
       console.log("Winners:", winners);
 
       if (settings.announceWinners) {

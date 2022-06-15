@@ -26,42 +26,16 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, DELETE");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type,appchecktoken"
+    "X-Requested-With,content-type"
   );
-  if (req.method === "OPTIONS") {
-    res.send(200);
-  } else {
-    next();
-  }
-});
-
-app.use(async (req, res, next) => {
-  const appCheckToken = req.header("appchecktoken");
-  if (appCheckToken === undefined) {
-    functions.logger.log("appcheck: missing");
-    // uncomment the next line to enforce the appcheck instead of only logging it. (don't forget the same line in the try block where the token is actually validated).
-    // return res.status(400).send({ error: "Missing appcheck token" });
-    return next();
-  }
-  if (process.env.NODE_ENV !== "production") {
-    return next();
-  }
-  try {
-    await admin.appCheck().verifyToken(appCheckToken);
-    functions.logger.log("appcheck: valid");
-  } catch (err) {
-    functions.logger.log("appcheck: invalid");
-    functions.logger.log(err);
-    // uncomment the next line to enforce the appcheck instead of only logging it.
-    // return res.status(400).send({ error: "Invalid appcheck token" });
-  }
-  return next();
+  next();
 });
 
 // twitchService.checkChat();
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", addonRoutes);
 app.use("/api/v1", authRoutes);
+
 app.get("/", (_req: Request, res: Response) => {
   res.send({
     result: "hi there handsome ;)",

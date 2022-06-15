@@ -1,12 +1,6 @@
-import React, { useEffect } from "react";
-import { getAppcheck } from "../../firebase/Firebase";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
-function MainPage() {
-  const navigate = useNavigate();
-  useEffect(() => {
-    navigate("/addons", { replace: true });
-  }, []);
+function main_page() {
   return (
     <div>
       <div>
@@ -18,4 +12,4 @@ function MainPage() {
   );
 }
 
-export default MainPage;
+export default main_page;
