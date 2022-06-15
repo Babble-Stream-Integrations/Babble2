@@ -15,7 +15,7 @@ const Header = ({ onSignIn, showSite, avatar }: any) => {
       {isDesktop && <img className="babble-logo" alt="Babble" src={logo2} />}
       {isPhone && (
         <div className="header-flex">
-          <Button text={showSite ? "Log out" : "Login"} onClick={onSignIn} />
+          <Button text={showSite ? "Log out" : "Log in"} onClick={onSignIn} />
           <div className="nav-menu">
             <img className="hamburger-menu" alt="Babble" src={hamburger} />
           </div>

@@ -95,20 +95,15 @@ const AddonPage = () => {
           avatar={avatar}
         />
         <h1 className="titlePage">Add-ons</h1>
-        {showLoggedIn && (
-          <div className="myAddon">
-            <p className="subTitle">My Add-ons</p>
-          </div>
-        )}
-        <div className="myAddon">
-          <p className="subTitle">Toolkits</p>
-        </div>
         <div className="midPage">
           <div>
-            <p className="subTitle">Templates</p>
+            <p className="subTitle">Originals ⓘ</p>
           </div>
           <div className="templateCards">
             <AddonCards />
+          </div>
+          <div className="myAddon">
+            <p className="subTitle">Toolkits ⓘ</p>
           </div>
         </div>
       </div>
