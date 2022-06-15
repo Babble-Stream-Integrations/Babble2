@@ -1,28 +1,77 @@
-import Header from "../../components/header/Header";
-import Footer from "../../components/footer/Footer";
-import AddonCards from "../../components/addonCards/AddonCards";
-import "./AddonPage.css";
 import { useEffect, useState } from "react";
+import AddonCards from "../../components/addonCards/AddonCards";
+import Footer from "../../components/footer/Footer";
+import Header from "../../components/header/Header";
+import logo from "../../assets/logo/Babble-Orange-S.png";
+import {
+  getAuth,
+  signInWithPopup,
+  GoogleAuthProvider,
+  signOut,
+} from "firebase/auth";
+import "./AddonPage.css";
 
 const AddonPage = () => {
   const [showLoggedIn, setShowLoggedIn] = useState(false);
+  const [avatar, setAvatar] = useState(logo);
+  const google_provider = new GoogleAuthProvider();
+  const auth = getAuth();
 
   useEffect(() => {
     checkCookie();
-  });
+  }, []);
+
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, google_provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        if (credential !== null) {
+          const token = credential.accessToken;
+          console.log(token);
+        }
+        const user = result.user;
+        const cookie = "cookie =" + JSON.stringify(user) + "; max-age=30;";
+        document.cookie = cookie;
+        setShowLoggedIn(!showLoggedIn);
+        checkCookie();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(errorCode, errorMessage, email, credential);
+        setShowLoggedIn(false);
+      });
+  };
+
+  function signOutWithGoogle() {
+    signOut(auth)
+      .then(() => {
+        document.cookie = "darkmode=; Max-Age=0; path=/; domain=";
+        setShowLoggedIn(false);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
+  }
 
   function checkCookie() {
-    const user = getCookie("darkmode");
+    const user = getCookie("cookie");
     if (user != "") {
-      setShowLoggedIn(true);
+      setShowLoggedIn(!showLoggedIn);
+      if (user.includes("photoURL")) {
+        const avatar = user.split(`","providerData"`);
+        const photourl = avatar[0].split(`"photoURL":"`);
+        setAvatar(photourl[1]);
+      }
     } else {
       setShowLoggedIn(false);
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function getCookie(dark_mode: any) {
-    const name = dark_mode + "=";
+  function getCookie(cookie: any) {
+    const name = cookie + "=";
     const decodedCookie = decodeURIComponent(document.cookie);
     const ca = decodedCookie.split(";");
     for (let i = 0; i < ca.length; i++) {
@@ -36,10 +85,15 @@ const AddonPage = () => {
     }
     return "";
   }
+
   return (
     <div className="page-container">
       <div className="content-wrap">
-        <Header />
+        <Header
+          onSignIn={showLoggedIn ? signOutWithGoogle : signInWithGoogle}
+          showSite={showLoggedIn}
+          avatar={avatar}
+        />
         <h1 className="titlePage">Add-ons</h1>
         {showLoggedIn && (
           <div className="myAddon">
