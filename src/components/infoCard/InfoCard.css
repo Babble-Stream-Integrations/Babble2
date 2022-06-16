@@ -1,0 +1,55 @@
+.infoCard {
+  background-color: var(--midGrey);
+  width: 600px;
+  height: 310px;
+  margin: 25px 15px;
+  border-radius: 10px;
+  color: var(--offWhiteTwo);
+}
+
+.heading {
+  color: var(--offWhiteTwo);
+  background-image: linear-gradient(to right, #0063ff, #00f0ff);
+  display: flex;
+  justify-content: left;
+  padding: 3px 25px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  font-weight: bold;
+}
+
+.infoBody {
+  display: grid;
+  grid-template-columns: auto, auto;
+  grid-template-rows: auto, auto;
+}
+
+.infoText {
+  /* justify-content: left; */
+  text-align: left;
+  width: 300px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  /* margin: 25px; */
+  margin-left: 25px;
+}
+
+.addonPreview {
+  /* width: 300px; */
+  grid-column-start: 2;
+  grid-column-end: 3;
+}
+
+.title {
+  text-transform: uppercase;
+  font: bold 16px Montserrat, sans-serif;
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.info {
+  font-size: 12px;
+  margin: 0px;
+}

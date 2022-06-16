@@ -7,7 +7,6 @@ import Button from "../button/Button";
 
 interface HeaderTypes {
   onSignIn: () => void;
-  // onSignIn: (event: React.MouseEvent<HTMLButtonElement>) => void;
   showSite: boolean;
   avatar: string;
 }
@@ -35,8 +34,7 @@ const Header = ({ onSignIn, showSite, avatar }: HeaderTypes) => {
               <img className="nav-avatar-profile" src={avatar} alt="profile" />
             </div>
           )}
-          <Button text={showSite ? "Log out" : "Login"} clickOn={onSignIn} />
-          {/* <button onClick={onSignIn}>{showSite ? "Log out" : "Login"}</button> */}
+          <Button text={showSite ? "Log out" : "Log in"} clickOn={onSignIn} />
           <div className="nav-menu">
             <img
               className="hamburger-menu"

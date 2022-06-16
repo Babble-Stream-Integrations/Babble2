@@ -2,7 +2,6 @@ import "./Button.css";
 
 interface Three {
   text: string;
-  // clickOn: (event: React.MouseEvent<HTMLButtonElement>) => void;
   clickOn: () => void;
 }
 

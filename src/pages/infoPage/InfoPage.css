@@ -1,0 +1,9 @@
+.pageTitle {
+  color: var(--offWhiteTwo);
+  margin: 0px;
+}
+
+.infoCards {
+  display: flex;
+  justify-content: center;
+}

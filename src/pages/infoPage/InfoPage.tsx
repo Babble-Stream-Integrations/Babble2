@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import AddonCards from "../../components/addonCards/AddonCards";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import logoSmall from "../../assets/logo/Babble-Orange-S.png";
@@ -9,9 +8,12 @@ import {
   GoogleAuthProvider,
   signOut,
 } from "firebase/auth";
-import "./AddonPage.css";
+import "./InfoPage.css";
+import InfoCard from "../../components/infoCard/InfoCard";
+// import useQuery from "react-query";
 
-const AddonPage = () => {
+const InfoPage = () => {
+  // const query = useQuery();
   const [showLoggedIn, setShowLoggedIn] = useState(false);
   const [avatar, setAvatar] = useState(logoSmall);
   const google_provider = new GoogleAuthProvider();
@@ -88,28 +90,18 @@ const AddonPage = () => {
 
   return (
     <div className="page-container">
-      <div className="content-wrap">
-        <Header
-          onSignIn={showLoggedIn ? signOutWithGoogle : signInWithGoogle}
-          showSite={showLoggedIn}
-          avatar={avatar}
-        />
-        <h1 className="titlePage">Add-ons</h1>
-        <div className="midPage">
-          <div>
-            <p className="subTitle">Originals ⓘ</p>
-          </div>
-          <div className="templateCards">
-            <AddonCards />
-          </div>
-          <div className="myAddon">
-            <p className="subTitle">Toolkits ⓘ</p>
-          </div>
-        </div>
+      <Header
+        onSignIn={showLoggedIn ? signOutWithGoogle : signInWithGoogle}
+        showSite={showLoggedIn}
+        avatar={avatar}
+      />
+      <h1 className="pageTitle">Title</h1>
+      <div className="infoCards">
+        <InfoCard />
       </div>
       <Footer />
     </div>
   );
 };
 
-export default AddonPage;
+export default InfoPage;
