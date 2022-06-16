@@ -14,6 +14,7 @@ interface addonTypes {
 
 function Raffle({ dataRecieved, data }: addonTypes) {
   const [state, setState] = useState(2);
+  const [time, setTime] = useState(60);
   useEffect(() => {
     const styling = data["styling" as keyof typeof data];
     const raffle = document.getElementById("raffle");
@@ -48,9 +49,13 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             // raffle.style.animationPlayState = "running";
             raffle?.style.setProperty("animationPlayState", "running");
             raffle?.style.setProperty("display", "block");
-            setState(1);
+            setTimeout(() => {
+              setState(1);
+            }, 7000);
+            console.log(time);
             break;
           case "end":
+            setState(2);
             console.log("endcase");
             break;
           case "idle":
@@ -58,7 +63,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             // raffle.style.animationPlayState = "paused";
             raffle?.style.setProperty("animationPlayState", "paused");
             raffle?.style.setProperty("display", "block");
-            setState(2);
+            setState(0);
             break;
         }
       });
@@ -70,8 +75,8 @@ function Raffle({ dataRecieved, data }: addonTypes) {
         <div id="raffle" className="raffle">
           {
             {
-              1: <RaffleVisualStart />,
-              2: <RaffleVisualCountdown />,
+              0: <RaffleVisualStart />,
+              1: <RaffleVisualCountdown time={time} />,
             }[state]
           }
         </div>

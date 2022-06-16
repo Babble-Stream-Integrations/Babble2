@@ -1,10 +1,25 @@
-import { time } from "console";
 import React, { useEffect, useState } from "react";
 import ticketlogo from "../../../assets/Ticket-icon.png";
 import "./Raffle.css";
 
-function RaffleVisualCountdown() {
-  const [time, setTime] = useState(60);
+interface RaffleCountdownTypes {
+  time: number;
+}
+
+function RaffleVisualCountdown({ time }: RaffleCountdownTypes) {
+  const [currentTime, setCurrentTime] = useState(time);
+
+  useEffect(() => {
+    let countdownInterval: NodeJS.Timeout;
+    if (currentTime >= 1) {
+      countdownInterval = setTimeout(() => {
+        setCurrentTime(currentTime - 1);
+      }, 1000);
+    } else {
+      clearTimeout(countdownInterval);
+    }
+  }, [currentTime]);
+
   return (
     <>
       <div className="raffle__container">
@@ -17,7 +32,7 @@ function RaffleVisualCountdown() {
         </div>
         <div className="raffle__text">
           <div className="raffle__subtitle">Time remaining:</div>
-          <div className="raffle__title">{time}</div>
+          <div className="raffle__title">{currentTime}</div>
         </div>
       </div>
     </>
