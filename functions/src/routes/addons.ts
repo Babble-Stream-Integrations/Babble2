@@ -4,6 +4,8 @@ import admin from "firebase-admin";
 import twitchRaffle from "../services/twitchRaffle";
 // import youtubeAutotitle from "../services/youtubeAutotitle";
 import twitchAutoTitle from "../services/twitchAutoTitle";
+import leagueToolkit from "../services/leagueToolkit";
+import riot from "../services/riot";
 
 const db = admin.firestore();
 
@@ -38,13 +40,17 @@ async function runAddon(user: string, addon: string, addonType: string) {
     return { result: "Youtube addons aren't developed yet!" };
   }
   if (platform === "twitch") {
-    if (addonType === "raffleSystem") {
-      await twitchRaffle.startRaffle(settings, tokens, uniqueString);
-      return { result: "Twitch raffle has been succesfully finished!" };
-    }
-    if (addonType === "automaticStreamTitle") {
-      await twitchAutoTitle.changeChannelInfo(settings, tokens);
-      return { result: "Twitch autoTitle has been succesfully finished!" };
+    switch (addonType) {
+      case "raffleSystem":
+        await twitchRaffle.startRaffle(settings, tokens, uniqueString);
+        return { result: "Twitch raffle has been succesfully finished!" };
+      case "automaticStreamTitle":
+        await twitchAutoTitle.changeChannelInfo(settings, tokens);
+        return { result: "Twitch autoTitle has been succesfully finished!" };
+      case "leagueToolkit":
+        await leagueToolkit.startLeagueToolkit(settings, tokens, uniqueString);
+        break;
+      default:
     }
   }
 }
@@ -73,6 +79,11 @@ router.post("/autoTitle/start", async (req, res, next) => {
       next(error);
     }
   }
+});
+
+router.get("/summoner/:name", async (req, res) => {
+  const summoner = await riot.summonerByName(req.params.name);
+  res.send(summoner);
 });
 
 export default router;

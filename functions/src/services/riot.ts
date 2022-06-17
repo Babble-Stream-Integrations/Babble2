@@ -1,20 +1,38 @@
 import axios from "axios";
 
-async function summonerID(name: string) {
-  axios
-    .get(
-      `https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(
-        name
-      )}`,
-      {
-        headers: {
-          "X-Riot-Token": "RGAPI-8b2c43e7-5a2e-4df9-9557-b5539104f0c7",
-        },
-      }
-    )
-    .then((res) => {
-      console.log(res);
-    });
+const riotToken = "RGAPI-411d5d89-931c-4ff1-bcf4-ad2ccbca9d71";
+
+interface summoner {
+  id: string;
+  accountId: string;
+  puuid: string;
+  name: string;
+  profileIcondId: number;
+  revisionDate: number;
+  summonerLevel: number;
 }
 
-//header "X-Riot-Token": "RGAPI-8b2c43e7-5a2e-4df9-9557-b5539104f0c7"
+async function summonerByName(name: string): Promise<summoner> {
+  return axios.get(
+    `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}`,
+    {
+      headers: {
+        "X-Riot-Token": riotToken,
+      },
+    }
+  );
+}
+
+async function summonerByID(id: string): Promise<summoner> {
+  return axios.get(
+    `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${id}`,
+    {
+      headers: {
+        "X-Riot-Token": riotToken,
+      },
+    }
+  );
+}
+
+export { riotToken };
+export default { summonerByName, summonerByID };

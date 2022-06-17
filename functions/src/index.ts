@@ -38,12 +38,12 @@ app.use((req, res, next) => {
 app.use(async (req, res, next) => {
   const appCheckToken = req.header("appchecktoken");
   if (appCheckToken === undefined) {
+    if (process.env.NODE_ENV !== "production") {
+      return next();
+    }
     functions.logger.log("appcheck: missing");
     // uncomment the next line to enforce the appcheck instead of only logging it. (don't forget the same line in the try block where the token is actually validated).
     // return res.status(400).send({ error: "Missing appcheck token" });
-    return next();
-  }
-  if (process.env.NODE_ENV !== "production") {
     return next();
   }
   try {
