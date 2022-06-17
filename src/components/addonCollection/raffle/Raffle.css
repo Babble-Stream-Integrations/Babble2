@@ -24,7 +24,7 @@
 .raffle {
   width: auto;
   height: auto;
-  /* display: none; */
+  display: none;
   position: fixed;
   background-color: var(--backgroundColor);
   margin: 50px;
@@ -203,7 +203,7 @@
   animation-duration: 2s, 2s;
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
-  animation-fill-mode: none, forwards;
+  animation-fill-mode: none, none;
   animation-play-state: paused;
   display: flex;
 }

@@ -13,9 +13,10 @@ interface addonTypes {
 }
 
 function Raffle({ dataRecieved, data }: addonTypes) {
-  const [state, setState] = useState(2);
+  const [state, setState] = useState(0);
   const [time, setTime] = useState(60);
   useEffect(() => {
+    console.log(state);
     const styling = data["styling" as keyof typeof data];
     const raffle = document.getElementById("raffle");
     const canvas = document.getElementById("canvas");
@@ -35,7 +36,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
               }
             }
           }
-          if (typeof y === "string")
+          if (typeof y === "number")
             raffle?.classList.add(ChooseRaffleAnimation(y.toString()));
         }
       }
@@ -46,13 +47,12 @@ function Raffle({ dataRecieved, data }: addonTypes) {
         switch (eventType) {
           case "start":
             console.log("startcase");
-            // raffle.style.animationPlayState = "running";
-            raffle?.style.setProperty("animationPlayState", "running");
-            raffle?.style.setProperty("display", "block");
+            raffle?.style.setProperty("animation-play-state", "running");
+            raffle?.style.setProperty("display", "flex");
             setTimeout(() => {
+              raffle?.style.setProperty("animation-play-state", "paused");
               setState(1);
-            }, 7000);
-            console.log(time);
+            }, 6900);
             break;
           case "end":
             setState(2);
@@ -60,9 +60,8 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             break;
           case "idle":
             console.log("idlecase");
-            // raffle.style.animationPlayState = "paused";
-            raffle?.style.setProperty("animationPlayState", "paused");
-            raffle?.style.setProperty("display", "block");
+            raffle?.style.setProperty("animation-play-state", "paused");
+            raffle?.style.setProperty("display", "none");
             setState(0);
             break;
         }

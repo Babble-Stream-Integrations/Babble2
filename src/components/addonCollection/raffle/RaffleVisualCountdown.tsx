@@ -10,11 +10,11 @@ function RaffleVisualCountdown({ time }: RaffleCountdownTypes) {
   const [currentTime, setCurrentTime] = useState(time);
 
   useEffect(() => {
-    let countdownInterval: NodeJS.Timeout;
+    const countdownInterval = setTimeout(() => {
+      setCurrentTime(currentTime - 1);
+    }, 1000);
     if (currentTime >= 1) {
-      countdownInterval = setTimeout(() => {
-        setCurrentTime(currentTime - 1);
-      }, 1000);
+      countdownInterval;
     } else {
       clearTimeout(countdownInterval);
     }
