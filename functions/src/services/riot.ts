@@ -34,5 +34,16 @@ async function summonerByID(id: string): Promise<summoner> {
   );
 }
 
+async function summonerByPUUID(PUUID: string): Promise<summoner> {
+  return axios.get(
+    `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${PUUID}`,
+    {
+      headers: {
+        "X-Riot-Token": riotToken,
+      },
+    }
+  );
+}
+
 export { riotToken };
-export default { summonerByName, summonerByID };
+export default { summonerByName, summonerByID, summonerByPUUID };

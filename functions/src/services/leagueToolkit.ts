@@ -1,14 +1,31 @@
 import axios from "axios";
 import tmi from "tmi.js";
-import { riotToken } from "./riot";
+import {
+  getClientId,
+  TwitchTokens,
+  getStreamerChannel,
+  getBotDetails,
+} from "./twitchRaffle";
+import riot, { riotToken } from "./riot";
+
+interface leagueToolkitsettings {
+  allowedCommands: Array<string>;
+  chatCommands: { [key: string]: string };
+  prefix: string;
+  useMyAccount: boolean;
+}
+
+console.log(riotToken);
+let clientId: string;
 
 async function startLeagueToolkit(
-  settings: TwitchRaffleSettings,
+  settings: leagueToolkitsettings,
   tokens: TwitchTokens,
-  uniqueString: string
+  uniqueString: string,
+  PUUID: string
 ) {
   console.log(settings, tokens);
-  console.log("Start Twitch Raffle");
+  console.log("Start league toolkit");
   clientId = await getClientId();
 
   try {
@@ -28,20 +45,20 @@ async function startLeagueToolkit(
     });
 
     client.connect().then(() => {
-      client.say(
-        streamerChannel,
-        `Raffle started! Type ${settings.enterMessage} to enter`
-      );
-      RTDBStart(uniqueString, settings.duration);
-      RTDBIdle(uniqueString);
+      client.say(streamerChannel, `leagueToolkit started!`);
     });
 
-    const usersEntered: string[] = [];
+    const summoner = await riot.summonerByPUUID(PUUID);
+    const { prefix } = settings;
 
     client.on("message", async (channel, tags, message, self) => {
       // Ignore echoed messages.
       if (self) return;
 
+      // check if message starts with prefix
+      if (message.slice(0, prefix.length) === prefix) {
+        let command = message.slice(prefix.length);
+      }
       if (
         message.toLowerCase() === settings.enterMessage &&
         !usersEntered.includes(tags["display-name"]!)
@@ -90,7 +107,7 @@ async function startLeagueToolkit(
       return { error: err.response?.status };
     }
   }
-  return { result: "Twitch raffle has been succesfully finished!" };
+  return { result: "League Toolkit has been succesfully finished!" };
 }
 
 export default { startLeagueToolkit };

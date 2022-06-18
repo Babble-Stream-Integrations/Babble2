@@ -41,15 +41,24 @@ async function runAddon(user: string, addon: string, addonType: string) {
   }
   if (platform === "twitch") {
     switch (addonType) {
-      case "raffleSystem":
+      case "raffleSystem": {
         await twitchRaffle.startRaffle(settings, tokens, uniqueString);
         return { result: "Twitch raffle has been succesfully finished!" };
-      case "automaticStreamTitle":
+      }
+      case "automaticStreamTitle": {
         await twitchAutoTitle.changeChannelInfo(settings, tokens);
         return { result: "Twitch autoTitle has been succesfully finished!" };
-      case "leagueToolkit":
-        await leagueToolkit.startLeagueToolkit(settings, tokens, uniqueString);
-        break;
+      }
+      case "leagueToolkit": {
+        const { PUUID } = addonDoc.data()!;
+        await leagueToolkit.startLeagueToolkit(
+          settings,
+          tokens,
+          uniqueString,
+          PUUID
+        );
+        return { result: "LeagueToolkit has stopped" };
+      }
       default:
     }
   }
@@ -72,6 +81,18 @@ router.post("/autoTitle/start", async (req, res, next) => {
     res.send(
       await runAddon(req.body.user, req.body.addon, "automaticStreamTitle")
     );
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(400).send({ error: error.message });
+    } else {
+      next(error);
+    }
+  }
+});
+
+router.post("/leagueKit/start", async (req, res, next) => {
+  try {
+    res.send(await runAddon(req.body.user, req.body.addon, "leagueToolkit"));
   } catch (error) {
     if (error instanceof Error) {
       res.status(400).send({ error: error.message });
