@@ -12,6 +12,18 @@ interface summoner {
   summonerLevel: number;
 }
 
+interface masteryDto {
+  championPointsUntilNextLevel: number;
+  chestGranted: boolean;
+  championId: number;
+  lastPlayTime: number;
+  championLevel: number;
+  summonerId: string;
+  championPoints: number;
+  championPointsSinceLastLevel: number;
+  tokensEarned: number;
+}
+
 async function summonerByName(name: string): Promise<summoner> {
   return axios.get(
     `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${name}`,
@@ -45,5 +57,23 @@ async function summonerByPUUID(PUUID: string): Promise<summoner> {
   );
 }
 
+async function masteryBysummonerID(
+  summonerID: string
+): Promise<Array<masteryDto>> {
+  return axios.get(
+    `https://euw1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-summoner/${summonerID}`,
+    {
+      headers: {
+        "X-Riot-Token": riotToken,
+      },
+    }
+  );
+}
+
 export { riotToken };
-export default { summonerByName, summonerByID, summonerByPUUID };
+export default {
+  summonerByName,
+  summonerByID,
+  summonerByPUUID,
+  masteryBysummonerID,
+};
