@@ -105,6 +105,12 @@ router.post("/leagueKit/start", async (req, res, next) => {
 router.get("/summoner/:name", async (req, res) => {
   const summoner = await riot.summonerByName(req.params.name);
   res.send(summoner);
+  // res.send("test");
+});
+
+router.get("/summoner/mastery/:summonerID", async (req, res) => {
+  const mastery = await riot.masteryBysummonerID(req.params.summonerID);
+  res.send(mastery);
 });
 
 export default router;

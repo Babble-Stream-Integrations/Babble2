@@ -15,6 +15,54 @@ interface leagueToolkitsettings {
   useMyAccount: boolean;
 }
 
+interface champions {
+  version: string;
+  id: string;
+  key: string;
+  name: string;
+  title: string;
+  blurb: string;
+  info: {
+    attack: number;
+    defense: number;
+    magic: number;
+    difficulty: number;
+  };
+  image: {
+    full: string;
+    sprite: string;
+    group: string;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  };
+  tags: Array<string>;
+  partype: string;
+  stats: {
+    hp: number;
+    hpperlevel: number;
+    mp: number;
+    mpperlevel: number;
+    movespeed: number;
+    armor: number;
+    armorperlevel: number;
+    spellblock: number;
+    spellblockperlevel: number;
+    attackrange: number;
+    hpregen: number;
+    hpregenperlevel: number;
+    mpregen: number;
+    mpregenperlevel: number;
+    crit: number;
+    critperlevel: number;
+    attackdamage: number;
+    attackdamageperlevel: number;
+    attackspeedperlevel: number;
+    attackspeed: number;
+  };
+}
+
 console.log(riotToken);
 let clientId: string;
 
@@ -55,6 +103,11 @@ async function startLeagueToolkit(
       "https://ddragon.leagueoflegends.com/api/versions.json"
     );
     const datadragonversion = datadragonversionsObject[0];
+    const champions: { [key: string]: champions } = (
+      await axios.get(
+        `http://ddragon.leagueoflegends.com/cdn/${datadragonversion}/data/en_US/champion.json`
+      )
+    ).data;
 
     client.on("message", async (channel, tags, message, self) => {
       // Ignore echoed messages.
@@ -76,10 +129,24 @@ async function startLeagueToolkit(
           case settings.chatCommands.mastery +
             command.slice(settings.chatCommands.mastery.length):
             {
-              const champion = command.slice(
+              let champion = command.slice(
                 settings.chatCommands.mastery.length
               );
               if (champion === "") {
+                // neccesary because input is an array
+                // eslint-disable-next-line prefer-spread
+                const maxMastery = Math.max.apply(
+                  Math,
+                  mastery.map((o) => o.championPoints)
+                );
+                const championID = mastery.find(
+                  (o) => o.championPoints === maxMastery
+                )!.championId;
+                const championsArray = Object.values(champions);
+                // eslint-disable-next-line eqeqeq
+                champion = championsArray.find(
+                  (o) => Number(o.key) === championID
+                )!.name;
               }
             }
             break;
