@@ -14,7 +14,8 @@ interface addonTypes {
 
 function Raffle({ dataRecieved, data }: addonTypes) {
   const [state, setState] = useState(0);
-  const [time, setTime] = useState(60);
+  const [time, setTime] = useState(180);
+  const [animation, setAnimation] = useState("");
   useEffect(() => {
     console.log(state);
     const styling = data["styling" as keyof typeof data];
@@ -36,10 +37,12 @@ function Raffle({ dataRecieved, data }: addonTypes) {
               }
             }
           }
-          if (typeof y === "number")
+          if (typeof y === "number") {
             raffle?.classList.add(ChooseRaffleAnimation(y.toString()));
+          }
         }
       }
+      const animationClass = raffle?.classList[1];
       const eventRef = ref(rtdb, data["uniqueString" as keyof typeof data]);
       onValue(eventRef, (snapshot) => {
         const data = snapshot.val();
@@ -50,9 +53,21 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             raffle?.style.setProperty("animation-play-state", "running");
             raffle?.style.setProperty("display", "flex");
             setTimeout(() => {
-              raffle?.style.setProperty("animation-play-state", "paused");
+              raffle?.classList.remove(animationClass);
+              raffle?.style.setProperty("display", "none");
+              raffle?.style.removeProperty("animation-play-state");
+              // Triggered een reflow van CSS waardoor de 2de animatie kan starten.
+              raffle?.offsetWidth;
               setState(1);
-            }, 6900);
+              const animationDuration = time + 1;
+              raffle?.style.setProperty(
+                "animation-delay",
+                "0s, " + animationDuration + "s"
+              );
+              raffle?.classList.add(animationClass);
+              raffle?.style.setProperty("animation-play-state", "running");
+              raffle?.style.setProperty("display", "flex");
+            }, 7000);
             break;
           case "end":
             setState(2);
@@ -62,6 +77,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             console.log("idlecase");
             raffle?.style.setProperty("animation-play-state", "paused");
             raffle?.style.setProperty("display", "none");
+            raffle?.style.removeProperty(animationClass);
             setState(0);
             break;
         }
