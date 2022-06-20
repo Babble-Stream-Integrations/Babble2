@@ -14,8 +14,7 @@ interface addonTypes {
 
 function Raffle({ dataRecieved, data }: addonTypes) {
   const [state, setState] = useState(0);
-  const [time, setTime] = useState(180);
-  const [animation, setAnimation] = useState("");
+  const [time, setTime] = useState(60);
   useEffect(() => {
     console.log(state);
     const styling = data["styling" as keyof typeof data];
@@ -52,6 +51,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             console.log("startcase");
             raffle?.style.setProperty("animation-play-state", "running");
             raffle?.style.setProperty("display", "flex");
+            // Timeout to start the countdown visual
             setTimeout(() => {
               raffle?.classList.remove(animationClass);
               raffle?.style.setProperty("display", "none");
@@ -59,7 +59,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
               // Triggered een reflow van CSS waardoor de 2de animatie kan starten.
               raffle?.offsetWidth;
               setState(1);
-              const animationDuration = time + 1;
+              const animationDuration = time + 3;
               raffle?.style.setProperty(
                 "animation-delay",
                 "0s, " + animationDuration + "s"
@@ -78,6 +78,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             raffle?.style.setProperty("animation-play-state", "paused");
             raffle?.style.setProperty("display", "none");
             raffle?.style.removeProperty(animationClass);
+            raffle?.style.removeProperty("animation-delay");
             setState(0);
             break;
         }
