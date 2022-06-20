@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import * as userDb from "../db/userDb";
 
 // User routes
@@ -13,10 +13,19 @@ export const addUser = async (req: Request, res: Response) => {
   return res.send({ result: `user ${user} added to database!` });
 };
 
-export const getUser = async (req: Request, res: Response) => {
+export const getUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+  // eslint-disable-next-line consistent-return
+) => {
   const { user } = req.params;
-  const userData = await userDb.getUser(user);
-  return res.send(userData);
+  try {
+    const userData = await userDb.getUser(user);
+    return res.send(userData);
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const deleteUser = async (req: Request, res: Response) => {

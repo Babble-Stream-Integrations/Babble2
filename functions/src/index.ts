@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import * as functions from "firebase-functions";
 import userRoutes from "./routes/userRoutes";
 import addonRoutes from "./routes/addonRoutes";
@@ -33,6 +33,14 @@ app.use((req, res, next) => {
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", addonRoutes);
 app.use("/api/v1", authRoutes);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  if (err instanceof Error) {
+    res.status(400).send(err.message);
+  } else {
+    next(err);
+  }
+});
 
 app.get("/", (_req: Request, res: Response) => {
   res.send({
