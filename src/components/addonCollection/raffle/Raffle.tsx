@@ -42,6 +42,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
         }
       }
       const animationClass = raffle?.classList[1];
+      // Set connection between FE and Realtime database
       const eventRef = ref(rtdb, data["uniqueString" as keyof typeof data]);
       onValue(eventRef, (snapshot) => {
         const data = snapshot.val();
@@ -59,11 +60,13 @@ function Raffle({ dataRecieved, data }: addonTypes) {
               // Triggered een reflow van CSS waardoor de 2de animatie kan starten.
               raffle?.offsetWidth;
               setState(1);
+              // Setting the time of animation-delay
               const animationDuration = time + 3;
               raffle?.style.setProperty(
                 "animation-delay",
                 "0s, " + animationDuration + "s"
               );
+              // Add animation class again, start the animation and display th animation
               raffle?.classList.add(animationClass);
               raffle?.style.setProperty("animation-play-state", "running");
               raffle?.style.setProperty("display", "flex");
@@ -75,6 +78,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             break;
           case "idle":
             console.log("idlecase");
+            // Reset all values of animation so the animation can be started again
             raffle?.style.setProperty("animation-play-state", "paused");
             raffle?.style.setProperty("display", "none");
             raffle?.style.removeProperty(animationClass);

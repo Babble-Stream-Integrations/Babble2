@@ -31,7 +31,7 @@ function RaffleVisualCountdown({ time }: RaffleCountdownTypes) {
           />
         </div>
         <div className="raffle__text">
-          <div className="raffle__subtitle">Time remaining:</div>
+          <div className="raffle__subtitle">Time left:</div>
           <div className="raffle__title">{currentTime}</div>
         </div>
       </div>

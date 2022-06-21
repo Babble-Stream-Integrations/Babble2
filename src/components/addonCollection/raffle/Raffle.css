@@ -80,7 +80,7 @@
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
   animation-fill-mode: none, forwards;
-
+  animation-play-state: paused;
   display: flex;
 }
 
@@ -111,7 +111,7 @@
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
   animation-fill-mode: none, forwards;
-
+  animation-play-state: paused;
   display: flex;
 }
 
@@ -142,7 +142,7 @@
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
   animation-fill-mode: none, forwards;
-
+  animation-play-state: paused;
   display: flex;
 }
 
@@ -173,7 +173,7 @@
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
   animation-fill-mode: none, forwards;
-
+  animation-play-state: paused;
   display: flex;
 }
 
