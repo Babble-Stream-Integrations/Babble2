@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import * as location from "./RaffleLocations";
 import { ChooseRaffleAnimation } from "./RaffleAnimation";
 import RaffleVisualStart from "./RaffleVisualStart";
-import "./Raffle.css";
 import RaffleVisualCountdown from "./RaffleVisualCountdown";
+import RaffleVisualWinners from "./RaffleVisualWinners";
+import "./Raffle.css";
 
 interface addonTypes {
   data: object;
@@ -15,6 +16,7 @@ interface addonTypes {
 function Raffle({ dataRecieved, data }: addonTypes) {
   const [state, setState] = useState(0);
   const [time, setTime] = useState(60);
+  const [raffleWinners, setRaffleWinners] = useState({});
   useEffect(() => {
     console.log(state);
     const styling = data["styling" as keyof typeof data];
@@ -73,8 +75,14 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             }, 7000);
             break;
           case "end":
-            setState(2);
             console.log("endcase");
+            raffle?.classList.remove(animationClass);
+            raffle?.style.setProperty("display", "none");
+            raffle?.style.removeProperty("animation-play-state");
+            raffle?.offsetWidth;
+            setState(2);
+            console.log(data.winners);
+            setRaffleWinners(data.winners);
             break;
           case "idle":
             console.log("idlecase");
@@ -97,6 +105,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             {
               0: <RaffleVisualStart />,
               1: <RaffleVisualCountdown time={time} />,
+              2: <RaffleVisualWinners raffleWinners={raffleWinners} />,
             }[state]
           }
         </div>
