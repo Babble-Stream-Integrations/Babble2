@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import * as functions from "firebase-functions";
+import axios from "axios";
 import userRoutes from "./routes/userRoutes";
 import addonRoutes from "./routes/addonRoutes";
 import authRoutes from "./routes/authRoutes";
@@ -34,12 +35,17 @@ app.use("/api/v1", userRoutes);
 app.use("/api/v1", addonRoutes);
 app.use("/api/v1", authRoutes);
 
+// eslint-disable-next-line no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  if (err instanceof Error) {
-    res.status(400).send(err.message);
-  } else {
-    next(err);
+  if (axios.isAxiosError(err)) {
+    const status = err.response?.status || 400;
+    if (status === 401) {
+      console.log(req.platform);
+      return;
+    }
+    res.status(status).send(err.message);
   }
+  res.status(400).send(err.message);
 });
 
 app.get("/", (_req: Request, res: Response) => {

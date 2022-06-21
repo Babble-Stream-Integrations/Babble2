@@ -1,14 +1,7 @@
 import axios from "axios";
 import { getTokens } from "../db/userDb";
 import { getTwitchAppDetails, getTwitchAddonScopes } from "../db/devDb";
-
-interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-  scope: string[];
-  expiresIn?: number;
-  tokenType?: string;
-}
+import { Addons, TwitchTokens } from "../ts/types";
 
 async function getPrevScope(user: string) {
   const tokens = (await getTokens(user, "twitch"))!;
@@ -18,30 +11,26 @@ async function getPrevScope(user: string) {
   return [];
 }
 
-async function getNextScope(addon: string) {
-  const scope = (await getTwitchAddonScopes()).get(addon);
-  if (!scope) {
-    throw new Error("Wrong addon specified!");
-  }
-  return scope;
+async function getNextScope(addon: Addons) {
+  const scope = await getTwitchAddonScopes();
+  return scope[addon];
 }
 
-async function calculateScope(user: string, addon: string) {
+async function calculateScope(user: string, addon: Addons) {
   // Merge prev&next scopes
   const scopes = (await getPrevScope(user)).concat(await getNextScope(addon));
 
   // Remove dupes
-  let result = scopes.filter(
+  const cleanScopes = scopes.filter(
     (item: string, idx: number) => scopes.indexOf(item) === idx
   );
 
   // Space seperated list for Twitch syntax
-  result = result.join(" ");
-
+  const result = cleanScopes.join(" ");
   return result;
 }
 
-export async function getCode(user: string, addon: string) {
+export async function getCode(user: string, addon: Addons) {
   const { clientId, redirectURL, state } = await getTwitchAppDetails();
   const scopes = await calculateScope(user, addon);
 
@@ -52,7 +41,7 @@ export async function getCode(user: string, addon: string) {
   return authUrl;
 }
 
-export async function getTokensWithCode(code: string): Promise<Tokens> {
+export async function getTokensWithCode(code: string): Promise<TwitchTokens> {
   const { clientId, clientSecret, redirectURL } = await getTwitchAppDetails();
 
   const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
@@ -64,7 +53,12 @@ export async function getTokensWithCode(code: string): Promise<Tokens> {
       redirect_uri: redirectURL,
     },
   });
-  return res.data as Tokens;
+  const {
+    access_token: accessToken,
+    refresh_token: refreshToken,
+    scope,
+  } = res.data;
+  return { accessToken, refreshToken, scope };
 }
 
 // export async function refreshAccessToken(

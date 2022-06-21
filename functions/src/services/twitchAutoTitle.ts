@@ -1,47 +1,23 @@
 import axios from "axios";
 import { getCurrentSteamGame, getSteamGameAchievementData } from "./steamKit";
 import { getTwitchAppDetails } from "../db/devDb";
+import {
+  AutoTitleSettings,
+  Game,
+  TitleVariables,
+  TwitchTokens,
+} from "../ts/types";
 
 let clientId: string;
 
-interface TwitchAutoTitleSettings {
-  steamId: string;
-  steamAPIKey?: string;
-  customTitle?: string;
-  changeGame: boolean;
-  justChatting: boolean;
-}
-
-interface TwitchTokens {
-  accessToken: string;
-  refreshToken: string;
-  scope: string[];
-}
-
 async function getStreamerId(accessToken: string) {
-  try {
-    const res = await axios.get("https://api.twitch.tv/helix/users", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Client-Id": clientId,
-      },
-    });
-    return res.data.data[0].id;
-  } catch (error) {
-    return error;
-  }
-}
-
-interface TitleVariables {
-  gameName: string;
-  achievementsTotal: string;
-  achievementsAchieved: string;
-  achievementsLeft: string;
-}
-
-interface Game {
-  name: string;
-  id: string;
+  const res = await axios.get("https://api.twitch.tv/helix/users", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Client-Id": clientId,
+    },
+  });
+  return res.data.data[0].id;
 }
 
 async function generateTitle(
@@ -86,71 +62,50 @@ async function generateTitle(
 }
 
 async function getGameId(accessToken: string, game: string) {
-  try {
-    const res = await axios.get(
-      `https://api.twitch.tv/helix/games?name=${game}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Client-Id": clientId,
-        },
-      }
-    );
-    if (res.data.data.length === 0) {
-      return false;
+  const res = await axios.get(
+    `https://api.twitch.tv/helix/games?name=${game}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-Id": clientId,
+      },
     }
-    return res.data.data[0].id;
-  } catch (error) {
-    return error;
+  );
+  if (res.data.data.length === 0) {
+    return false;
   }
+  return res.data.data[0].id;
 }
 
 async function changeTitle(accessToken: string, id: number, title: string) {
-  try {
-    await axios.patch(
-      `https://api.twitch.tv/helix/channels?broadcaster_id=${id}`,
-      { title },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Client-Id": clientId,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  } catch (error) {
-    console.log(error);
-  }
+  await axios.patch(
+    `https://api.twitch.tv/helix/channels?broadcaster_id=${id}`,
+    { title },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-Id": clientId,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 }
 
 async function changeGame(accessToken: string, id: number, gameId: number) {
-  try {
-    await axios.patch(
-      `https://api.twitch.tv/helix/channels?broadcaster_id=${id}`,
-      { game_id: gameId },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Client-Id": clientId,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  } catch (error) {
-    console.log(error);
-  }
+  await axios.patch(
+    `https://api.twitch.tv/helix/channels?broadcaster_id=${id}`,
+    { game_id: gameId },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Client-Id": clientId,
+        "Content-Type": "application/json",
+      },
+    }
+  );
 }
 
-async function changeChannelInfo(
-  settings: TwitchAutoTitleSettings,
-  tokens: TwitchTokens
-) {
-  if (!settings.changeGame && !settings.customTitle) {
-    return {
-      result:
-        "Twitch autoTitle has been ended without change due to addon settings",
-    };
-  }
+async function start(settings: AutoTitleSettings, tokens: TwitchTokens) {
   clientId = (await getTwitchAppDetails()).clientId;
   const { accessToken } = tokens;
   const streamerId = await getStreamerId(accessToken);
@@ -174,7 +129,6 @@ async function changeChannelInfo(
     );
     await changeTitle(accessToken, streamerId, title);
   }
-  return { result: "Twitch autoTitle has been ended succesfully!" };
 }
 
-export default { changeChannelInfo };
+export default { start };

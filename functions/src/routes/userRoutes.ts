@@ -1,7 +1,44 @@
 import express from "express";
+import db from "../config/firebase";
 import * as userController from "../controllers/userController";
 
 const router = express.Router();
+
+router.param("user", async (req, res, next, user) => {
+  if (req.method === "PUT") {
+    return next();
+  }
+  const doc = await db.doc(`users/${user}`).get();
+  if (!doc.exists) {
+    return next(new Error("User document not found"));
+  }
+  req.user = user;
+  return next();
+});
+
+router.param("addon", async (req, res, next, addon) => {
+  if (req.method === "PUT") {
+    return next();
+  }
+  const doc = await db.doc(`users/${req.params.user}/addons/${addon}`).get();
+  if (!doc.exists) {
+    return next(new Error("Addon document not found"));
+  }
+  req.addon = addon;
+  return next();
+});
+
+router.param("platform", async (req, res, next, platform) => {
+  if (req.method === "PUT") {
+    return next();
+  }
+  const doc = await db.doc(`users/${req.params.user}/tokens/${platform}`).get();
+  if (!doc.exists) {
+    return next(new Error("Token document not found"));
+  }
+  req.platform = platform;
+  return next();
+});
 
 // User routes
 router.get("/users", userController.getAllUsers);
