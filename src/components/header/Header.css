@@ -24,20 +24,6 @@
   margin-left: 25px;
 }
 
-.log-button {
-  font-family: "Montserrat", sans-serif;
-  font-weight: bold;
-  font-size: 0.85em;
-  background-color: var(--mainOrange);
-  border-radius: 50px;
-  padding-left: 20px;
-  padding-right: 20px;
-  color: var(--darkGrey);
-  height: 30px;
-  border: none;
-  text-transform: uppercase;
-}
-
 .header-flex {
   display: flex;
   flex-direction: row;
@@ -46,7 +32,7 @@
 }
 
 .nav-avatar {
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
