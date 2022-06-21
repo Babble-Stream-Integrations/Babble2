@@ -98,6 +98,7 @@ async function startLeagueToolkit(
 
     const summoner = await riot.summonerByPUUID(PUUID);
     const mastery = await riot.masteryBysummonerID(summoner.id);
+    const totalMastery = await riot.totalMasteryBysummonerID(summoner.id);
     const { prefix } = settings;
     const datadragonversionsObject: Array<string> = await axios.get(
       "https://ddragon.leagueoflegends.com/api/versions.json"
@@ -128,7 +129,7 @@ async function startLeagueToolkit(
             break;
           case settings.chatCommands.mastery +
             command.slice(settings.chatCommands.mastery.length):
-            {
+            if (settings.allowedCommands.includes("mastery")) {
               let champion = command.slice(
                 settings.chatCommands.mastery.length
               );
@@ -139,16 +140,21 @@ async function startLeagueToolkit(
                   Math,
                   mastery.map((o) => o.championPoints)
                 );
-                const championID = mastery.find(
+                const maxMasteryChamp = mastery.find(
                   (o) => o.championPoints === maxMastery
-                )!.championId;
+                )!;
+                const championID = maxMasteryChamp.championId;
                 const championsArray = Object.values(champions);
-                // eslint-disable-next-line eqeqeq
                 champion = championsArray.find(
                   (o) => Number(o.key) === championID
                 )!.name;
+                client.say(
+                  streamerChannel,
+                  `Mastery ${champion}: ${maxMastery}, Total mastery: ${maxMastery}`
+                );
               }
             }
+
             break;
 
           default:

@@ -78,10 +78,24 @@ async function masteryBysummonerID(
   ).data;
 }
 
+async function totalMasteryBysummonerID(summonerID: string): Promise<number> {
+  return (
+    await axios.get(
+      `https://euw1.api.riotgames.com/lol/champion-mastery/v4/scores/by-summoner/${summonerID}`,
+      {
+        headers: {
+          "X-Riot-Token": riotToken,
+        },
+      }
+    )
+  ).data;
+}
+
 export { riotToken };
 export default {
   summonerByName,
   summonerByID,
   summonerByPUUID,
   masteryBysummonerID,
+  totalMasteryBysummonerID,
 };
