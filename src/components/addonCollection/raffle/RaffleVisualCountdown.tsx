@@ -8,15 +8,33 @@ interface RaffleCountdownTypes {
 
 function RaffleVisualCountdown({ time }: RaffleCountdownTypes) {
   const [currentTime, setCurrentTime] = useState(time);
+  const [display, setDisplay] = useState("0:00");
 
+  // Zet de initiële tijd in de visual
   useEffect(() => {
-    const countdownInterval = setTimeout(() => {
+    const min = time / 60;
+    const presec = time % 60;
+    let sec: string;
+    if (presec < 10) {
+      sec = "0" + presec;
+    } else sec = presec.toString();
+    setDisplay(min + ":" + sec);
+  }, []);
+
+  // Telt af en displayed de timer als minuten : secondes
+  useEffect(() => {
+    const countdown = setTimeout(() => {
+      const min = Math.floor(currentTime / 60);
+      const presec = currentTime % 60;
+      let sec: string;
+      if (presec < 10) {
+        sec = "0" + presec;
+      } else sec = presec.toString();
+      setDisplay(min + ":" + sec);
       setCurrentTime(currentTime - 1);
     }, 1000);
-    if (currentTime >= 1) {
-      countdownInterval;
-    } else {
-      clearTimeout(countdownInterval);
+    if (currentTime < 0) {
+      clearTimeout(countdown);
     }
   }, [currentTime]);
 
@@ -32,7 +50,7 @@ function RaffleVisualCountdown({ time }: RaffleCountdownTypes) {
         </div>
         <div className="raffle__text">
           <div className="raffle__subtitle">Time left:</div>
-          <div className="raffle__title">{currentTime}</div>
+          <div className="raffle__title">{display}</div>
         </div>
       </div>
     </>
