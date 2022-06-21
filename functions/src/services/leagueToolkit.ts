@@ -133,6 +133,7 @@ async function startLeagueToolkit(
               let champion = command.slice(
                 settings.chatCommands.mastery.length
               );
+              const championsArray = Object.values(champions);
               if (champion === "") {
                 // neccesary because input is an array
                 // eslint-disable-next-line prefer-spread
@@ -140,21 +141,41 @@ async function startLeagueToolkit(
                   Math,
                   mastery.map((o) => o.championPoints)
                 );
-                const maxMasteryChamp = mastery.find(
+                const masteryChamp = mastery.find(
                   (o) => o.championPoints === maxMastery
                 )!;
-                const championID = maxMasteryChamp.championId;
-                const championsArray = Object.values(champions);
+                const championID = masteryChamp.championId;
+
                 champion = championsArray.find(
                   (o) => Number(o.key) === championID
                 )!.name;
                 client.say(
                   streamerChannel,
-                  `Mastery ${champion}: ${maxMastery}, Total mastery: ${maxMastery}`
+                  `Mastery ${champion}: ${maxMastery}, Total mastery: ${totalMastery}`
+                );
+              } else {
+                const championID = championsArray.find(
+                  (o) => o.name.toLowerCase === champion.toLowerCase
+                )!.key;
+                const masteryChamp = mastery.find(
+                  (o) => Number(championID) === o.championId
+                )!;
+                client.say(
+                  streamerChannel,
+                  `Mastery ${champion}: ${masteryChamp.championPoints}, Total mastery: ${totalMastery}`
                 );
               }
             }
-
+            break;
+          case settings.chatCommands.gameType:
+            if (settings.allowedCommands.includes("gametype")) {
+              const activeGame = await riot.LOLActiveGame(summoner.id);
+              if (typeof activeGame === "string") {
+                client.say(streamerChannel, activeGame);
+              } else {
+                // active game stuff
+              }
+            }
             break;
 
           default:
