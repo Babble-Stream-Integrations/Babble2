@@ -68,6 +68,13 @@
   color: var(--primaryTextColor);
 }
 
+.raffle__countdown {
+  text-transform: uppercase;
+  font-size: 2.3em;
+  letter-spacing: 0.1rem;
+  color: var(--primaryTextColor);
+}
+
 .raffle__subtitle {
   color: var(--secondaryTextColor);
 }

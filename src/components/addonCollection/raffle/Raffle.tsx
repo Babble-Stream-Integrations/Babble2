@@ -41,7 +41,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
           }
         }
       }
-      const animationClass = raffle?.classList[1];
+      const animationClass = raffle?.classList[1] as string;
       // Set connection between FE and Realtime database
       const eventRef = ref(rtdb, data["uniqueString" as keyof typeof data]);
       onValue(eventRef, (snapshot) => {
