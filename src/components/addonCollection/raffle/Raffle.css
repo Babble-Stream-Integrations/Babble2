@@ -68,6 +68,13 @@
   color: var(--primaryTextColor);
 }
 
+.raffle__countdown {
+  text-transform: uppercase;
+  font-size: 2.3em;
+  letter-spacing: 0.1rem;
+  color: var(--primaryTextColor);
+}
+
 .raffle__subtitle {
   color: var(--secondaryTextColor);
 }
@@ -80,7 +87,7 @@
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
   animation-fill-mode: none, forwards;
-
+  animation-play-state: paused;
   display: flex;
 }
 
@@ -111,7 +118,7 @@
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
   animation-fill-mode: none, forwards;
-
+  animation-play-state: paused;
   display: flex;
 }
 
@@ -142,7 +149,7 @@
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
   animation-fill-mode: none, forwards;
-
+  animation-play-state: paused;
   display: flex;
 }
 
@@ -173,7 +180,7 @@
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
   animation-fill-mode: none, forwards;
-
+  animation-play-state: paused;
   display: flex;
 }
 
