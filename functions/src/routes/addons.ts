@@ -108,6 +108,11 @@ router.get("/summoner/:name", async (req, res) => {
   // res.send("test");
 });
 
+router.get("/test/:id", async (req, res) => {
+  const summoner = await riot.summonerByPUUID(req.params.id);
+  res.send(summoner);
+});
+
 router.get("/summoner/mastery/:summonerID", async (req, res) => {
   const mastery = await riot.masteryBysummonerID(req.params.summonerID);
   res.send(mastery);

@@ -74,7 +74,7 @@ async function summonerByID(id: string): Promise<summoner> {
 async function summonerByPUUID(PUUID: string): Promise<summoner> {
   return (
     await axios.get(
-      `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-account/${PUUID}`,
+      `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${PUUID}`,
       {
         headers: {
           "X-Riot-Token": riotToken,

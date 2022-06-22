@@ -226,5 +226,5 @@ async function startRaffle(
   return { result: "Twitch raffle has been succesfully finished!" };
 }
 
-export { getClientId, TwitchTokens, getStreamerChannel, getBotDetails };
+export { getClientId, TwitchTokens, getBotDetails };
 export default { startRaffle };
