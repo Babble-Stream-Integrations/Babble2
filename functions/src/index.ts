@@ -35,17 +35,15 @@ app.use("/api/v1", userRoutes);
 app.use("/api/v1", addonRoutes);
 app.use("/api/v1", authRoutes);
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (axios.isAxiosError(err)) {
     const status = err.response?.status || 400;
-    if (status === 401) {
-      console.log(req.platform);
-      return;
-    }
-    res.status(status).send(err.message);
+    const message = err.response?.data || err.message;
+    return res.status(status).send(message);
   }
-  res.status(400).send(err.message);
+
+  return res.status(400).send(err.message);
 });
 
 app.get("/", (_req: Request, res: Response) => {

@@ -1,65 +1,62 @@
 import axios from "axios";
 import tmi from "tmi.js";
-import { getTwitchAppDetails, getTwitchBot } from "../db/devDb";
-import { TwitchRaffleSettings, TwitchTokens } from "../ts/types";
-// import { refreshAccessToken } from "./twitchAuth";
+import { getTwitchBot } from "../db/devDb";
+import { AuthInfo, TwitchRaffleSettings } from "../ts/types";
+import { authErrorHandler } from "./twitchAuth";
 
-let clientId: string;
+async function getStreamerChannel(authInfo: AuthInfo): Promise<string[]> {
+  try {
+    const res = await axios.get("https://api.twitch.tv/helix/users", {
+      headers: {
+        Authorization: `Bearer ${authInfo.tokens.accessToken}`,
+        "Client-Id": authInfo.clientId,
+      },
+    });
 
-async function getStreamerChannel(
-  accessToken: string
-  // refreshToken: string
-): Promise<string[]> {
-  const res = await axios.get("https://api.twitch.tv/helix/users", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Client-Id": clientId,
-    },
-  });
-  console.log("monkey");
-
-  const streamerChannel: string = `#${res.data.data[0].login}`;
-  const streamerID: string = res.data.data[0].id;
-  const streamerName: string = res.data.data[0].login;
-  const streamerPassword: string = `oauth:${accessToken}`;
-  return [streamerChannel, streamerID, streamerName, streamerPassword];
-  // try {
-  //   const [newAccessToken, newrefreshToken] = await refreshAccessToken(
-  //     refreshToken
-  //   );
-  //   return await getStreamerChannel(newAccessToken, newrefreshToken);
-  // } catch (refreshErr) {
-  //   if (axios.isAxiosError(err)) {
-  //     throw err;
-  //   }
-  // }
-  // throw new Error("Couldn't get Twitch user");
+    const streamerChannel: string = `#${res.data.data[0].login}`;
+    const streamerID: string = res.data.data[0].id;
+    const streamerName: string = res.data.data[0].login;
+    const streamerPassword: string = `oauth:${authInfo.tokens.accessToken}`;
+    return [streamerChannel, streamerID, streamerName, streamerPassword];
+  } catch (error) {
+    return authErrorHandler(error, authInfo, getStreamerChannel);
+  }
 }
 
 async function getStatus(
+  authInfo: AuthInfo,
   isSubscribed: boolean,
   viewerID: string,
-  streamerID: string,
-  accessToken: string
+  streamerID: string
 ): Promise<string> {
   if (isSubscribed === true) {
     return "Subscriber";
   }
 
-  const res = await axios.get(
-    `https://api.twitch.tv/helix/users/follows?from_id=${viewerID}&to_id=${streamerID}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Client-Id": clientId,
-      },
+  try {
+    const res = await axios.get(
+      `https://api.twitch.tv/helix/users/follows?from_id=${viewerID}&to_id=${streamerID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authInfo.tokens.accessToken}`,
+          "Client-Id": authInfo.clientId,
+        },
+      }
+    );
+    if (res.data.total === 1) {
+      return "Follower";
     }
-  );
-  if (res.data.total === 1) {
-    return "Follower";
+    return "Pleb";
+  } catch (error) {
+    return authErrorHandler(
+      error,
+      authInfo,
+      getStatus,
+      isSubscribed,
+      viewerID,
+      streamerID
+    );
   }
-
-  return "Pleb";
 }
 
 function calculateNewUsers(
@@ -102,16 +99,13 @@ function pickWinner(
   return winnerArray;
 }
 
-async function start(settings: TwitchRaffleSettings, tokens: TwitchTokens) {
-  console.log(settings, tokens);
+async function start(settings: TwitchRaffleSettings, authInfo: AuthInfo) {
+  console.log(settings, authInfo);
   console.log("Start Twitch Raffle");
-  clientId = (await getTwitchAppDetails()).clientId;
 
   const [streamerChannel, streamerID, streamerName, streamerPassword] =
-    await getStreamerChannel(tokens.accessToken);
+    await getStreamerChannel(authInfo);
   const { name: botName, token: botPassword } = await getTwitchBot();
-
-  console.log("monk");
 
   const client = new tmi.Client({
     options: {
@@ -142,10 +136,10 @@ async function start(settings: TwitchRaffleSettings, tokens: TwitchTokens) {
       !usersEntered.includes(tags["display-name"]!)
     ) {
       const status = await getStatus(
+        authInfo,
         tags.subscriber!,
         tags["user-id"]!,
-        streamerID,
-        tokens.accessToken
+        streamerID
       );
       const newUsersEntered = calculateNewUsers(
         settings,

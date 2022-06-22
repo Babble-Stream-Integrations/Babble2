@@ -5,19 +5,15 @@ import { Achievement } from "../ts/types";
 async function getCurrentSteamGame(steamAPIKey: string, steamId: string) {
   const steamApiKey =
     steamAPIKey !== "" ? steamAPIKey : (await getSteamDetails()).steamWebAPIKey;
-  try {
-    const steamCurrentGame = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamApiKey}&steamids=${steamId}`;
-    const response = await axios.get(steamCurrentGame);
-    if ("gameid" in response.data.response.players[0]) {
-      return {
-        name: response.data.response.players[0].gameextrainfo,
-        id: response.data.response.players[0].gameid,
-      };
-    }
-    return { name: "", id: "" };
-  } catch (error) {
-    return { name: "", id: "" };
+  const steamCurrentGame = `http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${steamApiKey}&steamids=${steamId}`;
+  const response = await axios.get(steamCurrentGame);
+  if ("gameid" in response.data.response.players[0]) {
+    return {
+      name: response.data.response.players[0].gameextrainfo,
+      id: response.data.response.players[0].gameid,
+    };
   }
+  return { name: "", id: "" };
 }
 
 async function getSteamGameAchievementData(

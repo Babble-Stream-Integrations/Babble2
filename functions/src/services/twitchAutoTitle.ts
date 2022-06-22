@@ -1,23 +1,20 @@
 import axios from "axios";
 import { getCurrentSteamGame, getSteamGameAchievementData } from "./steamKit";
-import { getTwitchAppDetails } from "../db/devDb";
-import {
-  AutoTitleSettings,
-  Game,
-  TitleVariables,
-  TwitchTokens,
-} from "../ts/types";
+import { AuthInfo, AutoTitleSettings, Game, TitleVariables } from "../ts/types";
+import { authErrorHandler } from "./twitchAuth";
 
-let clientId: string;
-
-async function getStreamerId(accessToken: string) {
-  const res = await axios.get("https://api.twitch.tv/helix/users", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      "Client-Id": clientId,
-    },
-  });
-  return res.data.data[0].id;
+async function getStreamerId(authInfo: AuthInfo): Promise<string> {
+  try {
+    const res = await axios.get("https://api.twitch.tv/helix/users", {
+      headers: {
+        Authorization: `Bearer ${authInfo.tokens.accessToken}`,
+        "Client-Id": authInfo.clientId,
+      },
+    });
+    return res.data.data[0].id;
+  } catch (error) {
+    return authErrorHandler(error, authInfo, getStreamerId);
+  }
 }
 
 async function generateTitle(
@@ -61,73 +58,101 @@ async function generateTitle(
   return newTitle.join("");
 }
 
-async function getGameId(accessToken: string, game: string) {
-  const res = await axios.get(
-    `https://api.twitch.tv/helix/games?name=${game}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Client-Id": clientId,
-      },
-    }
-  );
-  if (res.data.data.length === 0) {
-    return false;
+async function getGameId(
+  authInfo: AuthInfo,
+  game: string
+): Promise<string | undefined> {
+  try {
+    const res = await axios.get(
+      `https://api.twitch.tv/helix/games?name=${game}`,
+      {
+        headers: {
+          Authorization: `Bearer ${authInfo.tokens.accessToken}`,
+          "Client-Id": authInfo.clientId,
+        },
+      }
+    );
+    return res.data.data[0].id;
+  } catch (error) {
+    return authErrorHandler(error, authInfo, getGameId);
   }
-  return res.data.data[0].id;
 }
 
-async function changeTitle(accessToken: string, id: number, title: string) {
-  await axios.patch(
-    `https://api.twitch.tv/helix/channels?broadcaster_id=${id}`,
-    { title },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Client-Id": clientId,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+async function changeTitle(
+  authInfo: AuthInfo,
+  id: string,
+  title: string
+): Promise<void> {
+  try {
+    await axios.patch(
+      `https://api.twitch.tv/helix/channels?broadcaster_id=${id}`,
+      { title },
+      {
+        headers: {
+          Authorization: `Bearer ${authInfo.tokens.accessToken}`,
+          "Client-Id": authInfo.clientId,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (error) {
+    authErrorHandler(error, authInfo, changeTitle, id, title);
+  }
 }
 
-async function changeGame(accessToken: string, id: number, gameId: number) {
-  await axios.patch(
-    `https://api.twitch.tv/helix/channels?broadcaster_id=${id}`,
-    { game_id: gameId },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Client-Id": clientId,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+async function changeGame(
+  authInfo: AuthInfo,
+  id: string,
+  gameId: string
+): Promise<void> {
+  try {
+    await axios.patch(
+      `https://api.twitch.tv/helix/channels?broadcaster_id=${id}`,
+      { game_id: gameId },
+      {
+        headers: {
+          Authorization: `Bearer ${authInfo.tokens.accessToken}`,
+          "Client-Id": authInfo.clientId,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  } catch (error) {
+    authErrorHandler(error, authInfo, changeGame, id, gameId);
+  }
 }
 
-async function start(settings: AutoTitleSettings, tokens: TwitchTokens) {
-  clientId = (await getTwitchAppDetails()).clientId;
-  const { accessToken } = tokens;
-  const streamerId = await getStreamerId(accessToken);
+async function start(settings: AutoTitleSettings, authInfo: AuthInfo) {
+  const streamerId = await getStreamerId(authInfo);
   const steamAPIKey =
     typeof settings.steamAPIKey !== "undefined" ? settings.steamAPIKey : "";
-  const game: Game = await getCurrentSteamGame(steamAPIKey, settings.steamId);
-  if (settings.changeGame) {
-    if (game.name || settings.justChatting) {
-      const gameId = game.name
-        ? await getGameId(accessToken, game.name)
-        : 509658;
-      await changeGame(accessToken, streamerId, gameId);
+
+  try {
+    const game: Game = await getCurrentSteamGame(steamAPIKey, settings.steamId);
+    if (settings.changeGame) {
+      if (game.name || settings.justChatting) {
+        if (!game.name) {
+          await changeGame(authInfo, streamerId, "509658");
+        } else {
+          const gameId = await getGameId(authInfo, game.name);
+          if (gameId) {
+            await changeGame(authInfo, streamerId, gameId);
+          }
+        }
+      }
     }
-  }
-  if (settings.customTitle && game.name) {
-    const title = await generateTitle(
-      settings.customTitle,
-      game,
-      steamAPIKey,
-      settings.steamId
-    );
-    await changeTitle(accessToken, streamerId, title);
+    if (settings.customTitle && game.name) {
+      const title = await generateTitle(
+        settings.customTitle,
+        game,
+        steamAPIKey,
+        settings.steamId
+      );
+      await changeTitle(authInfo, streamerId, title);
+    }
+  } catch (error) {
+    console.log("timer");
+    throw error;
   }
 }
 

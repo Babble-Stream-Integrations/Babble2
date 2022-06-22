@@ -4,28 +4,40 @@ import { getAddon, getTokens } from "../db/userDb";
 import twitchRaffle from "../services/twitchRaffle";
 // import youtubeAutotitle from "../services/youtubeAutotitle";
 import twitchAutoTitle from "../services/twitchAutoTitle";
-import { Addons, AutoTitleSettings, TwitchRaffleSettings } from "../ts/types";
+import {
+  Addons,
+  AuthInfo,
+  AutoTitleSettings,
+  TwitchRaffleSettings,
+} from "../ts/types";
+import { getTwitchAppDetails } from "../db/devDb";
 
-// eslint-disable-next-line consistent-return
 async function runAddon(user: string, addon: string, addonType: Addons) {
   const { type, platform, settings } = await getAddon(user, addon);
   if (type !== addonType) {
     throw new Error(`Wrong type of addon: expected ${addonType} addon`);
   }
-  const tokens = await getTokens(user, platform);
+  if (platform !== "twitch" && platform !== "youtube") {
+    throw new Error("No platform detected");
+  }
+  const authInfo: AuthInfo = {
+    user,
+    platform,
+    tokens: await getTokens(user, platform),
+    clientId: (await getTwitchAppDetails()).clientId,
+  };
 
   if (platform === "youtube") {
-    return { result: "Youtube addons aren't developed yet!" };
+    return;
   }
   if (platform === "twitch") {
     if (addonType === "raffleSystem") {
-      await twitchRaffle.start(settings as TwitchRaffleSettings, tokens);
+      await twitchRaffle.start(settings as TwitchRaffleSettings, authInfo);
     }
     if (addonType === "automaticStreamTitle") {
-      await twitchAutoTitle.start(settings as AutoTitleSettings, tokens);
+      await twitchAutoTitle.start(settings as AutoTitleSettings, authInfo);
     }
   }
-  throw new Error("No platform detected");
 }
 
 export const runRaffle = async (req: Request, res: Response) => {

@@ -97,7 +97,7 @@ export type Addon = {
   uniqueString: string;
 };
 
-/// Tokens
+/// Auth
 export type TwitchTokens = {
   accessToken: string;
   refreshToken: string;
@@ -105,6 +105,13 @@ export type TwitchTokens = {
 };
 
 export type Tokens = TwitchTokens;
+
+export type AuthInfo = {
+  user: string;
+  platform: string;
+  tokens: Tokens;
+  clientId: string;
+};
 
 //  SteamKit
 export type Achievement = {
