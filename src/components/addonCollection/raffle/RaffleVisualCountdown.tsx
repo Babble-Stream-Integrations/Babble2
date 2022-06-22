@@ -12,7 +12,7 @@ function RaffleVisualCountdown({ time }: RaffleCountdownTypes) {
 
   // Zet de initiële tijd in de visual
   useEffect(() => {
-    const min = time / 60;
+    const min = Math.floor(time / 60);
     const presec = time % 60;
     let sec: string;
     if (presec < 10) {

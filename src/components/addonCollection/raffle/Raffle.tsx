@@ -7,6 +7,7 @@ import RaffleVisualStart from "./RaffleVisualStart";
 import RaffleVisualCountdown from "./RaffleVisualCountdown";
 import RaffleVisualWinners from "./RaffleVisualWinners";
 import "./Raffle.css";
+import { convertWinnerArray } from "./RaffleConvertWinnerArray";
 
 interface addonTypes {
   data: object;
@@ -15,8 +16,8 @@ interface addonTypes {
 
 function Raffle({ dataRecieved, data }: addonTypes) {
   const [state, setState] = useState(0);
-  const [time, setTime] = useState(60);
-  const [raffleWinners, setRaffleWinners] = useState({});
+  const [time, setTime] = useState(80);
+  const [raffleWinners, setRaffleWinners] = useState<string[]>([]);
   useEffect(() => {
     console.log(state);
     const styling = data["styling" as keyof typeof data];
@@ -79,10 +80,13 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             raffle?.classList.remove(animationClass);
             raffle?.style.setProperty("display", "none");
             raffle?.style.removeProperty("animation-play-state");
+            raffle?.style.removeProperty("animation-delay");
             raffle?.offsetWidth;
             setState(2);
-            console.log(data.winners);
-            setRaffleWinners(data.winners);
+            setRaffleWinners(convertWinnerArray(data.winners));
+            raffle?.classList.add(animationClass);
+            raffle?.style.setProperty("animation-play-state", "running");
+            raffle?.style.setProperty("display", "flex");
             break;
           case "idle":
             console.log("idlecase");

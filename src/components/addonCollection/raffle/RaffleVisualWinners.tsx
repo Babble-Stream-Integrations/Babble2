@@ -1,18 +1,11 @@
-import React from "react";
-import { useEffect } from "react";
 import ticketlogo from "../../../assets/Ticket-icon.png";
 import "./Raffle.css";
 
 interface RaffleVisualWinnersTypes {
-  raffleWinners: object;
+  raffleWinners: string[];
 }
 
 function RaffleVisualWinners({ raffleWinners }: RaffleVisualWinnersTypes) {
-  useEffect(() => {
-    Object.entries(raffleWinners).forEach((x) => {
-      console.log(Number(x[0]) + 1 + ". " + x[1]);
-    });
-  });
   return (
     <>
       <div className="raffle__container">
@@ -30,7 +23,11 @@ function RaffleVisualWinners({ raffleWinners }: RaffleVisualWinnersTypes) {
           <div className="raffle__subtitle">
             Here are the <b>winners</b>:
           </div>
-          <div className="raffle__winners">{}</div>
+          <div className="raffle__winners">
+            {raffleWinners.map((a, i) => (
+              <p key={i}>{a}</p>
+            ))}
+          </div>
         </div>
       </div>
     </>
