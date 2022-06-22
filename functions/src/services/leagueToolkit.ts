@@ -59,6 +59,13 @@ interface Champions {
   };
 }
 
+interface Queue {
+  queueId: number;
+  map: string;
+  description: string | null;
+  notes: string | null;
+}
+
 let clientId: string;
 
 async function getStreamerChannel(
@@ -135,6 +142,11 @@ async function startLeagueToolkit(
       `http://ddragon.leagueoflegends.com/cdn/${datadragonversion}/data/en_US/champion.json`
     )
   ).data.data;
+  const queues: Array<Queue> = (
+    await axios.get(
+      "https://static.developer.riotgames.com/docs/lol/queues.json"
+    )
+  ).data;
   client.on("message", async (channel, tags, message, self) => {
     // Ignore echoed messages.
     if (self) return;
@@ -153,7 +165,9 @@ async function startLeagueToolkit(
         case settings.chatCommands.mastery +
           command.slice(settings.chatCommands.mastery.length):
           if (settings.allowedCommands.includes("mastery")) {
-            let champion = command.slice(settings.chatCommands.mastery.length);
+            let champion = command.slice(
+              settings.chatCommands.mastery.length + 1
+            );
 
             const championsArray = Object.values(champions);
             if (champion === "") {
@@ -196,7 +210,17 @@ async function startLeagueToolkit(
             if (typeof activeGame === "string") {
               client.say(streamerChannel, activeGame);
             } else {
-              // active game stuff
+              const queue: Queue = queues.find(
+                (o) => activeGame.gameQueueConfigId === o.queueId
+              )!;
+              if (queue.description !== null) {
+                client.say(
+                  streamerChannel,
+                  `Game type: ${queue.description.replace("games", "")}`
+                );
+              } else {
+                client.say(streamerChannel, `Game type: ${queue.map}`);
+              }
             }
           }
           break;

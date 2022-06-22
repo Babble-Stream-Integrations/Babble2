@@ -1,5 +1,4 @@
-import axios, { AxiosResponse, AxiosError } from "axios";
-import { act } from "react-dom/test-utils";
+import axios, { AxiosError } from "axios";
 
 const riotToken = "RGAPI-52889f89-2a59-47f1-bba5-0afe339788af";
 
@@ -126,7 +125,7 @@ async function LOLActiveGame(summonerID: string): Promise<activegame | string> {
     if (reason.response!.status === 404) {
       return "user is not in active game";
     }
-    return "an error has occured";
+    return "an error has occured while trying to fetch the active game";
   });
   return activeGame;
 }
