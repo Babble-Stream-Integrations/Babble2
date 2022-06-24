@@ -1,4 +1,4 @@
-import db from "../config/firebase";
+import { db } from "../config/firebase";
 
 export async function getSteamDetails() {
   const doc = await db.doc(`dev/steamDetails`).get();
