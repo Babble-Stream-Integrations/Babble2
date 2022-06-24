@@ -228,26 +228,6 @@ async function startLeagueToolkit(
         default:
       }
     }
-    // if (
-    //   message.toLowerCase() === settings.enterMessage &&
-    //   !usersEntered.includes(tags["display-name"]!)
-    // ) {
-    //   const status = await getStatus(
-    //     tags.subscriber!,
-    //     tags["user-id"]!,
-    //     streamerID,
-    //     tokens.accessToken
-    //   );
-    //   const newUsersEntered = calculateNewUsers(
-    //     settings,
-    //     status,
-    //     tags["display-name"]!
-    //   );
-
-    //   usersEntered.push(...newUsersEntered);
-
-    //   console.log(status, usersEntered);
-    // }
   });
 }
 
