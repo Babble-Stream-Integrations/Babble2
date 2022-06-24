@@ -190,7 +190,6 @@ async function startLeagueToolkit(
                 `Mastery ${champion}: ${maxMastery}, Total mastery: ${totalMastery}`
               );
             } else {
-              console.log(champion.toLowerCase());
               const championID = championsArray.find(
                 (o) => o.name.toLowerCase() === champion.toLowerCase()
               )!.key;
@@ -222,6 +221,12 @@ async function startLeagueToolkit(
                 client.say(streamerChannel, `Game type: ${queue.map}`);
               }
             }
+          }
+          break;
+        case "stop":
+          if (tags["display-name"] === streamerName) {
+            client.say(streamerChannel, "league toolkit has disconnected");
+            client.disconnect();
           }
           break;
 

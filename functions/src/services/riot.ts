@@ -110,7 +110,7 @@ async function totalMasteryBysummonerID(summonerID: string): Promise<number> {
     )
   ).data;
 }
-
+// fixen
 async function LOLActiveGame(summonerID: string): Promise<activegame | string> {
   const activeGame = (
     await axios.get(
