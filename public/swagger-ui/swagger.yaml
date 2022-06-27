@@ -1,0 +1,22 @@
+openapi: 3.0.0
+info:
+  title: Serverless API
+  description:
+  version: 0.0.1
+servers:
+  - url: https://anothername.mysite.com/staging/v1
+    description: Internal staging server for testing
+  - url: https://anothername.mysite.com/prod/v1
+    description: Main (production) server
+paths:
+  /hi:
+    get:
+      summary: Returns a string.
+      description: Greetings.
+      responses:
+        "200": # status code
+          description: A String
+          content:
+            application/json:
+              schema:
+                type: string

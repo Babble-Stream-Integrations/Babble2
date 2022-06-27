@@ -1,11 +1,14 @@
 import express, { NextFunction, Request, Response } from "express";
 import * as functions from "firebase-functions";
 import axios from "axios";
+import swaggerJsDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 import userRoutes from "./routes/userRoutes";
 import addonRoutes from "./routes/addonRoutes";
 import authRoutes from "./routes/authRoutes";
 
 const app = express();
+app.use(express.static("public"));
 
 app.use(
   express.urlencoded({
@@ -31,6 +34,24 @@ app.use((req, res, next) => {
   next();
 });
 
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      version: "1.0.0",
+      title: "Customer API",
+      description: "Customer API Information",
+      contact: {
+        name: "Amazing Developer",
+      },
+    },
+  },
+  // ['.routes/*.js']
+  apis: ["index.ts"],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", addonRoutes);
 app.use("/api/v1", authRoutes);
@@ -46,10 +67,14 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   return res.status(400).send(err.message);
 });
 
-app.get("/", (_req: Request, res: Response) => {
+app.get("/hi", (_req: Request, res: Response) => {
   res.send({
     result: "hi there handsome ;)",
   });
 });
 
-export default functions.region("europe-west1").https.onRequest(app);
+app.get("/docs", (req, res) => {
+  res.sendFile("index.html");
+});
+
+export default functions.https.onRequest(app);

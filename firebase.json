@@ -22,7 +22,7 @@
       "rewrites": [
         {
           "source": "**",
-          "destination": "/index.html"
+          "function": "default"
         }
       ]
     },
@@ -37,7 +37,7 @@
       "rewrites": [
         {
           "source": "**",
-          "destination": "/index.html"
+          "function": "default"
         }
       ]
     }
