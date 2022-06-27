@@ -24,7 +24,7 @@ async function getTwitchAppDetails() {
   const results: TwitchAppDetails = {
     clientId: doc.data()!.clientId,
     clientSecret: doc.data()!.clientSecret,
-    redirectURL: doc.data()!.redirectURLDev,
+    redirectURL: doc.data()!.redirectURL,
     state: doc.data()!.state,
   };
   return results;

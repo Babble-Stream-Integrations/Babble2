@@ -166,7 +166,7 @@ async function startRaffle(
         `Raffle started! Type ${settings.enterMessage} to enter`
       );
       RTDBStart(uniqueString, settings.duration);
-      RTDBIdle(uniqueString);
+      // RTDBIdle(uniqueString);
     });
 
     const usersEntered: string[] = [];
