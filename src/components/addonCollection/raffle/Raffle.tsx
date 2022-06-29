@@ -52,6 +52,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
         const eventType = data.type;
         switch (eventType) {
           case "start":
+            console.log(data.duration);
             setTime(data.duration - 12);
             console.log("startcase");
             raffle?.style.setProperty("animation-play-state", "running");
