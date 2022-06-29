@@ -40,8 +40,79 @@ router.param("platform", async (req, res, next, platform) => {
   return next();
 });
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - displayName
+ *         - email
+ *       properties:
+ *         displayName:
+ *           type: string
+ *           description: The Full Name of the User's Google Account
+ *         email:
+ *           type: string
+ *           description: The User's Google Mail
+ *       example:
+ *         displayName: Joas Boevink
+ *         email: joas.boevink@gmail.com
+ */
+
+/**
+ * @swagger
+ * tags:
+ *   name: Users
+ *   description: User Routes
+ */
+
 // User routes
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Returns a list of all User ID's
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: A list of User id's
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ */
 router.get("/users", userController.getAllUsers);
+
+/**
+ * @swagger
+ * /users/{userId}:
+ *   get:
+ *     summary: Get a user by ID
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         schema:
+ *           type: integer
+          required: true
+          description: Numeric ID of the user to get
+ * /users/:
+ *   get:
+ *     summary: Returns a list of all User ID's
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: A list of User id's
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ */
 router.put("/users/:user", userController.addUser);
 router.get("/users/:user", userController.getUser);
 router.delete("/users/:user", userController.deleteUser);

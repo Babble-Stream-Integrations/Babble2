@@ -58,7 +58,7 @@ export async function getAllTokens(user: string) {
 export async function addTokens(
   user: string,
   platform: string,
-  tokens: TwitchTokens
+  tokens: Tokens
 ) {
   await db.doc(`users/${user}/addons/${platform}`).set(tokens);
 }
