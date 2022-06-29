@@ -1,5 +1,5 @@
 import db from "../config/firebase";
-import { Addon, AddonSettings, Tokens, TwitchTokens, User } from "../ts/types";
+import { Addon, AddonSettings, Tokens, User } from "../ts/types";
 
 // User functions
 export async function getAllUsers() {
@@ -49,7 +49,7 @@ export async function updateAddonSettings(
     .set({ settings: data }, { merge: true });
 }
 
-// UserTokens functions
+// UserTokens functions (routes largely removed until babble auth implementation)
 export async function getAllTokens(user: string) {
   const col = await db.doc(`users/${user}`).collection(`tokens`).get();
   return col.docs.map((doc) => doc.id);
@@ -58,9 +58,10 @@ export async function getAllTokens(user: string) {
 export async function addTokens(
   user: string,
   platform: string,
-  tokens: TwitchTokens
+  tokens: Tokens
 ) {
-  await db.doc(`users/${user}/addons/${platform}`).set(tokens);
+  console.log("New tokens received");
+  await db.doc(`users/${user}/tokens/${platform}`).set(tokens);
 }
 
 export async function getTokens(user: string, platform: string) {
@@ -69,5 +70,5 @@ export async function getTokens(user: string, platform: string) {
 }
 
 export async function deleteTokens(user: string, platform: string) {
-  await db.doc(`users/${user}/addons/${platform}`).delete();
+  await db.doc(`users/${user}/tokens/${platform}`).delete();
 }
