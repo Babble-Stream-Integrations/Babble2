@@ -47,7 +47,7 @@ function PrototypeComponent({
 
   useEffect(() => {
     if (Pmodalshow === false) {
-      fetch(`${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2/settings`, {
+      fetch(`${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2`, {
         headers: {
           Origin: origin,
           appchecktoken: appcheck,
@@ -55,16 +55,16 @@ function PrototypeComponent({
       })
         .then((response) => {
           response.json().then((data) => {
-            setRaffleDuration(data["duration"]);
-            setRaffleEnterMessage(data["enterMessage"]);
-            setRaffleFreeOnly(data["followOnly"]);
-            setRafflePaidOnly(data["subOnly"]);
-            setRaffleFreePrivilege(data["followPrivilege"]);
-            setRafflePaidPrivilege(data["subPrivilege"]);
-            setRaffleWinnerAmount(data["winnerAmount"]);
-            setRaffleDuplicateWinners(data["duplicateWinners"]);
-            setRaffleAnnounceWinners(data["announceWinners"]);
-            setRaffleMyAccount(data["useMyAccount"]);
+            setRaffleDuration(data.settings["duration"]);
+            setRaffleEnterMessage(data.settings["enterMessage"]);
+            setRaffleFreeOnly(data.settings["followOnly"]);
+            setRafflePaidOnly(data.settings["subOnly"]);
+            setRaffleFreePrivilege(data.settings["followPrivilege"]);
+            setRafflePaidPrivilege(data.settings["subPrivilege"]);
+            setRaffleWinnerAmount(data.settings["winnerAmount"]);
+            setRaffleDuplicateWinners(data.settings["duplicateWinners"]);
+            setRaffleAnnounceWinners(data.settings["announceWinners"]);
+            setRaffleMyAccount(data.settings["useMyAccount"]);
           });
         })
         .catch((err) => {
@@ -304,7 +304,7 @@ function PrototypeComponent({
                   fetch(
                     `${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2/settings`,
                     {
-                      method: "PUT",
+                      method: "PATCH",
                       headers: {
                         "Content-Type": "application/json",
                         Origin: origin,
