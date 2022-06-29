@@ -1,8 +1,7 @@
 import axios from "axios";
-import admin from "firebase-admin";
 import { getCurrentSteamGame, getSteamGameAchievementData } from "./steamKit";
+import { getTwitchAppDetails } from "../db/devDb";
 
-const db = admin.firestore();
 let clientId: string;
 
 interface TwitchAutoTitleSettings {
@@ -17,11 +16,6 @@ interface TwitchTokens {
   accessToken: string;
   refreshToken: string;
   scope: string[];
-}
-
-async function getClientId(): Promise<string> {
-  const doc = await db.collection("dev").doc("twitchAppDetails").get();
-  return doc.data()!.clientId;
 }
 
 async function getStreamerId(accessToken: string) {
@@ -157,7 +151,7 @@ async function changeChannelInfo(
         "Twitch autoTitle has been ended without change due to addon settings",
     };
   }
-  clientId = await getClientId();
+  clientId = (await getTwitchAppDetails()).clientId;
   const { accessToken } = tokens;
   const streamerId = await getStreamerId(accessToken);
   const steamAPIKey =

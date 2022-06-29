@@ -1,45 +1,27 @@
-import express from "express";
-import admin from "firebase-admin";
+import { Request, Response, NextFunction } from "express";
+import { getAddon, getTokens } from "../db/userDb";
 // import youtubeRaffle from "../services/youtubeRaffle";
 import twitchRaffle from "../services/twitchRaffle";
 // import youtubeAutotitle from "../services/youtubeAutotitle";
 import twitchAutoTitle from "../services/twitchAutoTitle";
 
-const db = admin.firestore();
-
-const router = express.Router();
-
 // eslint-disable-next-line consistent-return
 async function runAddon(user: string, addon: string, addonType: string) {
-  const addonDoc = await db.doc(`users/${user}/addons/${addon}`).get();
-  if (!addonDoc.exists) {
-    throw new Error("addon document not found");
-  }
-  if (addonDoc.data()!.type !== addonType) {
+  const { type, platform, settings } = await getAddon(user, addon);
+  if (type !== addonType) {
     throw new Error(`Wrong type of addon: expected ${addonType} addon`);
   }
-  const { platform } = addonDoc.data()!;
   if (platform !== "twitch" && platform !== "youtube") {
     throw new Error("no platform detected");
   }
+  const tokens = await getTokens(user, platform);
 
-  const tokensDoc = await db.doc(`users/${user}/tokens/twitch`).get();
-  if (!tokensDoc.exists) {
-    throw new Error("twitch tokens not found");
-  }
-
-  const { settings, uniqueString } = addonDoc.data()!;
-  const tokens = {
-    accessToken: tokensDoc.data()!.access_token,
-    refreshToken: tokensDoc.data()!.refresh_token,
-    scope: tokensDoc.data()!.scope,
-  };
   if (platform === "youtube") {
     return { result: "Youtube addons aren't developed yet!" };
   }
   if (platform === "twitch") {
     if (addonType === "raffleSystem") {
-      await twitchRaffle.startRaffle(settings, tokens, uniqueString);
+      await twitchRaffle.startRaffle(settings, tokens);
       return { result: "Twitch raffle has been succesfully finished!" };
     }
     if (addonType === "automaticStreamTitle") {
@@ -49,7 +31,11 @@ async function runAddon(user: string, addon: string, addonType: string) {
   }
 }
 
-router.post("/raffle/start", async (req, res, next) => {
+export const runRaffle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     res.send(await runAddon(req.body.user, req.body.addon, "raffleSystem"));
   } catch (error) {
@@ -59,9 +45,13 @@ router.post("/raffle/start", async (req, res, next) => {
       next(error);
     }
   }
-});
+};
 
-router.post("/autoTitle/start", async (req, res, next) => {
+export const runAutoTitle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     res.send(
       await runAddon(req.body.user, req.body.addon, "automaticStreamTitle")
@@ -73,6 +63,4 @@ router.post("/autoTitle/start", async (req, res, next) => {
       next(error);
     }
   }
-});
-
-export default router;
+};

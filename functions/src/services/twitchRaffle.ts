@@ -1,11 +1,9 @@
 import axios from "axios";
 import tmi from "tmi.js";
-import admin from "firebase-admin";
-import { refreshAccessToken } from "./twitchAuth";
-
+import { getTwitchAppDetails, getTwitchBot } from "../db/devDb";
+// import { refreshAccessToken } from "./twitchAuth";
 import { RTDBIdle, RTDBEnd, RTDBStart } from "./realtimeDB";
 
-const db = admin.firestore();
 let clientId: string;
 
 interface TwitchRaffleSettings {
@@ -27,14 +25,9 @@ interface TwitchTokens {
   scope: string[];
 }
 
-async function getClientId(): Promise<string> {
-  const doc = await db.collection("dev").doc("twitchAppDetails").get();
-  return doc.data()!.clientId;
-}
-
 async function getStreamerChannel(
-  accessToken: string,
-  refreshToken: string
+  accessToken: string
+  // refreshToken: string
 ): Promise<string[]> {
   try {
     const res = await axios.get("https://api.twitch.tv/helix/users", {
@@ -50,23 +43,18 @@ async function getStreamerChannel(
     const streamerPassword: string = `oauth:${accessToken}`;
     return [streamerChannel, streamerID, streamerName, streamerPassword];
   } catch (err) {
-    try {
-      const [newAccessToken, newrefreshToken] = await refreshAccessToken(
-        refreshToken
-      );
-      return await getStreamerChannel(newAccessToken, newrefreshToken);
-    } catch (refreshErr) {
-      if (axios.isAxiosError(err)) {
-        throw err;
-      }
-    }
+    // try {
+    //   const [newAccessToken, newrefreshToken] = await refreshAccessToken(
+    //     refreshToken
+    //   );
+    //   return await getStreamerChannel(newAccessToken, newrefreshToken);
+    // } catch (refreshErr) {
+    //   if (axios.isAxiosError(err)) {
+    //     throw err;
+    //   }
+    // }
     throw new Error("Couldn't get Twitch user");
   }
-}
-
-async function getBotDetails() {
-  const doc = await db.collection("dev").doc("twitchBot").get();
-  return [doc.data()!.name, doc.data()!.token];
 }
 
 async function getStatus(
@@ -142,12 +130,12 @@ async function startRaffle(
 ) {
   console.log(settings, tokens);
   console.log("Start Twitch Raffle");
-  clientId = await getClientId();
+  clientId = (await getTwitchAppDetails()).clientId;
 
   try {
     const [streamerChannel, streamerID, streamerName, streamerPassword] =
-      await getStreamerChannel(tokens.accessToken, tokens.refreshToken);
-    const [botName, botPassword] = await getBotDetails();
+      await getStreamerChannel(tokens.accessToken);
+    const { name: botName, token: botPassword } = await getTwitchBot();
 
     const client = new tmi.Client({
       options: {

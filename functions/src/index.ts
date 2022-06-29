@@ -1,12 +1,9 @@
-/* eslint-disable import/first */
 import express, { Request, Response } from "express";
 import * as functions from "firebase-functions";
-import admin from "firebase-admin";
-
-admin.initializeApp();
-import userRoutes from "./routes/users";
-import addonRoutes from "./routes/addons";
-import authRoutes from "./routes/auth";
+import userRoutes from "./routes/userRoutes";
+import addonRoutes from "./routes/addonRoutes";
+import authRoutes from "./routes/authRoutes";
+import { verifyAppCheck } from "./config/firebase";
 
 const app = express();
 
@@ -23,7 +20,10 @@ app.use((req, res, next) => {
       : "https://dev-babble.web.app";
 
   res.setHeader("Access-Control-Allow-Origin", origin);
-  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, PUT, DELETE");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, PUT, DELETE, PATCH, POST"
+  );
   res.setHeader(
     "Access-Control-Allow-Headers",
     "X-Requested-With,content-type,appchecktoken"
@@ -47,7 +47,7 @@ app.use(async (req, res, next) => {
     return next();
   }
   try {
-    await admin.appCheck().verifyToken(appCheckToken);
+    await verifyAppCheck(appCheckToken);
     functions.logger.log("appcheck: valid");
   } catch (err) {
     functions.logger.log("appcheck: invalid");
@@ -58,7 +58,6 @@ app.use(async (req, res, next) => {
   return next();
 });
 
-// twitchService.checkChat();
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", addonRoutes);
 app.use("/api/v1", authRoutes);
