@@ -1,7 +1,7 @@
 import axios from "axios";
 import { addTokens, getTokens } from "../db/userDb";
 import { getTwitchAppDetails, getTwitchAddonScopes } from "../db/devDb";
-import { Addons, AuthInfo } from "../ts/types";
+import { Addons, AuthInfo, TwitchTokens } from "../ts/types";
 
 async function getPrevScope(user: string) {
   const tokens = (await getTokens(user, "twitch"))!;
@@ -61,7 +61,7 @@ export async function setAccessTokens(
     accessToken: res.data.access_token,
     refreshToken: res.data.refresh_token,
     scope: res.data.scope,
-  };
+  } as TwitchTokens;
   await addTokens(user, platform, tokens);
 }
 
@@ -83,7 +83,7 @@ async function refreshAccessTokens(
     accessToken: res.data.access_token,
     refreshToken: res.data.refresh_token,
     scope: res.data.scope,
-  };
+  } as TwitchTokens;
   await addTokens(user, platform, tokens);
   console.log(`${platform} tokens refreshed!`);
 

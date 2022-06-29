@@ -124,35 +124,28 @@ async function changeGame(
 
 async function start(settings: AutoTitleSettings, authInfo: AuthInfo) {
   const streamerId = await getStreamerId(authInfo);
-  const steamAPIKey =
-    typeof settings.steamAPIKey !== "undefined" ? settings.steamAPIKey : "";
-
-  try {
-    const game: Game = await getCurrentSteamGame(steamAPIKey, settings.steamId);
-    if (settings.changeGame) {
-      if (game.name || settings.justChatting) {
-        if (!game.name) {
-          await changeGame(authInfo, streamerId, "509658");
-        } else {
-          const gameId = await getGameId(authInfo, game.name);
-          if (gameId) {
-            await changeGame(authInfo, streamerId, gameId);
-          }
+  const steamAPIKey = settings.steamAPIKey ?? "";
+  const game: Game = await getCurrentSteamGame(steamAPIKey, settings.steamId);
+  if (settings.changeGame) {
+    if (game.name || settings.justChatting) {
+      if (!game.name) {
+        await changeGame(authInfo, streamerId, "509658");
+      } else {
+        const gameId = await getGameId(authInfo, game.name);
+        if (gameId) {
+          await changeGame(authInfo, streamerId, gameId);
         }
       }
     }
-    if (settings.customTitle && game.name) {
-      const title = await generateTitle(
-        settings.customTitle,
-        game,
-        steamAPIKey,
-        settings.steamId
-      );
-      await changeTitle(authInfo, streamerId, title);
-    }
-  } catch (error) {
-    console.log("timer");
-    throw error;
+  }
+  if (settings.customTitle && game.name) {
+    const title = await generateTitle(
+      settings.customTitle,
+      game,
+      steamAPIKey,
+      settings.steamId
+    );
+    await changeTitle(authInfo, streamerId, title);
   }
 }
 

@@ -56,7 +56,7 @@ export type TwitchRaffleSettings = RaffleSettings & {
   subPrivilege: number;
 };
 export type YoutubeRaffleSettings = RaffleSettings & {
-  subbOnly: boolean;
+  subOnly: boolean;
   subPrivilege: number;
   memberOnly: boolean;
   memberPrivilege: number;
@@ -104,7 +104,13 @@ export type TwitchTokens = {
   scope: string[];
 };
 
-export type Tokens = TwitchTokens;
+export type YoutubeTokens = {
+  accessToken: string;
+  refreshToken: string;
+  scope: string[];
+};
+
+export type Tokens = TwitchTokens | YoutubeTokens;
 
 export type AuthInfo = {
   user: string;
