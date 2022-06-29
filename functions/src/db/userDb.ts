@@ -1,4 +1,4 @@
-import db from "../config/firebase";
+import { db } from "../config/firebase";
 import { Addon, AddonSettings, Tokens, User } from "../ts/types";
 
 // User functions
