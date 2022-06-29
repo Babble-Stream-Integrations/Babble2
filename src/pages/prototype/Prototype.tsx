@@ -1,7 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import PrototypeComponent from "../../components/prototype/PrototypeComponent";
-import Prototype_modal from "../../components/prototypeModal/PrototypeModal";
+import PrototypeModal from "../../components/prototypeModal/PrototypeModal";
+import BABalert from "../../components/library/alert/BABalert";
+import StartRaffleNotification from "../../components/startRaffleNotification/StartRaffleNotification";
 
 const uuid = localStorage.getItem("UUID");
 const baseURL =
@@ -13,15 +15,21 @@ const origin =
     ? "https://dev-babble.web.app"
     : "http://localhost:3000";
 
+const RaffleAlertStyle = {
+  borderRadius: "30px",
+  margin: "50px",
+  backgroundColor: "var(--offWhiteTwo)",
+  // transform: "translateX(1000px)",
+};
+
 function Prototype() {
   const [Pmodalshow, setPmodalshow] = useState(true);
+  const [raffleAlertShow, setRaffleAlertShow] = useState(false);
   useEffect(() => {
     if (uuid === null) {
       setPmodalshow(true);
-      console.log("F");
     } else {
       setPmodalshow(false);
-      console.log("testtest");
     }
 
     const params = window.location.search;
@@ -49,10 +57,22 @@ function Prototype() {
         });
     }
   }, []);
+
   return (
     <div className="prototype-container">
-      <Prototype_modal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
-      <PrototypeComponent Pmodalshow={Pmodalshow} />
+      <PrototypeModal Pmodalshow={Pmodalshow} SetPmodalShow={setPmodalshow} />
+      <BABalert
+        Position="TopRight"
+        ContainerStyle={RaffleAlertStyle}
+        raffleAlertShow={raffleAlertShow}
+        setRaffleAlertShow={setRaffleAlertShow}
+      >
+        <StartRaffleNotification />
+      </BABalert>
+      <PrototypeComponent
+        Pmodalshow={Pmodalshow}
+        setRaffleAlertShow={setRaffleAlertShow}
+      />
     </div>
   );
 }
