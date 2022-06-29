@@ -100,11 +100,7 @@ function pickWinner(
   return winnerArray;
 }
 
-async function start(
-  settings: TwitchRaffleSettings,
-  authInfo: AuthInfo,
-  uniqueString: string
-) {
+async function start(settings: TwitchRaffleSettings, authInfo: AuthInfo) {
   console.log(settings, authInfo);
   console.log("Start Twitch Raffle");
 
@@ -128,7 +124,7 @@ async function start(
       streamerChannel,
       `Raffle started! Type ${settings.enterMessage} to enter`
     );
-    RTDBStart(uniqueString, settings.duration);
+    RTDBStart(authInfo.uniqueString, settings.duration);
   });
 
   const usersEntered: string[] = [];
@@ -168,8 +164,8 @@ async function start(
     );
     console.log("Winners:", winners);
 
-    RTDBEnd(uniqueString, winners);
-    RTDBIdle(uniqueString);
+    RTDBEnd(authInfo.uniqueString, winners);
+    RTDBIdle(authInfo.uniqueString);
 
     if (settings.announceWinners) {
       client.say(

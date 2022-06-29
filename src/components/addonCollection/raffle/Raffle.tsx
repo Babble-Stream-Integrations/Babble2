@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import * as location from "./RaffleLocations";
 import { ChooseRaffleAnimation } from "./RaffleAnimation";
 import RaffleVisualStart from "./RaffleVisualStart";
-import "./Raffle.css";
 import RaffleVisualCountdown from "./RaffleVisualCountdown";
+import RaffleVisualWinners from "./RaffleVisualWinners";
+import "./Raffle.css";
+import { convertWinnerArray } from "./RaffleConvertWinnerArray";
 
 interface addonTypes {
   data: object;
@@ -14,7 +16,8 @@ interface addonTypes {
 
 function Raffle({ dataRecieved, data }: addonTypes) {
   const [state, setState] = useState(0);
-  const [time, setTime] = useState(60);
+  const [time, setTime] = useState(80);
+  const [raffleWinners, setRaffleWinners] = useState<string[]>([]);
   useEffect(() => {
     console.log(state);
     const styling = data["styling" as keyof typeof data];
@@ -49,6 +52,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
         const eventType = data.type;
         switch (eventType) {
           case "start":
+            setTime(data.duration - 12);
             console.log("startcase");
             raffle?.style.setProperty("animation-play-state", "running");
             raffle?.style.setProperty("display", "flex");
@@ -61,7 +65,7 @@ function Raffle({ dataRecieved, data }: addonTypes) {
               raffle?.offsetWidth;
               setState(1);
               // Setting the time of animation-delay
-              const animationDuration = time + 3;
+              const animationDuration = time + 1;
               raffle?.style.setProperty(
                 "animation-delay",
                 "0s, " + animationDuration + "s"
@@ -73,17 +77,28 @@ function Raffle({ dataRecieved, data }: addonTypes) {
             }, 7000);
             break;
           case "end":
-            setState(2);
             console.log("endcase");
+            raffle?.classList.remove(animationClass);
+            raffle?.style.setProperty("display", "none");
+            raffle?.style.removeProperty("animation-play-state");
+            raffle?.style.removeProperty("animation-delay");
+            raffle?.offsetWidth;
+            setState(2);
+            setRaffleWinners(convertWinnerArray(data.winners));
+            raffle?.classList.add(animationClass);
+            raffle?.style.setProperty("animation-play-state", "running");
+            raffle?.style.setProperty("display", "flex");
+            setTimeout(() => {
+              raffle?.style.setProperty("animation-play-state", "paused");
+              raffle?.style.setProperty("display", "none");
+              raffle?.style.removeProperty(animationClass);
+              raffle?.style.removeProperty("animation-delay");
+              raffle?.offsetWidth;
+              setState(0);
+            }, 7000);
             break;
           case "idle":
             console.log("idlecase");
-            // Reset all values of animation so the animation can be started again
-            raffle?.style.setProperty("animation-play-state", "paused");
-            raffle?.style.setProperty("display", "none");
-            raffle?.style.removeProperty(animationClass);
-            raffle?.style.removeProperty("animation-delay");
-            setState(0);
             break;
         }
       });
@@ -95,8 +110,13 @@ function Raffle({ dataRecieved, data }: addonTypes) {
         <div id="raffle" className="raffle">
           {
             {
-              0: <RaffleVisualStart />,
+              0: (
+                <RaffleVisualStart
+                  enterMessage={data["enterMessage" as keyof typeof data]}
+                />
+              ),
               1: <RaffleVisualCountdown time={time} />,
+              2: <RaffleVisualWinners raffleWinners={raffleWinners} />,
             }[state]
           }
         </div>

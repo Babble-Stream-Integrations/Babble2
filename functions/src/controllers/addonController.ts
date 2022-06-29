@@ -14,7 +14,10 @@ import {
 import { getTwitchAppDetails } from "../db/devDb";
 
 async function runAddon(user: string, addon: string, addonType: Addons) {
-  const { type, platform, settings } = await getAddon(user, addon);
+  const { type, platform, settings, uniqueString } = await getAddon(
+    user,
+    addon
+  );
   if (type !== addonType) {
     throw new Error(`Wrong type of addon: expected ${addonType} addon`);
   }
@@ -26,6 +29,7 @@ async function runAddon(user: string, addon: string, addonType: Addons) {
     platform,
     tokens: await getTokens(user, platform),
     clientId: (await getTwitchAppDetails()).clientId,
+    uniqueString,
   };
 
   switch (platform) {

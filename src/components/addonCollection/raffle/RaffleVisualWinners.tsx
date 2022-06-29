@@ -1,12 +1,11 @@
-import React from "react";
 import ticketlogo from "../../../assets/Ticket-icon.png";
 import "./Raffle.css";
 
-interface raffleVisualStartTypes {
-  enterMessage: string;
+interface RaffleVisualWinnersTypes {
+  raffleWinners: string[];
 }
 
-function RaffleVisualStart({ enterMessage }: raffleVisualStartTypes) {
+function RaffleVisualWinners({ raffleWinners }: RaffleVisualWinnersTypes) {
   return (
     <>
       <div className="raffle__container">
@@ -19,10 +18,15 @@ function RaffleVisualStart({ enterMessage }: raffleVisualStartTypes) {
         </div>
         <div className="raffle__text">
           <div className="raffle__title">
-            Raffle <b>starting</b>!
+            Raffle <b>Finished</b>!
           </div>
           <div className="raffle__subtitle">
-            Use <b>{enterMessage}</b> to enter.
+            Here are the <b>winners</b>:
+          </div>
+          <div className="raffle__winners">
+            {raffleWinners.map((a, i) => (
+              <p key={i}>{a}</p>
+            ))}
           </div>
         </div>
       </div>
@@ -30,4 +34,4 @@ function RaffleVisualStart({ enterMessage }: raffleVisualStartTypes) {
   );
 }
 
-export default RaffleVisualStart;
+export default RaffleVisualWinners;

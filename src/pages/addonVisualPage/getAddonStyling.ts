@@ -14,6 +14,7 @@ export async function getAddonStyling(
     const stateData = {
       uniqueString: docSnap.data()["uniqueString"],
       styling: docSnap.data()["styling"],
+      enterMessage: docSnap.data()["settings"]["enterMessage"],
     };
     return setDataState(stateData);
   } else {
