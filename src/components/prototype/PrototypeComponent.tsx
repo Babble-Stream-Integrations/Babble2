@@ -327,18 +327,33 @@ function PrototypeComponent({
                         Origin: origin,
                         appchecktoken: appcheck,
                       },
-                      body: JSON.stringify({
-                        announceWinners: raffleAnnounceWinners,
-                        followOnly: raffleFreeOnly,
-                        winnerAmount: raffleWinnerAmount,
-                        useMyAccount: raffleMyAccount,
-                        subOnly: rafflePaidOnly,
-                        duplicateWinners: raffleDuplicateWinners,
-                        duration: raffleDuration,
-                        followPrivilege: raffleFreePrivilege,
-                        subPrivilege: rafflePaidPrivilege,
-                        enterMessage: raffleEnterMessage,
-                      }),
+                      body: JSON.stringify(
+                        isYoutube
+                          ? {
+                              announceWinners: raffleAnnounceWinners,
+                              subOnly: raffleFreeOnly,
+                              winnerAmount: raffleWinnerAmount,
+                              useMyAccount: raffleMyAccount,
+                              memberOnly: rafflePaidOnly,
+                              duplicateWinners: raffleDuplicateWinners,
+                              duration: raffleDuration,
+                              subPrivilege: raffleFreePrivilege,
+                              memberPrivilege: rafflePaidPrivilege,
+                              enterMessage: raffleEnterMessage,
+                            }
+                          : {
+                              announceWinners: raffleAnnounceWinners,
+                              followOnly: raffleFreeOnly,
+                              winnerAmount: raffleWinnerAmount,
+                              useMyAccount: raffleMyAccount,
+                              subOnly: rafflePaidOnly,
+                              duplicateWinners: raffleDuplicateWinners,
+                              duration: raffleDuration,
+                              followPrivilege: raffleFreePrivilege,
+                              subPrivilege: rafflePaidPrivilege,
+                              enterMessage: raffleEnterMessage,
+                            }
+                      ),
                     }
                   )
                     .then((response) =>
