@@ -42,27 +42,6 @@ router.param("platform", async (req, res, next, platform) => {
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       required:
- *         - displayName
- *         - email
- *       properties:
- *         displayName:
- *           type: string
- *           description: The Full Name of the User's Google Account
- *         email:
- *           type: string
- *           description: The User's Google Mail
- *       example:
- *         displayName: Joas Boevink
- *         email: joas.boevink@gmail.com
- */
-
-/**
- * @swagger
  * tags:
  *   name: Users
  *   description: User Routes

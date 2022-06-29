@@ -21,7 +21,7 @@ const options = {
       },
     ],
   },
-  apis: ["./lib/routes/*.js"],
+  apis: ["./functions/lib/routes/*.js", "./functions/lib/index.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(options);
@@ -79,3 +79,32 @@ app.get("/", (_req: Request, res: Response) => {
 app.listen(5000, () => {
   console.log(`Api docs listening on port 5000`);
 });
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - displayName
+ *         - email
+ *       properties:
+ *         displayName:
+ *           type: string
+ *           description: The Full Name of the User's Google Account
+ *         email:
+ *           type: string
+ *           description: The User's Google Mail
+ *       example:
+ *         displayName: Joas Boevink
+ *         email: joas.boevink@gmail.com
+ *
+ *     Addon:
+ *       type: object
+ *       properties:
+ *         displayName:
+ *           type: string
+ *         email:
+ *           type: string
+ */
