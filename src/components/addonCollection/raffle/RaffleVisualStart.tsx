@@ -2,7 +2,11 @@ import React from "react";
 import ticketlogo from "../../../assets/Ticket-icon.png";
 import "./Raffle.css";
 
-function RaffleVisualStart() {
+interface raffleVisualStartTypes {
+  enterMessage: string;
+}
+
+function RaffleVisualStart({ enterMessage }: raffleVisualStartTypes) {
   return (
     <>
       <div className="raffle__container">
@@ -18,7 +22,7 @@ function RaffleVisualStart() {
             Raffle <b>starting</b>!
           </div>
           <div className="raffle__subtitle">
-            Use <b>/join</b> to enter.
+            Use <b>{enterMessage}</b> to enter.
           </div>
         </div>
       </div>

@@ -110,7 +110,11 @@ function Raffle({ dataRecieved, data }: addonTypes) {
         <div id="raffle" className="raffle">
           {
             {
-              0: <RaffleVisualStart />,
+              0: (
+                <RaffleVisualStart
+                  enterMessage={data["enterMessage" as keyof typeof data]}
+                />
+              ),
               1: <RaffleVisualCountdown time={time} />,
               2: <RaffleVisualWinners raffleWinners={raffleWinners} />,
             }[state]
