@@ -8,9 +8,8 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 export const addUser = async (req: Request, res: Response) => {
-  const { user } = req.params;
-  await userDb.addUser(user, req.body);
-  return res.send({ result: `user ${user} added to database!` });
+  await userDb.addUser(req.params.user, req.body);
+  return res.send({ result: `user ${req.user} added to database!` });
 };
 
 export const getUser = async (req: Request, res: Response) => {

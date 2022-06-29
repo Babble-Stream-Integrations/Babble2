@@ -1,48 +1,5 @@
 import { db } from "../config/firebase";
-
-// Interface
-interface User {
-  displayName: string;
-  email: string;
-}
-
-interface TwitchOptions {
-  followOnly: boolean;
-  followPrivilege: number;
-  subOnly: boolean;
-  subPrivilege: number;
-}
-interface YoutubeOptions {
-  subOnly: boolean;
-  subPrivilege: number;
-  memberOnly: boolean;
-  memberPrivilege: number;
-}
-interface RaffleSettings {
-  announceWinners: boolean;
-  duplicateWinners: boolean;
-  duration: number;
-  enterMessage: string;
-  useMyAccount: boolean;
-  winnerAmount: number;
-  platformOptions: TwitchOptions | YoutubeOptions;
-}
-interface Addon {
-  platform: string;
-  type: string;
-  uniqueString: string;
-  settings: RaffleSettings;
-  looks?: unknown;
-  designSettings?: unknown;
-}
-
-interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-  scope: string[];
-  expiresIn: number;
-  tokenType: string;
-}
+import { Addon, AddonSettings, Tokens, TwitchTokens, User } from "../ts/types";
 
 // User functions
 export async function getAllUsers() {
@@ -56,10 +13,7 @@ export async function addUser(user: string, data: User) {
 
 export async function getUser(user: string) {
   const doc = await db.doc(`users/${user}`).get();
-  if (!doc.exists) {
-    throw new Error("User document not found");
-  }
-  return doc.data()!;
+  return doc.data() as User;
 }
 
 export async function deleteUser(user: string) {
@@ -78,10 +32,7 @@ export async function addAddon(user: string, addon: string, data: Addon) {
 
 export async function getAddon(user: string, addon: string) {
   const doc = await db.doc(`users/${user}/addons/${addon}`).get();
-  if (!doc.exists) {
-    throw new Error("Addon document not found");
-  }
-  return doc.data()!;
+  return doc.data() as Addon;
 }
 
 export async function deleteAddon(user: string, addon: string) {
@@ -91,7 +42,7 @@ export async function deleteAddon(user: string, addon: string) {
 export async function updateAddonSettings(
   user: string,
   addon: string,
-  data: RaffleSettings
+  data: AddonSettings
 ) {
   await db
     .doc(`users/${user}/addons/${addon}`)
@@ -107,22 +58,14 @@ export async function getAllTokens(user: string) {
 export async function addTokens(
   user: string,
   platform: string,
-  tokens: Tokens
+  tokens: TwitchTokens
 ) {
   await db.doc(`users/${user}/addons/${platform}`).set(tokens);
 }
 
 export async function getTokens(user: string, platform: string) {
   const doc = await db.doc(`users/${user}/tokens/${platform}`).get();
-  if (!doc.exists) {
-    throw new Error("Token document not found");
-  }
-  const {
-    access_token: accessToken,
-    refresh_token: refreshToken,
-    scope,
-  } = doc.data()!;
-  return { accessToken, refreshToken, scope };
+  return doc.data() as Tokens;
 }
 
 export async function deleteTokens(user: string, platform: string) {

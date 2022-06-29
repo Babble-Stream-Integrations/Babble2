@@ -1,8 +1,9 @@
 import express from "express";
-import authController from "../controllers/authController";
+import * as authController from "../controllers/authController";
 
 const router = express.Router();
 
-router.get("/auth/:platform/:uuid/:addonType", authController);
+router.get("/getAuthCode/:user/:platform/:addonType", authController.getCode);
+router.post("/setAccessTokens/:user/:platform/:code", authController.setTokens);
 
 export default router;

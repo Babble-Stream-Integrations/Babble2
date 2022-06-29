@@ -1,14 +1,7 @@
 import axios from "axios";
-import { getTokens } from "../db/userDb";
+import { addTokens, getTokens } from "../db/userDb";
 import { getTwitchAppDetails, getTwitchAddonScopes } from "../db/devDb";
-
-interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-  scope: string[];
-  expiresIn?: number;
-  tokenType?: string;
-}
+import { Addons, AuthInfo } from "../ts/types";
 
 async function getPrevScope(user: string) {
   const tokens = (await getTokens(user, "twitch"))!;
@@ -18,30 +11,26 @@ async function getPrevScope(user: string) {
   return [];
 }
 
-async function getNextScope(addon: string) {
-  const scope = (await getTwitchAddonScopes()).get(addon);
-  if (!scope) {
-    throw new Error("Wrong addon specified!");
-  }
-  return scope;
+async function getNextScope(addon: Addons) {
+  const scope = await getTwitchAddonScopes();
+  return scope[addon];
 }
 
-async function calculateScope(user: string, addon: string) {
+async function calculateScope(user: string, addon: Addons) {
   // Merge prev&next scopes
   const scopes = (await getPrevScope(user)).concat(await getNextScope(addon));
 
   // Remove dupes
-  let result = scopes.filter(
+  const cleanScopes = scopes.filter(
     (item: string, idx: number) => scopes.indexOf(item) === idx
   );
 
   // Space seperated list for Twitch syntax
-  result = result.join(" ");
-
+  const result = cleanScopes.join(" ");
   return result;
 }
 
-export async function getCode(user: string, addon: string) {
+export async function getAuthCode(user: string, addon: Addons) {
   const { clientId, redirectURL, state } = await getTwitchAppDetails();
   const scopes = await calculateScope(user, addon);
 
@@ -52,7 +41,11 @@ export async function getCode(user: string, addon: string) {
   return authUrl;
 }
 
-export async function getTokensWithCode(code: string): Promise<Tokens> {
+export async function setAccessTokens(
+  user: string,
+  platform: string,
+  code: string
+): Promise<void> {
   const { clientId, clientSecret, redirectURL } = await getTwitchAppDetails();
 
   const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
@@ -64,31 +57,54 @@ export async function getTokensWithCode(code: string): Promise<Tokens> {
       redirect_uri: redirectURL,
     },
   });
-  return res.data as Tokens;
+  const tokens = {
+    accessToken: res.data.access_token,
+    refreshToken: res.data.refresh_token,
+    scope: res.data.scope,
+  };
+  await addTokens(user, platform, tokens);
 }
 
-// export async function refreshAccessToken(
-//   refreshToken: string
-// ): Promise<string[]> {
-//   const { clientId, clientSecret } = await getTwitchAppDetails();
+async function refreshAccessTokens(
+  refreshToken: string,
+  user: string,
+  platform: string
+): Promise<string> {
+  const { clientId, clientSecret } = await getTwitchAppDetails();
+  const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
+    params: {
+      refresh_token: refreshToken,
+      client_id: clientId,
+      client_secret: clientSecret,
+      grant_type: "refresh_token",
+    },
+  });
+  const tokens = {
+    accessToken: res.data.access_token,
+    refreshToken: res.data.refresh_token,
+    scope: res.data.scope,
+  };
+  await addTokens(user, platform, tokens);
+  console.log(`${platform} tokens refreshed!`);
 
-//   try {
-//     const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
-//       params: {
-//         refresh_token: refreshToken,
-//         client_id: clientId,
-//         client_secret: clientSecret,
-//         grant_type: "refresh_token",
-//       },
-//     });
-//     db.collection("users")
-//       .doc("sf")
-//       .collection("tokens")
-//       .doc("twitch")
-//       .set(res.data);
+  return tokens.accessToken;
+}
 
-//     return [res.data.access_token, res.data.refresh_token];
-//   } catch (err) {
-//     throw new Error("Couldn't refresh accessToken");
-//   }
-// }
+export async function authErrorHandler<Type>(
+  error: unknown,
+  oldAuthInfo: AuthInfo,
+  func: (authInfo: AuthInfo, ...args: any[]) => Type,
+  ...funcArgs: unknown[]
+): Promise<Type> {
+  if (axios.isAxiosError(error) && error.response?.status === 401) {
+    const newAuthInfo = oldAuthInfo;
+    newAuthInfo.tokens.accessToken = await refreshAccessTokens(
+      oldAuthInfo.tokens.refreshToken,
+      oldAuthInfo.user,
+      oldAuthInfo.platform
+    );
+
+    return func(newAuthInfo, ...funcArgs);
+  }
+  throw error;
+}

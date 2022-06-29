@@ -1,66 +1,51 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { getAddon, getTokens } from "../db/userDb";
 // import youtubeRaffle from "../services/youtubeRaffle";
 import twitchRaffle from "../services/twitchRaffle";
 // import youtubeAutotitle from "../services/youtubeAutotitle";
 import twitchAutoTitle from "../services/twitchAutoTitle";
+import {
+  Addons,
+  AuthInfo,
+  AutoTitleSettings,
+  TwitchRaffleSettings,
+} from "../ts/types";
+import { getTwitchAppDetails } from "../db/devDb";
 
-// eslint-disable-next-line consistent-return
-async function runAddon(user: string, addon: string, addonType: string) {
+async function runAddon(user: string, addon: string, addonType: Addons) {
   const { type, platform, settings } = await getAddon(user, addon);
   if (type !== addonType) {
     throw new Error(`Wrong type of addon: expected ${addonType} addon`);
   }
   if (platform !== "twitch" && platform !== "youtube") {
-    throw new Error("no platform detected");
+    throw new Error("No platform detected");
   }
-  const tokens = await getTokens(user, platform);
+  const authInfo: AuthInfo = {
+    user,
+    platform,
+    tokens: await getTokens(user, platform),
+    clientId: (await getTwitchAppDetails()).clientId,
+  };
 
   if (platform === "youtube") {
-    return { result: "Youtube addons aren't developed yet!" };
+    return;
   }
   if (platform === "twitch") {
     if (addonType === "raffleSystem") {
-      await twitchRaffle.startRaffle(settings, tokens);
-      return { result: "Twitch raffle has been succesfully finished!" };
+      await twitchRaffle.start(settings as TwitchRaffleSettings, authInfo);
     }
     if (addonType === "automaticStreamTitle") {
-      await twitchAutoTitle.changeChannelInfo(settings, tokens);
-      return { result: "Twitch autoTitle has been succesfully finished!" };
+      await twitchAutoTitle.start(settings as AutoTitleSettings, authInfo);
     }
   }
 }
 
-export const runRaffle = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    res.send(await runAddon(req.body.user, req.body.addon, "raffleSystem"));
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(400).send({ error: error.message });
-    } else {
-      next(error);
-    }
-  }
+export const runRaffle = async (req: Request, res: Response) => {
+  await runAddon(req.body.user, req.body.addon, "raffleSystem");
+  res.send({ result: "Twitch raffle has been succesfully finished!" });
 };
 
-export const runAutoTitle = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    res.send(
-      await runAddon(req.body.user, req.body.addon, "automaticStreamTitle")
-    );
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(400).send({ error: error.message });
-    } else {
-      next(error);
-    }
-  }
+export const runAutoTitle = async (req: Request, res: Response) => {
+  await runAddon(req.body.user, req.body.addon, "automaticStreamTitle");
+  res.send({ result: "Twitch autoTitle has been succesfully finished!" });
 };
