@@ -117,6 +117,7 @@ export type AuthInfo = {
   platform: string;
   tokens: Tokens;
   clientId: string;
+  uniqueString: string;
 };
 
 //  SteamKit
