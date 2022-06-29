@@ -35,8 +35,8 @@ function Prototype() {
     const params = window.location.search;
     if (params.trim().length !== 0) {
       const codeParam = new URLSearchParams(params).get("code");
-      fetch(`${baseURL}/api/v1/users/${uuid}/tokens/twitch`, {
-        method: "PUT",
+      fetch(`${baseURL}/api/v1/setAccessTokens/${uuid}/twitch`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },

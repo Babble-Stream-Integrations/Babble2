@@ -13,7 +13,10 @@ import {
 import { getTwitchAppDetails } from "../db/devDb";
 
 async function runAddon(user: string, addon: string, addonType: Addons) {
-  const { type, platform, settings } = await getAddon(user, addon);
+  const { type, platform, settings, uniqueString } = await getAddon(
+    user,
+    addon
+  );
   if (type !== addonType) {
     throw new Error(`Wrong type of addon: expected ${addonType} addon`);
   }
@@ -32,7 +35,11 @@ async function runAddon(user: string, addon: string, addonType: Addons) {
   }
   if (platform === "twitch") {
     if (addonType === "raffleSystem") {
-      await twitchRaffle.start(settings as TwitchRaffleSettings, authInfo);
+      await twitchRaffle.start(
+        settings as TwitchRaffleSettings,
+        authInfo,
+        uniqueString
+      );
     }
     if (addonType === "automaticStreamTitle") {
       await twitchAutoTitle.start(settings as AutoTitleSettings, authInfo);

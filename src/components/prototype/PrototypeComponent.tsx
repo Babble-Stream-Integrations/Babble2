@@ -105,7 +105,7 @@ function PrototypeComponent({
               className="PC-button"
               onClick={() => {
                 fetch(
-                  `${baseURL}/api/v1/twitch/auth?uuid=${uuid}&addonName=raffle`,
+                  `${baseURL}/api/v1/getAuthCode/${uuid}/twitch/raffleSystem`,
                   {
                     headers: {
                       Origin: origin,
