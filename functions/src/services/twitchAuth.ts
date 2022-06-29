@@ -1,73 +1,36 @@
 import axios from "axios";
-import admin from "firebase-admin";
-
-const db = admin.firestore();
-
-interface TwitchAppDetails {
-  clientId: string;
-  clientSecret: string;
-  redirectURL: string;
-  state: string;
-}
-
-interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-  scope: string[];
-  expiresIn?: number;
-  tokenType?: string;
-}
-
-async function getTwitchAppDetails() {
-  const doc = await db.collection("dev").doc("twitchAppDetails").get();
-
-  const results: TwitchAppDetails = {
-    clientId: doc.data()!.clientId,
-    clientSecret: doc.data()!.clientSecret,
-    redirectURL: doc.data()!.redirectURL,
-    state: doc.data()!.state,
-  };
-  return results;
-}
+import { addTokens, getTokens } from "../db/userDb";
+import { getTwitchAppDetails, getTwitchAddonScopes } from "../db/devDb";
+import { Addons, AuthInfo } from "../ts/types";
 
 async function getPrevScope(user: string) {
-  const doc = await db
-    .collection("users")
-    .doc(user)
-    .collection("tokens")
-    .doc("twitch")
-    .get();
-
-  if (doc.exists && doc.data()!.scope) {
-    return doc.data()!.scope;
+  const tokens = (await getTokens(user, "twitch"))!;
+  if ("scope" in tokens) {
+    return tokens.scope;
   }
   return [];
 }
 
-async function getNextScope(addon: string) {
-  const doc = await db.collection("dev").doc("twitchAddonScopes").get();
-  if (!doc.exists) {
-    throw new Error("Wrong addon specified!");
-  }
-  return doc.data()![addon];
+async function getNextScope(addon: Addons) {
+  const scope = await getTwitchAddonScopes();
+  return scope[addon];
 }
 
-async function calculateScope(user: string, addon: string) {
+async function calculateScope(user: string, addon: Addons) {
   // Merge prev&next scopes
   const scopes = (await getPrevScope(user)).concat(await getNextScope(addon));
 
   // Remove dupes
-  let result = scopes.filter(
+  const cleanScopes = scopes.filter(
     (item: string, idx: number) => scopes.indexOf(item) === idx
   );
 
   // Space seperated list for Twitch syntax
-  result = result.join(" ");
-
+  const result = cleanScopes.join(" ");
   return result;
 }
 
-async function getCode(user: string, addon: string) {
+export async function getAuthCode(user: string, addon: Addons) {
   const { clientId, redirectURL, state } = await getTwitchAppDetails();
   const scopes = await calculateScope(user, addon);
 
@@ -75,10 +38,14 @@ async function getCode(user: string, addon: string) {
     `https://id.twitch.tv/oauth2/authorize` +
     `?response_type=code&force_verify=true&client_id=${clientId}&redirect_uri=${redirectURL}&scope=${scopes}&state=${state}`;
 
-  return { url: authUrl };
+  return authUrl;
 }
 
-async function getTokensWithCode(code: string): Promise<Tokens> {
+export async function setAccessTokens(
+  user: string,
+  platform: string,
+  code: string
+): Promise<void> {
   const { clientId, clientSecret, redirectURL } = await getTwitchAppDetails();
 
   const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
@@ -90,31 +57,54 @@ async function getTokensWithCode(code: string): Promise<Tokens> {
       redirect_uri: redirectURL,
     },
   });
-  return res.data as Tokens;
+  const tokens = {
+    accessToken: res.data.access_token,
+    refreshToken: res.data.refresh_token,
+    scope: res.data.scope,
+  };
+  await addTokens(user, platform, tokens);
 }
 
-async function refreshAccessToken(refreshToken: string): Promise<string[]> {
+async function refreshAccessTokens(
+  refreshToken: string,
+  user: string,
+  platform: string
+): Promise<string> {
   const { clientId, clientSecret } = await getTwitchAppDetails();
+  const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
+    params: {
+      refresh_token: refreshToken,
+      client_id: clientId,
+      client_secret: clientSecret,
+      grant_type: "refresh_token",
+    },
+  });
+  const tokens = {
+    accessToken: res.data.access_token,
+    refreshToken: res.data.refresh_token,
+    scope: res.data.scope,
+  };
+  await addTokens(user, platform, tokens);
+  console.log(`${platform} tokens refreshed!`);
 
-  try {
-    const res = await axios.post("https://id.twitch.tv/oauth2/token", null, {
-      params: {
-        refresh_token: refreshToken,
-        client_id: clientId,
-        client_secret: clientSecret,
-        grant_type: "refresh_token",
-      },
-    });
-    db.collection("users")
-      .doc("sf")
-      .collection("tokens")
-      .doc("twitch")
-      .set(res.data);
-
-    return [res.data.access_token, res.data.refresh_token];
-  } catch (err) {
-    throw new Error("Couldn't refresh accessToken");
-  }
+  return tokens.accessToken;
 }
 
-export { getCode, getTokensWithCode, refreshAccessToken };
+export async function authErrorHandler<Type>(
+  error: unknown,
+  oldAuthInfo: AuthInfo,
+  func: (authInfo: AuthInfo, ...args: any[]) => Type,
+  ...funcArgs: unknown[]
+): Promise<Type> {
+  if (axios.isAxiosError(error) && error.response?.status === 401) {
+    const newAuthInfo = oldAuthInfo;
+    newAuthInfo.tokens.accessToken = await refreshAccessTokens(
+      oldAuthInfo.tokens.refreshToken,
+      oldAuthInfo.user,
+      oldAuthInfo.platform
+    );
+
+    return func(newAuthInfo, ...funcArgs);
+  }
+  throw error;
+}
