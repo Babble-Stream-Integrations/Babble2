@@ -84,6 +84,12 @@ app.listen(5000, () => {
  * @swagger
  * components:
  *   schemas:
+ *     Addons:
+ *       type: string
+ *       enum: [raffleSystem, automaticStreamTitle]
+ *     Platforms:
+ *       type: string
+ *       enum: [twitch, youtube]
  *     User:
  *       type: object
  *       required:
@@ -103,8 +109,16 @@ app.listen(5000, () => {
  *     Addon:
  *       type: object
  *       properties:
- *         displayName:
+ *         platform:
+ *           $ref: '#/components/schemas/Platforms'
+ *         settings:
  *           type: string
- *         email:
+ *         styling:
  *           type: string
+ *         type:
+ *           $ref: '#/components/schemas/Addons'
+ *         uniqueString:
+ *           type: string
+ *
+ *
  */
