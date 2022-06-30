@@ -65,7 +65,7 @@ export type YoutubeRaffleSettings = RaffleSettings & {
 export type AutoTitleSettings = {
   changeGame: boolean;
   customTitle?: string;
-  justChatting: boolean;
+  justChatting?: boolean;
   steamAPIKey?: string;
   steamId: string;
 };

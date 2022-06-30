@@ -138,6 +138,12 @@ app.listen(5000, () => {
  *         - borderRadius
  *         - borderSize
  *         - iconColor
+ *         - position
+ *         - primaryTextColor
+ *         - primaryTextColor
+ *         - scale
+ *         - secondaryTextColor
+ *         - secondaryTextFont
  *       properties:
  *         backgroundColor:
  *           type: string
@@ -170,6 +176,13 @@ app.listen(5000, () => {
  *
  *     RaffleSettings:
  *       type: object
+ *       required:
+ *         - announceWinners
+ *         - duplicateWinners
+ *         - duration
+ *         - enterMessage
+ *         - useMyAccount
+ *         - winnerAmount
  *       properties:
  *         announceWinners:
  *           type: boolean
@@ -195,6 +208,11 @@ app.listen(5000, () => {
  *       allOf:
  *         - $ref: '#/components/schemas/RaffleSettings'
  *         - type: object
+ *           required:
+ *             - followOnly
+ *             - followPrivilege
+ *             - subOnly
+ *             - subPrivilege
  *           properties:
  *             followOnly:
  *                type: boolean
@@ -213,6 +231,11 @@ app.listen(5000, () => {
  *       allOf:
  *         - $ref: '#/components/schemas/RaffleSettings'
  *         - type: object
+ *           required:
+ *             - subOnly
+ *             - subPrivilege
+ *             - memberOnly
+ *             - memberPrivilege
  *           properties:
  *             subOnly:
  *                type: boolean
@@ -229,6 +252,9 @@ app.listen(5000, () => {
  *
  *     AutoTitleSettings:
  *       type: object
+ *       required:
+ *         - changeGame
+ *         - steamId
  *       properties:
  *         changeGame:
  *           type: boolean
@@ -252,6 +278,10 @@ app.listen(5000, () => {
  *
  *     TwitchTokens:
  *       type: object
+ *       required:
+ *         - accessToken
+ *         - refreshToken
+ *         - scope
  *       properties:
  *         accessToken:
  *           type: string
