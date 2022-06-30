@@ -52,7 +52,7 @@ function Prototype() {
         }
       } else if (location.search.match(/code=([^&]*)/g)) {
         const codeParam = new URLSearchParams(params).get("code");
-        fetch(`${baseURL}/api/v1/setAccessTokens/${uuid}/twitch`, {
+        fetch(`${baseURL}/api/v1/setAccessTokens/${uuid}/youtube`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
