@@ -56,7 +56,7 @@ export type TwitchRaffleSettings = RaffleSettings & {
   subPrivilege: number;
 };
 export type YoutubeRaffleSettings = RaffleSettings & {
-  subbOnly: boolean;
+  subOnly: boolean;
   subPrivilege: number;
   memberOnly: boolean;
   memberPrivilege: number;

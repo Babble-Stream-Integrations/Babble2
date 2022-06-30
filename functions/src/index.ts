@@ -84,12 +84,15 @@ app.listen(5000, () => {
  * @swagger
  * components:
  *   schemas:
- *     Addons:
- *       type: string
- *       enum: [raffleSystem, automaticStreamTitle]
  *     Platforms:
  *       type: string
+ *       description: Available platforms
  *       enum: [twitch, youtube]
+ *     Addons:
+ *       type: string
+ *       description: Available addonTypes
+ *       enum: [raffleSystem, automaticStreamTitle]
+ *
  *     User:
  *       type: object
  *       required:
@@ -98,27 +101,167 @@ app.listen(5000, () => {
  *       properties:
  *         displayName:
  *           type: string
- *           description: The Full Name of the User's Google Account
+ *           description: Automatically defined full name of Google Account
  *         email:
  *           type: string
- *           description: The User's Google Mail
+ *           description: Automatically defined email of Google Account
  *       example:
  *         displayName: Joas Boevink
  *         email: joas.boevink@gmail.com
  *
  *     Addon:
  *       type: object
+ *       required:
+ *         - platform
+ *         - settings
+ *         - styling
+ *         - type
+ *         - uniqueString
  *       properties:
  *         platform:
  *           $ref: '#/components/schemas/Platforms'
  *         settings:
- *           type: string
+ *           $ref: '#/components/schemas/AddonSettings'
  *         styling:
- *           type: string
+ *           $ref: '#/components/schemas/AddonStyling'
  *         type:
  *           $ref: '#/components/schemas/Addons'
  *         uniqueString:
  *           type: string
+ *           description: Automatically generated string used for creating a unique link for the OBS browser source
+ *
+ *     AddonStyling:
+ *       type: object
+ *       required:
+ *         - backgroundColor
+ *         - borderColor
+ *         - borderRadius
+ *         - borderSize
+ *         - iconColor
+ *       properties:
+ *         backgroundColor:
+ *           type: string
+ *         borderColor:
+ *           type: string
+ *         borderRadius:
+ *           type: string
+ *         borderSize:
+ *           type: string
+ *         iconColor:
+ *           type: string
+ *         position:
+ *           type: number
+ *         primaryTextColor:
+ *           type: string
+ *         primaryTextFont:
+ *           type: string
+ *         scale:
+ *           type: number
+ *         secondaryTextColor:
+ *           type: string
+ *         secondaryTextFont:
+ *           type: string
+ *
+ *     AddonSettings:
+ *       oneOf:
+ *         - $ref: '#/components/schemas/TwitchRaffleSettings'
+ *         - $ref: '#/components/schemas/YoutubeRaffleSettings'
+ *         - $ref: '#/components/schemas/AutoTitleSettings'
+ *
+ *     RaffleSettings:
+ *       type: object
+ *       properties:
+ *         announceWinners:
+ *           type: boolean
+ *           description: Announce the winners in the chat or only in the visual
+ *         duplicateWinners:
+ *           type: boolean
+ *           description: Allow users to win multiple times (possible due to privilege chance)
+ *         duration:
+ *           type: number
+ *           description: Amount of time for the raffle to run before selecting winners
+ *         enterMessage:
+ *           type: string
+ *           description: The message users need to type to enter the raffle
+ *         useMyAccount:
+ *           type: boolean
+ *           description: Send automated chat messages with the streamer account or a Babble bot account
+ *         winnerAmount:
+ *           type: number
+ *           description: Amount of possible winners
  *
  *
+ *     TwitchRaffleSettings:
+ *       allOf:
+ *         - $ref: '#/components/schemas/RaffleSettings'
+ *         - type: object
+ *           properties:
+ *             followOnly:
+ *                type: boolean
+ *                description: Only allow followers to enter the raffle
+ *             followPrivilege:
+ *                type: number
+ *                description: Increase chance of winning for followers
+ *             subOnly:
+ *                type: boolean
+ *                description: Only allow subscribers to enter the raffle
+ *             subPrivilege:
+ *                type: number
+ *                description: Increase chance of winning for subscribers
+ *
+ *     YoutubeRaffleSettings:
+ *       allOf:
+ *         - $ref: '#/components/schemas/RaffleSettings'
+ *         - type: object
+ *           properties:
+ *             subOnly:
+ *                type: boolean
+ *                description: Only allow subscribers to enter the raffle
+ *             subPrivilege:
+ *                type: number
+ *                description: Increase chance of winning for subscribers
+ *             memberOnly:
+ *                type: boolean
+ *                description: Only allow members to enter the raffle
+ *             memberPrivilege:
+ *                type: number
+ *                description: Increase chance of winning for members
+ *
+ *     AutoTitleSettings:
+ *       type: object
+ *       properties:
+ *         changeGame:
+ *           type: boolean
+ *           description: Change the stream directory based on the Steam game the streamer is playing (Twitch Only)
+ *         customTitle:
+ *           type: string
+ *           description: Change the stream title based on the Steam game the streamer is playing. This is a string with custom Babble variables defined as ${variable} (Currently available variables -> gameName, achievementsTotal, achievementsAchieved, achievementsLeft)
+ *         justChatting:
+ *           type: boolean
+ *           description: Change the stream directory to Just Chatting when no Steam game is detected. Only works when the changeGame property is true (Twitch Only)
+ *         steamAPIKey:
+ *           type: string
+ *           description: Personal Steam API Key to use the addon with a private Steam account
+ *         steamId:
+ *           type: string
+ *           description: Steam ID of the streamer's Steam Account
+ *
+ *     Tokens:
+ *       oneOf:
+ *         - $ref: '#/components/schemas/TwitchTokens'
+ *
+ *     TwitchTokens:
+ *       type: object
+ *       properties:
+ *         accessToken:
+ *           type: string
+ *           description: Automatically generated by Twitch
+ *         refreshToken:
+ *           type: string
+ *           description: Automatically generated by Twitch
+ *         scope:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Combined scopes of every addon the user has given permission of
  */
