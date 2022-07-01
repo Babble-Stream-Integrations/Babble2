@@ -99,7 +99,7 @@ export async function authErrorHandler<Type>(
   if (axios.isAxiosError(error) && error.response?.status === 401) {
     const newAuthInfo = oldAuthInfo;
     newAuthInfo.tokens.accessToken = await refreshAccessTokens(
-      oldAuthInfo.tokens.refreshToken,
+      oldAuthInfo.tokens.refreshToken!,
       oldAuthInfo.user,
       oldAuthInfo.platform
     );

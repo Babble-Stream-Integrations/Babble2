@@ -54,7 +54,7 @@ function PrototypeComponent({
       fetch(`${baseURL}/api/v1/users/${uuid}/addons/${addonName}`, {
         headers: {
           Origin: origin,
-          appchecktoken: appcheck,
+          // appchecktoken: appcheck,
         },
       })
         .then((response) => {
@@ -99,7 +99,7 @@ function PrototypeComponent({
                   {
                     headers: {
                       Origin: origin,
-                      appchecktoken: appcheck,
+                      // appchecktoken: appcheck,
                     },
                   }
                 )
@@ -126,7 +126,7 @@ function PrototypeComponent({
                   {
                     headers: {
                       Origin: origin,
-                      appchecktoken: appcheck,
+                      // appchecktoken: appcheck,
                     },
                   }
                 )
@@ -325,7 +325,7 @@ function PrototypeComponent({
                       headers: {
                         "Content-Type": "application/json",
                         Origin: origin,
-                        appchecktoken: appcheck,
+                        // appchecktoken: appcheck,
                       },
                       body: JSON.stringify(
                         isYoutube
@@ -388,7 +388,7 @@ function PrototypeComponent({
                   headers: {
                     "Content-Type": "application/json",
                     Origin: origin,
-                    appchecktoken: appcheck,
+                    // appchecktoken: appcheck,
                   },
                   body: JSON.stringify({
                     user: uuid,

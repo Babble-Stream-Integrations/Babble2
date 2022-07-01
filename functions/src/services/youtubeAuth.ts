@@ -53,11 +53,18 @@ export async function setAccessTokens(
 ): Promise<void> {
   const oauth2Client = await makeOauthClient();
   const { tokens } = await oauth2Client.getToken(code);
-  await addTokens(user, platform, {
-    accessToken: tokens.access_token!,
-    refreshToken: tokens.refresh_token!,
-    scope: tokens.scope?.split(" ")!,
-  });
+  if (tokens.refresh_token) {
+    await addTokens(user, platform, {
+      accessToken: tokens.access_token!,
+      refreshToken: tokens.refresh_token!,
+      scope: tokens.scope?.split(" ")!,
+    });
+  } else {
+    await addTokens(user, platform, {
+      accessToken: tokens.access_token!,
+      scope: tokens.scope?.split(" ")!,
+    });
+  }
 }
 
 export async function makeYoutubeClient(authInfo: AuthInfo) {

@@ -61,7 +61,8 @@ export async function addTokens(
   tokens: Tokens
 ) {
   console.log("New tokens received");
-  await db.doc(`users/${user}/tokens/${platform}`).set(tokens);
+
+  await db.doc(`users/${user}/tokens/${platform}`).set(tokens, { merge: true });
 }
 
 export async function getTokens(user: string, platform: string) {
