@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-// import * as functions from "firebase-functions";
+import * as functions from "firebase-functions";
 import axios from "axios";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
@@ -17,11 +17,16 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5000",
+        url: "https://europe-west1-babble-d6ef3.cloudfunctions.net/default/api/v1",
+        description: "Production Server",
+      },
+      {
+        url: "http://localhost:5001/babble-d6ef3/europe-west1/default/api/v1",
+        description: "Localhost",
       },
     ],
   },
-  apis: ["./functions/lib/routes/*.js", "./functions/lib/index.js"],
+  apis: ["./lib/routes/*.js", "./lib/index.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(options);
@@ -37,11 +42,16 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  const origin =
-    req.headers.origin === "http://localhost:3000"
-      ? "http://localhost:3000"
-      : "https://dev-babble.web.app";
-
+  console.log(process.env.NODE_ENV);
+  const origins = [
+    "http://localhost:3000",
+    "http://localhost:5000",
+    "https://babble.streamintegrations.com",
+    "https://dev-babble.web.app",
+  ];
+  const origin = origins.includes(req.headers.origin ?? "")
+    ? req.headers.origin!
+    : "";
   res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -75,7 +85,7 @@ app.get("/", (_req: Request, res: Response) => {
   });
 });
 
-// export default functions.region("europe-west1").https.onRequest(app);
+export default functions.region("europe-west1").https.onRequest(app);
 app.listen(5000, () => {
   console.log(`Api docs listening on port 5000`);
 });
@@ -86,12 +96,12 @@ app.listen(5000, () => {
  *   schemas:
  *     Platforms:
  *       type: string
- *       description: Available platforms
- *       enum: [twitch, youtube]
+ *       Available platforms: [twitch, youtube]
+ *       example: twitch
  *     Addons:
  *       type: string
- *       description: Available addonTypes
- *       enum: [raffleSystem, automaticStreamTitle]
+ *       Available addonTypes: [raffleSystem, automaticStreamTitle]
+ *       example: raffleSystem
  *
  *     User:
  *       type: object
@@ -129,6 +139,7 @@ app.listen(5000, () => {
  *         uniqueString:
  *           type: string
  *           description: Automatically generated string used for creating a unique link for the OBS browser source
+ *           example: zDdxO4Pok8b5UeVTUny2RbD1S6A1
  *
  *     AddonStyling:
  *       type: object
@@ -140,7 +151,7 @@ app.listen(5000, () => {
  *         - iconColor
  *         - position
  *         - primaryTextColor
- *         - primaryTextColor
+ *         - primaryTextFont
  *         - scale
  *         - secondaryTextColor
  *         - secondaryTextFont
@@ -167,12 +178,25 @@ app.listen(5000, () => {
  *           type: string
  *         secondaryTextFont:
  *           type: string
+ *       example:
+ *         backgroundColor: "#f2f2f4"
+ *         borderColor:
+ *         borderRadius: 30px
+ *         borderSize: 0px
+ *         iconColor: "#000000"
+ *         position: 11
+ *         primaryTextColor: "#000000"
+ *         primaryTextFont:
+ *         scale: 1
+ *         secondaryTextColor: "#000000"
+ *         secondaryTextFont:
  *
  *     AddonSettings:
  *       oneOf:
  *         - $ref: '#/components/schemas/TwitchRaffleSettings'
  *         - $ref: '#/components/schemas/YoutubeRaffleSettings'
  *         - $ref: '#/components/schemas/AutoTitleSettings'
+ *
  *
  *     RaffleSettings:
  *       type: object
@@ -202,6 +226,13 @@ app.listen(5000, () => {
  *         winnerAmount:
  *           type: number
  *           description: Amount of possible winners
+ *       example:
+ *         announceWinners: true
+ *         duplicateWinners: false
+ *         duration: 60
+ *         enterMessage: "!join"
+ *         useMyAccount: true
+ *         winnerAmount: 1
  *
  *
  *     TwitchRaffleSettings:
@@ -226,6 +257,11 @@ app.listen(5000, () => {
  *             subPrivilege:
  *                type: number
  *                description: Increase chance of winning for subscribers
+ *           example:
+ *             followOnly: false
+ *             followPrivilege: 2
+ *             subOnly: false
+ *             subPrivilege: 3
  *
  *     YoutubeRaffleSettings:
  *       allOf:
@@ -249,6 +285,11 @@ app.listen(5000, () => {
  *             memberPrivilege:
  *                type: number
  *                description: Increase chance of winning for members
+ *           example:
+ *             subOnly: false
+ *             subPrivilege: 2
+ *             memberOnly: false
+ *             memberPrivilege: 3
  *
  *     AutoTitleSettings:
  *       type: object
@@ -271,6 +312,11 @@ app.listen(5000, () => {
  *         steamId:
  *           type: string
  *           description: Steam ID of the streamer's Steam Account
+ *       example:
+ *         changeGame: true
+ *         customTitle: Hello handsome 😉 | ${gameName} | ${achievementsLeft} achievements to go!
+ *         justChatting: false
+ *         steamId: 76561198278073267
  *
  *     Tokens:
  *       oneOf:
@@ -294,4 +340,8 @@ app.listen(5000, () => {
  *           items:
  *             type: string
  *           description: Combined scopes of every addon the user has given permission of
+ *       example:
+ *         accessToken: 1r73n4r46u2kukvydhct9wl7l79qtx
+ *         refreshToken: la5mssq5gnqzlzyx1kb32628va69gx1wm43oww9ekit0xs2ibs
+ *         scope: [channel:manage:broadcast, chat:edit, chat:read]
  */

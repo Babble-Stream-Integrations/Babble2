@@ -26,7 +26,6 @@
     "lint": "eslint . --ext .ts --ext .tsx",
     "deploy:main": "firebase deploy --only hosting:main",
     "deploy:dev": "firebase deploy --only hosting:dev"
-
   },
   "eslintConfig": {
     "extends": [
