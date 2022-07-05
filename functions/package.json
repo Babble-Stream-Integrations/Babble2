@@ -6,7 +6,7 @@
     "serve": "npm run build && firebase emulators:start --only functions",
     "deploy": "npm run build && firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "api": "nodemon src/config/swagger.ts"
+    "api": "node lib/config/swagger.js"
   },
   "engines": {
     "node": "16"
