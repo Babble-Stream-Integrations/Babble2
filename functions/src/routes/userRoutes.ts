@@ -15,7 +15,7 @@ const router = express.Router();
  *           type: string
  *         required: true
  *         description: The User's UUID
- *         example: zDdxO4Pok8b5UeVTUny2RbD1S6A0
+ *         example: zDdxO4Pok8b5UeVTUny2RbD1S6A9
  */
 router.param("user", async (req, res, next, user) => {
   if (req.method === "PUT") {
@@ -94,14 +94,16 @@ router.param("platform", async (req, res, next, platform) => {
  *     tags: [Users]
  *     responses:
  *       200:
- *         description: A list of User id's
+ *         description: A list of User UUID's
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 type: string
- *               example: [zDdxO4Pok8b5UeVTUny2RbD1S6A0, jhKgqzIm8xcYZIgw8B2SRFsntrp1]
+ *               example: [zDdxO4Pok8b5UeVTUny2RbD1S6A3, jhKgqzIm8xcYZIgw8B2SRFsntrp1]
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
  */
 router.get("/users", userController.getAllUsers);
 
@@ -121,23 +123,46 @@ router.get("/users", userController.getAllUsers);
  *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
- *         description: OK
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Result'
+ *             example:
+ *               result: user zDdxO4Pok8b5UeVTUny2RbD1S6A9 added to database!
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
  *   get:
  *     summary: Get a User
  *     tags: [Users]
  *     responses:
  *       200:
- *         description: OK
+ *         description: A User object
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  *   delete:
  *     summary: Delete a User
  *     tags: [Users]
  *     responses:
  *       200:
- *         description: OK
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Result'
+ *             example:
+ *               result: user zDdxO4Pok8b5UeVTUny2RbD1S6A9 deleted to database!
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *
  */
 router.put("/users/:user", userController.addUser);
 router.get("/users/:user", userController.getUser);
@@ -161,6 +186,10 @@ router.delete("/users/:user", userController.deleteUser);
  *               items:
  *                 type: string
  *               example: [MyRaffleAddon2, AutoTitleTurtle]
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  */
 router.get("/users/:user/addons", userController.getAllAddons);
 
@@ -181,23 +210,45 @@ router.get("/users/:user/addons", userController.getAllAddons);
  *             $ref: '#/components/schemas/Addon'
  *     responses:
  *       200:
- *         description: OK
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Result'
+ *             example:
+ *               result: addon MyRaffleAddon2 added to zDdxO4Pok8b5UeVTUny2RbD1S6A9!
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
  *   get:
  *     summary: Get an Addon of a User
  *     tags: [Users]
  *     responses:
  *       200:
- *         description: OK
+ *         description: An Addon object
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Addon'
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  *   delete:
  *     summary: Delete an Addon of a User
  *     tags: [Users]
  *     responses:
  *       200:
- *         description: OK
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Result'
+ *             example:
+ *               result: addon MyRaffleAddon2 deleted from zDdxO4Pok8b5UeVTUny2RbD1S6A9!
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  */
 router.put("/users/:user/addons/:addon", userController.addAddon);
 router.get("/users/:user/addons/:addon", userController.getAddon);
@@ -220,7 +271,17 @@ router.delete("/users/:user/addons/:addon", userController.deleteAddon);
  *             $ref: '#/components/schemas/AddonSettings'
  *     responses:
  *       200:
- *         description: OK
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Result'
+ *             example:
+ *               result: addon MyRaffleAddon2 settings updated in zDdxO4Pok8b5UeVTUny2RbD1S6A9!
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  */
 router.patch(
   "/users/:user/addons/:addon/settings",
@@ -242,12 +303,33 @@ router.patch(
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Tokens'
+ *     responses:
+ *       200:
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Result'
+ *             example:
+ *               result: twitch tokens added to zDdxO4Pok8b5UeVTUny2RbD1S6A9!
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
  *   delete:
  *     summary: Delete tokens of a specific platform to a User
  *     tags: [Users]
  *     responses:
  *       200:
- *         description: OK
+ *         description: Success
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Result'
+ *             example:
+ *               result: twitch tokens deleted from zDdxO4Pok8b5UeVTUny2RbD1S6A9!
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  */
 router.put("/users/:user/tokens/:platform", userController.addTokens);
 router.delete("/users/:user/tokens/:platform", userController.deleteTokens);

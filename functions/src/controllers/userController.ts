@@ -33,7 +33,7 @@ export const getAllAddons = async (req: Request, res: Response) => {
 export const addAddon = async (req: Request, res: Response) => {
   const { user, addon } = req.params;
   await userDb.addAddon(user, addon, req.body);
-  return res.send({ result: `addon ${addon} added to ${user}` });
+  return res.send({ result: `addon ${addon} added to ${user}!` });
 };
 
 export const getAddon = async (req: Request, res: Response) => {
@@ -45,23 +45,23 @@ export const getAddon = async (req: Request, res: Response) => {
 export const deleteAddon = async (req: Request, res: Response) => {
   const { user, addon } = req.params;
   await userDb.deleteAddon(user, addon);
-  return res.send({ result: `addon ${addon} deleted from ${user}` });
+  return res.send({ result: `addon ${addon} deleted from ${user}!` });
 };
 
 export const updateAddonSettings = async (req: Request, res: Response) => {
   const { user, addon } = req.params;
   await userDb.updateAddonSettings(user, addon, req.body);
-  return res.send({ result: `addon ${addon} settings updated in ${user}` });
+  return res.send({ result: `addon ${addon} settings updated in ${user}!` });
 };
 
 export const addTokens = async (req: Request, res: Response) => {
   const { user, platform } = req.params;
   await userDb.addTokens(user, platform, req.body);
-  return res.send({ result: `${platform} tokens added to ${user}` });
+  return res.send({ result: `${platform} tokens added to ${user}!` });
 };
 
 export const deleteTokens = async (req: Request, res: Response) => {
   const { user, platform } = req.params;
   await userDb.deleteTokens(user, platform);
-  return res.send({ result: `${platform} tokens deleted from ${user}` });
+  return res.send({ result: `${platform} tokens deleted from ${user}!` });
 };
