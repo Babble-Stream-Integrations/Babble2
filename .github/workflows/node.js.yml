@@ -18,7 +18,7 @@ jobs:
     - name: Install front-end dependencies
       run: npm ci
     - name: Install back-end dependencies
-      run: npm ci
+      run: npm install --legacy-peer-deps
       working-directory: functions
     - name: Run front-end ESLint
       run: npm run lint

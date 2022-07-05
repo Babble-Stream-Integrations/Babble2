@@ -15,11 +15,15 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  const origin =
-    req.headers.origin === "http://localhost:3000"
-      ? "http://localhost:3000"
-      : "https://dev-babble.web.app";
-
+  const origins = [
+    "http://localhost:3000",
+    "http://localhost:5000",
+    "https://babble.streamintegrations.com",
+    "https://dev-babble.web.app",
+  ];
+  const origin = origins.includes(req.headers.origin ?? "")
+    ? req.headers.origin!
+    : "";
   res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -68,10 +72,11 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (axios.isAxiosError(err)) {
     const status = err.response?.status || 400;
     const message = err.response?.data || err.message;
-    return res.status(status).send(message);
+    return res.status(status).send({ error: message });
   }
 
-  return res.status(400).send(err.message);
+  const status = err.message.includes("not found") ? 404 : 400;
+  return res.status(status).send({ error: err.message });
 });
 
 app.get("/", (_req: Request, res: Response) => {
