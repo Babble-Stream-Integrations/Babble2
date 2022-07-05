@@ -20,6 +20,7 @@
     "firebase-functions": "^3.14.1",
     "swagger-jsdoc": "^6.2.1",
     "swagger-ui-express": "^4.4.0",
+    "googleapis": "^104.0.0",
     "tmi.js": "^1.8.5"
   },
   "devDependencies": {

@@ -104,13 +104,20 @@ export type TwitchTokens = {
   scope: string[];
 };
 
-export type Tokens = TwitchTokens;
+export type YoutubeTokens = {
+  accessToken: string;
+  refreshToken?: string;
+  scope: string[];
+};
+
+export type Tokens = TwitchTokens | YoutubeTokens;
 
 export type AuthInfo = {
   user: string;
   platform: string;
   tokens: Tokens;
   clientId: string;
+  uniqueString: string;
 };
 
 //  SteamKit

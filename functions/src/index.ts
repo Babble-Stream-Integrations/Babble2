@@ -4,6 +4,7 @@ import axios from "axios";
 import userRoutes from "./routes/userRoutes";
 import addonRoutes from "./routes/addonRoutes";
 import authRoutes from "./routes/authRoutes";
+import { verifyAppCheck } from "./config/firebase";
 
 const app = express();
 
@@ -26,13 +27,40 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, PUT, DELETE, PATCH, POST"
+    "GET, PUT, DELETE, PATCH, POST, OPTIONS"
   );
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
+    "X-Requested-With,content-type,appchecktoken"
   );
-  next();
+  if (req.method === "OPTIONS") {
+    res.send(200);
+  } else {
+    next();
+  }
+});
+
+app.use(async (req, res, next) => {
+  const appCheckToken = req.header("appchecktoken");
+  if (appCheckToken === undefined) {
+    functions.logger.log("appcheck: missing");
+    // uncomment the next line to enforce the appcheck instead of only logging it. (don't forget the same line in the try block where the token is actually validated).
+    // return res.status(400).send({ error: "Missing appcheck token" });
+    return next();
+  }
+  if (process.env.NODE_ENV !== "production") {
+    return next();
+  }
+  try {
+    await verifyAppCheck(appCheckToken);
+    functions.logger.log("appcheck: valid");
+  } catch (err) {
+    functions.logger.log("appcheck: invalid");
+    functions.logger.log(err);
+    // uncomment the next line to enforce the appcheck instead of only logging it.
+    // return res.status(400).send({ error: "Invalid appcheck token" });
+  }
+  return next();
 });
 
 app.use("/api/v1", userRoutes);

@@ -3,6 +3,7 @@ import tmi from "tmi.js";
 import { getTwitchBot } from "../db/devDb";
 import { AuthInfo, TwitchRaffleSettings } from "../ts/types";
 import { authErrorHandler } from "./twitchAuth";
+import { RTDBIdle, RTDBEnd, RTDBStart } from "./realtimeDB";
 
 async function getStreamerChannel(authInfo: AuthInfo): Promise<string[]> {
   try {
@@ -123,6 +124,7 @@ async function start(settings: TwitchRaffleSettings, authInfo: AuthInfo) {
       streamerChannel,
       `Raffle started! Type ${settings.enterMessage} to enter`
     );
+    RTDBStart(authInfo.uniqueString, settings.duration);
   });
 
   const usersEntered: string[] = [];
@@ -161,6 +163,9 @@ async function start(settings: TwitchRaffleSettings, authInfo: AuthInfo) {
       settings.duplicateWinners
     );
     console.log("Winners:", winners);
+
+    RTDBEnd(authInfo.uniqueString, winners);
+    RTDBIdle(authInfo.uniqueString);
 
     if (settings.announceWinners) {
       client.say(

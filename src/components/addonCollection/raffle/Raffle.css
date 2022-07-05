@@ -1,0 +1,234 @@
+.canvas {
+  --backgroundColor: #f2f2f4;
+  --borderColor: none;
+  --borderRadius: 30px;
+  --borderSize: 0px;
+  --iconColor: #000000;
+  --position: none;
+  --primaryTextColor: #000000;
+  --primaryTextFont: none;
+  --secondaryTextColor: #000000;
+  --secondaryTextFont: none;
+  --scale: 1;
+}
+
+/* raffle visual */
+.canvas {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  display: flex;
+  overflow: hidden;
+}
+
+.raffle {
+  width: auto;
+  height: auto;
+  display: none;
+  position: fixed;
+  background-color: var(--backgroundColor);
+  margin: 50px;
+  border-radius: var(--borderRadius);
+  border: solid var(--borderSize) var(--borderColor);
+  transform: scale(var(--scale));
+}
+
+.raffle__container {
+  display: flex;
+  margin: 30px 40px 30px 40px;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.raffle__logo {
+  display: flex;
+  align-items: center;
+}
+
+.raffle__img {
+  height: 3.7em;
+  width: 3.7em;
+  margin: 0.3em;
+  margin-bottom: 0;
+  fill: var(--iconColor);
+}
+
+.raffle__text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding-bottom: 1px;
+}
+
+.raffle__title {
+  text-transform: uppercase;
+  font-size: xx-large;
+  letter-spacing: 0.1rem;
+  color: var(--primaryTextColor);
+}
+
+.raffle__countdown {
+  text-transform: uppercase;
+  font-size: 2.3em;
+  letter-spacing: 0.1rem;
+  color: var(--primaryTextColor);
+}
+
+.raffle__subtitle {
+  color: var(--secondaryTextColor);
+}
+
+/* Animations */
+/* Animation slide in right */
+.alert-animation-right {
+  animation-name: alertSlideInRight, alertSlideOutRight;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: none, forwards;
+  animation-play-state: paused;
+  display: flex;
+}
+
+@keyframes alertSlideInRight {
+  from {
+    transform: translateX(100vw);
+  }
+  to {
+    transform: translateX(0vw);
+  }
+}
+
+@keyframes alertSlideOutRight {
+  from {
+    transform: translateX(0vw);
+    display: flex;
+  }
+  to {
+    transform: translateX(100vw);
+    display: none;
+  }
+}
+
+/* Animation slide in left */
+.alert-animation-left {
+  animation-name: alertSlideInLeft, alertSlideOutLeft;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: none, forwards;
+  animation-play-state: paused;
+  display: flex;
+}
+
+@keyframes alertSlideInLeft {
+  from {
+    transform: translateX(-100vw);
+  }
+  to {
+    transform: translateX(0vw);
+  }
+}
+
+@keyframes alertSlideOutLeft {
+  from {
+    transform: translateX(0vw);
+    display: flex;
+  }
+  to {
+    transform: translateX(-100vw);
+    display: none;
+  }
+}
+
+/* Animation slide in top */
+.alert-animation-top {
+  animation-name: alertSlideInTop, alertSlideOutTop;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: none, forwards;
+  animation-play-state: paused;
+  display: flex;
+}
+
+@keyframes alertSlideInTop {
+  from {
+    transform: translateY(-100vw);
+  }
+  to {
+    transform: translateY(0vw);
+  }
+}
+
+@keyframes alertSlideOutTop {
+  from {
+    transform: translateY(0vw);
+    display: flex;
+  }
+  to {
+    transform: translateY(-100vw);
+    display: none;
+  }
+}
+
+/* Animation slide in bottom */
+.alert-animation-bottom {
+  animation-name: alertSlideInBottom, alertSlideOutBottom;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: none, forwards;
+  animation-play-state: paused;
+  display: flex;
+}
+
+@keyframes alertSlideInBottom {
+  from {
+    transform: translateY(100vw);
+  }
+  to {
+    transform: translateY(0vw);
+  }
+}
+
+@keyframes alertSlideOutBottom {
+  from {
+    transform: translateY(0vw);
+    display: flex;
+  }
+  to {
+    transform: translateY(100vw);
+    display: none;
+  }
+}
+
+/* Animation slide in Center */
+.alert-animation-center {
+  animation-name: alertSlideInCenter, alertSlideOutCenter;
+  animation-duration: 2s, 2s;
+  animation-delay: 0s, 5s;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: forwards, forwards;
+  animation-play-state: paused;
+  display: flex;
+}
+
+@keyframes alertSlideInCenter {
+  from {
+    transform: scale(0, 0);
+  }
+  to {
+    transform: scale(1.5, 1.5);
+  }
+}
+
+@keyframes alertSlideOutCenter {
+  from {
+    transform: scale(1.5, 1.5);
+  }
+  to {
+    transform: scale(0, 0);
+  }
+}
