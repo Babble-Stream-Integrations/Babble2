@@ -16,11 +16,15 @@ const origin =
 
 type PrototypeTypes = {
   Pmodalshow: boolean;
+  addonName: string;
+  isYoutube: boolean;
   setRaffleAlertShow: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function PrototypeComponent({
   Pmodalshow,
+  addonName,
+  isYoutube,
   setRaffleAlertShow,
 }: PrototypeTypes) {
   // input values saved in states
@@ -36,7 +40,7 @@ function PrototypeComponent({
   const [raffleMyAccount, setRaffleMyAccount] = useState(false);
 
   // Is the page youtube or not?
-  const [isYoutube, setIsYoutube] = useState(false);
+  // const [isYoutube, setIsYoutube] = useState(false);
   const [appcheck, setAppcheck] = useState("");
 
   // useEffect(() => {
@@ -47,20 +51,28 @@ function PrototypeComponent({
 
   useEffect(() => {
     if (Pmodalshow === false) {
-      fetch(`${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2`, {
+      fetch(`${baseURL}/api/v1/users/${uuid}/addons/${addonName}`, {
         headers: {
           Origin: origin,
-          appchecktoken: appcheck,
+          // appchecktoken: appcheck,
         },
       })
         .then((response) => {
           response.json().then((data) => {
             setRaffleDuration(data.settings["duration"]);
             setRaffleEnterMessage(data.settings["enterMessage"]);
-            setRaffleFreeOnly(data.settings["followOnly"]);
-            setRafflePaidOnly(data.settings["subOnly"]);
-            setRaffleFreePrivilege(data.settings["followPrivilege"]);
-            setRafflePaidPrivilege(data.settings["subPrivilege"]);
+            setRaffleFreeOnly(
+              data.settings[isYoutube ? "subOnly" : "followOnly"]
+            );
+            setRafflePaidOnly(
+              data.settings[isYoutube ? "memberOnly" : "subOnly"]
+            );
+            setRaffleFreePrivilege(
+              data.settings[isYoutube ? "subPrivilege" : "followPrivilege"]
+            );
+            setRafflePaidPrivilege(
+              data.settings[isYoutube ? "memberPrivilege" : "subPrivilege"]
+            );
             setRaffleWinnerAmount(data.settings["winnerAmount"]);
             setRaffleDuplicateWinners(data.settings["duplicateWinners"]);
             setRaffleAnnounceWinners(data.settings["announceWinners"]);
@@ -80,22 +92,26 @@ function PrototypeComponent({
           <div className="PC-button-container">
             <button
               className="PC-button"
+              disabled={isYoutube ? false : true}
               onClick={() => {
-                // fetch("babble-d6ef3/europe-west1/default/api/v1/auth/youtube")
-                //   .then((response) =>
-                //     response.json().then((data) => {
-                //       console.log(data);
-                //       alert("login succesfull");
-                //       setIsYoutube(true);
-                //     })
-                //   )
-                //   .catch((err) => {
-                //     console.log("Error Reading data " + err);
-                //     alert("error during login try again");
-                //   });
-                setIsYoutube(true);
+                fetch(
+                  `${baseURL}/api/v1/getAuthCode/${uuid}/youtube/raffleSystem`,
+                  {
+                    headers: {
+                      Origin: origin,
+                      // appchecktoken: appcheck,
+                    },
+                  }
+                )
+                  .then((response) =>
+                    response.json().then((data) => {
+                      window.location.href = data.url;
+                    })
+                  )
+                  .catch((err) => {
+                    console.log("Error Reading data " + err);
+                  });
               }}
-              disabled={true}
             >
               Authorize Youtube
             </button>
@@ -103,13 +119,14 @@ function PrototypeComponent({
           <div className="PC-button-container">
             <button
               className="PC-button"
+              disabled={isYoutube ? true : false}
               onClick={() => {
                 fetch(
                   `${baseURL}/api/v1/getAuthCode/${uuid}/twitch/raffleSystem`,
                   {
                     headers: {
                       Origin: origin,
-                      appchecktoken: appcheck,
+                      // appchecktoken: appcheck,
                     },
                   }
                 )
@@ -302,26 +319,41 @@ function PrototypeComponent({
               onClick={() => {
                 if (raffleEnterMessage.trim().length !== 0) {
                   fetch(
-                    `${baseURL}/api/v1/users/${uuid}/addons/MyRaffleAddon2/settings`,
+                    `${baseURL}/api/v1/users/${uuid}/addons/${addonName}/settings`,
                     {
                       method: "PATCH",
                       headers: {
                         "Content-Type": "application/json",
                         Origin: origin,
-                        appchecktoken: appcheck,
+                        // appchecktoken: appcheck,
                       },
-                      body: JSON.stringify({
-                        announceWinners: raffleAnnounceWinners,
-                        followOnly: raffleFreeOnly,
-                        winnerAmount: raffleWinnerAmount,
-                        useMyAccount: raffleMyAccount,
-                        subOnly: rafflePaidOnly,
-                        duplicateWinners: raffleDuplicateWinners,
-                        duration: raffleDuration,
-                        followPrivilege: raffleFreePrivilege,
-                        subPrivilege: rafflePaidPrivilege,
-                        enterMessage: raffleEnterMessage,
-                      }),
+                      body: JSON.stringify(
+                        isYoutube
+                          ? {
+                              announceWinners: raffleAnnounceWinners,
+                              subOnly: raffleFreeOnly,
+                              winnerAmount: raffleWinnerAmount,
+                              useMyAccount: raffleMyAccount,
+                              memberOnly: rafflePaidOnly,
+                              duplicateWinners: raffleDuplicateWinners,
+                              duration: raffleDuration,
+                              subPrivilege: raffleFreePrivilege,
+                              memberPrivilege: rafflePaidPrivilege,
+                              enterMessage: raffleEnterMessage,
+                            }
+                          : {
+                              announceWinners: raffleAnnounceWinners,
+                              followOnly: raffleFreeOnly,
+                              winnerAmount: raffleWinnerAmount,
+                              useMyAccount: raffleMyAccount,
+                              subOnly: rafflePaidOnly,
+                              duplicateWinners: raffleDuplicateWinners,
+                              duration: raffleDuration,
+                              followPrivilege: raffleFreePrivilege,
+                              subPrivilege: rafflePaidPrivilege,
+                              enterMessage: raffleEnterMessage,
+                            }
+                      ),
                     }
                   )
                     .then((response) =>
@@ -356,11 +388,11 @@ function PrototypeComponent({
                   headers: {
                     "Content-Type": "application/json",
                     Origin: origin,
-                    appchecktoken: appcheck,
+                    // appchecktoken: appcheck,
                   },
                   body: JSON.stringify({
                     user: uuid,
-                    addon: "MyRaffleAddon2",
+                    addon: addonName,
                   }),
                 })
                   .then((response) =>

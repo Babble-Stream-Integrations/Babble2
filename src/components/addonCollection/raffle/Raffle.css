@@ -210,7 +210,7 @@
   animation-duration: 2s, 2s;
   animation-delay: 0s, 5s;
   animation-iteration-count: 1, 1;
-  animation-fill-mode: none, forwards;
+  animation-fill-mode: forwards, forwards;
   animation-play-state: paused;
   display: flex;
 }
@@ -220,13 +220,13 @@
     transform: scale(0, 0);
   }
   to {
-    transform: scale(1, 1);
+    transform: scale(1.5, 1.5);
   }
 }
 
 @keyframes alertSlideOutCenter {
   from {
-    transform: scale(1, 1);
+    transform: scale(1.5, 1.5);
   }
   to {
     transform: scale(0, 0);

@@ -1,6 +1,7 @@
 import { youtube_v3 as ytV3 } from "googleapis";
 // import { addTokens } from "../db/userDb";
 import { AuthInfo, YoutubeRaffleSettings } from "../ts/types";
+import { RTDBEnd, RTDBIdle, RTDBStart } from "./realtimeDB";
 import { makeYoutubeClient } from "./youtubeAuth";
 
 let settings: YoutubeRaffleSettings;
@@ -162,6 +163,7 @@ async function start(
     liveChatId,
     `Raffle started! Type ${settings.enterMessage} to enter`
   );
+  RTDBStart(authInfo.uniqueString, settings.duration);
 
   getChatMessages(channelId, liveChatId);
   setTimeout(() => {
@@ -169,6 +171,8 @@ async function start(
     const winners = pickWinner();
     console.log("Entered:", usersEntered);
     console.log("Winners:", winners);
+    RTDBEnd(authInfo.uniqueString, winners);
+    RTDBIdle(authInfo.uniqueString);
     if (settings.announceWinners) {
       postMessage(
         liveChatId,

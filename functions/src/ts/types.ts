@@ -106,7 +106,7 @@ export type TwitchTokens = {
 
 export type YoutubeTokens = {
   accessToken: string;
-  refreshToken: string;
+  refreshToken?: string;
   scope: string[];
 };
 
