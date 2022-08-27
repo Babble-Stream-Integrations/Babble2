@@ -1,4 +1,4 @@
-.menubalk {
+.header {
   background-color: transparent;
   display: flex;
   justify-content: space-between;
@@ -9,12 +9,12 @@
   align-items: center;
 }
 
-.babble-logo {
+.logo {
   margin: 10px;
   height: 25px;
 }
 
-.nav-menu {
+.menu {
   color: var(--offWhiteOne);
   height: 32px;
   width: 32px;
@@ -24,26 +24,26 @@
   margin-left: 25px;
 }
 
-.header-flex {
+.headerRightside {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 }
 
-.nav-avatar {
+.avatar {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.nav-avatar-profile {
+.avatar__picture {
   border-radius: 50%;
   margin-right: 15px;
   height: 30px;
   width: 30px;
 }
 
-.hamburger-menu {
+.menu__trigger {
   height: 25px;
 }

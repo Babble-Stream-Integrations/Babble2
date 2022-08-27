@@ -4,12 +4,15 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  left: 0;
+  /* left: 0; */
   bottom: 0;
   width: 100%;
-  background-color: var(--darkGray);
-  color: var(--offWhiteOne);
+  /* background-color: var(--darkGray); */
   font-size: small;
   margin: 25px 0px;
   height: 7.5rem;
+}
+
+.footer__text {
+  color: var(--offWhiteOne);
 }

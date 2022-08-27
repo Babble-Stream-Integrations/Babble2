@@ -7,7 +7,7 @@
   color: var(--offWhiteTwo);
 }
 
-.heading {
+.infoCard__heading {
   color: var(--offWhiteTwo);
   background-image: linear-gradient(to right, #0063ff, #00f0ff);
   display: flex;
@@ -18,13 +18,13 @@
   font-weight: bold;
 }
 
-.infoBody {
+.infoCard__body {
   display: grid;
   grid-template-columns: auto, auto;
   grid-template-rows: auto, auto;
 }
 
-.infoText {
+.infoCard__text {
   /* justify-content: left; */
   text-align: left;
   width: 300px;
@@ -37,19 +37,19 @@
 }
 
 .addonPreview {
-  /* width: 300px; */
+  width: 320px;
   grid-column-start: 2;
   grid-column-end: 3;
 }
 
-.title {
+.infoCard__item__title {
   text-transform: uppercase;
   font: bold 16px Montserrat, sans-serif;
   margin-top: 25px;
   margin-bottom: 10px;
 }
 
-.info {
+.infoCard__item__info {
   font-size: 12px;
   margin: 0px;
 }

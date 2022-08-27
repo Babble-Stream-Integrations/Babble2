@@ -48,7 +48,7 @@ const AddonPage = () => {
   function signOutWithGoogle() {
     signOut(auth)
       .then(() => {
-        document.cookie = "darkmode=; Max-Age=0; path=/; domain=";
+        document.cookie = "cookie=; Max-Age=0; path=/; domain=";
         setShowLoggedIn(false);
       })
       .catch((error: string) => {
@@ -87,23 +87,26 @@ const AddonPage = () => {
   }
 
   return (
-    <div className="page-container">
+    <div className="addonPage">
       <div className="content-wrap">
         <Header
           onSignIn={showLoggedIn ? signOutWithGoogle : signInWithGoogle}
           showSite={showLoggedIn}
           avatar={avatar}
         />
-        <h1 className="titlePage">Add-ons</h1>
-        <div className="midPage">
+        <h1 className="addonPage__title">Add-ons</h1>
+        <div className="addonPage__middle">
           <div>
-            <p className="subTitle">Originals ⓘ</p>
+            <p className="addonPage__subtitle">Originals ⓘ</p>
           </div>
           <div className="templateCards">
-            <AddonCards />
+            <AddonCards types="original" />
           </div>
-          <div className="myAddon">
-            <p className="subTitle">Toolkits ⓘ</p>
+          <div>
+            <p className="addonPage__subtitle">Toolkits ⓘ</p>
+          </div>
+          <div className="templateCards">
+            <AddonCards types="toolkit" />
           </div>
         </div>
       </div>

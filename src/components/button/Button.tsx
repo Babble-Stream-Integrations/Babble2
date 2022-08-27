@@ -7,7 +7,7 @@ interface Three {
 
 const Button = ({ text, clickOn }: Three) => {
   return (
-    <button onClick={clickOn} className="btn">
+    <button onClick={clickOn} className="button">
       {text}
     </button>
   );

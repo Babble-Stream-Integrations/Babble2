@@ -1,13 +1,13 @@
-.midPage {
+.addonPage__middle {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  max-width: 568px;
+  max-width: 570px;
   margin: auto;
 }
 
-.titlePage {
+.addonPage__title {
   color: var(--offWhiteTwo);
   font-family: "Montserrat", sans-serif;
   font-weight: bold;
@@ -15,12 +15,7 @@
   font-size: 1.6em;
 }
 
-.myAddon {
-  display: flex;
-  justify-content: center;
-}
-
-.subTitle {
+.addonPage__subtitle {
   border-bottom-style: solid;
   border-bottom-color: var(--lightGrey);
   padding-bottom: 5px;
@@ -29,7 +24,7 @@
   font-size: small;
   text-align: left;
   margin-top: 25px;
-  width: 538px;
+  width: 568px;
   margin-bottom: 0px;
 }
 
@@ -41,11 +36,11 @@
 }
 
 @media only screen and (max-width: 568px) {
-  .midPage {
+  .addonPage__middle {
     justify-content: center;
   }
 
-  .subTitle {
+  .addonPage__subtitle {
     width: 254px;
   }
 
@@ -56,7 +51,7 @@
   }
 }
 
-.page-container {
+.addonPage {
   position: relative;
   min-height: 100vh;
 }

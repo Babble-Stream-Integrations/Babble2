@@ -1,0 +1,5 @@
+.addonCards {
+  color: var(--offWhiteTwo);
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -29,7 +29,7 @@ const InfoPage = () => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         if (credential !== null) {
           const token = credential.accessToken;
-          console.log(token);
+          // console.log(token);
         }
         const user = result.user;
         const cookie = "cookie =" + JSON.stringify(user) + "; max-age=30;";
@@ -95,7 +95,7 @@ const InfoPage = () => {
         showSite={showLoggedIn}
         avatar={avatar}
       />
-      <h1 className="pageTitle">Title</h1>
+      <h1 className="infoPage__title">Title</h1>
       <div className="infoCards">
         <InfoCard />
       </div>

@@ -8,10 +8,11 @@ const addonCard = ({ card }: { card: IAddonData }) => {
   const colorChange = parseInt(restsplit[1]) + 15;
   const lightColor = hslSplit + ", " + restsplit[0] + ", " + colorChange + "%";
   const cardTitle = titleWords.join("_");
+  const restTitle = titleWords.splice(1).join(" ");
   // console.log(typeof card);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
 
   return (
     // <Link to={`/${linkName}`} target="_blank">
@@ -30,9 +31,13 @@ const addonCard = ({ card }: { card: IAddonData }) => {
           background: `linear-gradient(to right, hsl(${lightColor}), hsl(${card.color})`,
         }}
       >
-        <img src={card.icon} alt="placeholder" className="placeholder"></img>
-        <p className="titleAddon">
-          <b>{titleWords[0]}</b> {titleWords.splice(1).join(" ")}
+        <img
+          src={card.icon}
+          alt="placeholder"
+          className="addonCard__placeholder"
+        ></img>
+        <p className="addonCard__title">
+          <b>{titleWords[0]}</b> {restTitle}
         </p>
       </div>
       {/* </Route> */}

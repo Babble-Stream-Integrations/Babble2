@@ -16,28 +16,28 @@ const Header = ({ onSignIn, showSite, avatar }: HeaderTypes) => {
   const isPhone = useMatchMedia("(max-width: 568px)", true);
 
   return (
-    <div className="menubalk">
-      {isPhone && <img className="babble-logo" alt="Babble" src={logoSmall} />}
-      {isDesktop && <img className="babble-logo" alt="Babble" src={logoBig} />}
+    <div className="header">
+      {isPhone && <img className="logo" alt="Babble" src={logoSmall} />}
+      {isDesktop && <img className="logo" alt="Babble" src={logoBig} />}
       {isPhone && (
-        <div className="header-flex">
+        <div className="headerRightside">
           <Button text={showSite ? "Log out" : "Log in"} clickOn={onSignIn} />
-          <div className="nav-menu">
-            <img className="hamburger-menu" alt="Babble" src={hamburger} />
+          <div className="menu">
+            <img className="menu__trigger" alt="Babble" src={hamburger} />
           </div>
         </div>
       )}
       {isDesktop && (
-        <div className="header-flex">
+        <div className="headerRightside">
           {showSite && (
-            <div className="nav-avatar">
-              <img className="nav-avatar-profile" src={avatar} alt="profile" />
+            <div className="avatar">
+              <img className="avatar__picture" src={avatar} alt="profile" />
             </div>
           )}
           <Button text={showSite ? "Log out" : "Log in"} clickOn={onSignIn} />
-          <div className="nav-menu">
+          <div className="menu">
             <img
-              className="hamburger-menu"
+              className="menu__trigger"
               alt="Babble"
               src={hamburger}
               referrerPolicy="no-referrer"
