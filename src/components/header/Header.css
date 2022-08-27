@@ -42,6 +42,8 @@
   margin-right: 15px;
   height: 30px;
   width: 30px;
+  color: var(--offWhiteOne);
+  font-size: small;
 }
 
 .menu__trigger {
